@@ -3,7 +3,8 @@ import { SafeAreaView, View, Text, Dimensions } from 'react-native'
 import ScheduleItem from '../components/ScheduleItem';
 import COLORS from '../util/COLORS';
 import Loading from '../util/Loading';
-import { formatDate } from '../util/util';
+import isWeb, { formatDate } from '../util/util';
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const Schedule = () => {
     // use localstorage to avoid load times every time user visits page
@@ -13,8 +14,9 @@ const Schedule = () => {
     } catch (e) {
         storedValue = null;
     }
-
+    const insets = useSafeAreaInsets()
     const [schedule, setSchedule] = useState(storedValue);
+    const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
 
     useEffect(() => {
         if(schedule == null){
@@ -29,20 +31,29 @@ const Schedule = () => {
                 localStorage.setItem("schedule-today", JSON.stringify(json));
             })
         }
-    }, [schedule])
+
+        setTimeout(() => {
+            setCurrentTime(new Date(Date.now()));
+        }, 1000 * 60);
+
+    }, [schedule, currentTime])
 
     if(schedule == null){
         return (<Loading />);
     }
-
-    var heightOfElement = Dimensions.get("screen").height / schedule.data.length;
-    console.log(heightOfElement)
+    var scheduleLength = isWeb() ? schedule.data.length - 1 : schedule.data.length;
+    var heightOfElement = (Dimensions.get("screen").height - 24 - insets.bottom - insets.top) / scheduleLength;
+    console.log("height: " + (Dimensions.get("screen").height - 24 - insets.bottom - insets.top))
+    console.log(schedule.data.length)
+    console.log(insets)
     
-    var nowDate = new Date(Date.now());
-    // var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    var now = 500;
+    var nowDate = currentTime;
+    var now = nowDate.getHours() * 60 + nowDate.getMinutes();
+    // var now = 500;
 
     var positionOfTimeMarker = calculatePosition(now, schedule.data)
+    if(positionOfTimeMarker < 0 || positionOfTimeMarker > 100) positionOfTimeMarker = -100
+    // ^ hehe
 
     return (
         <SafeAreaView style={{overflow: "hidden"}}>
@@ -52,17 +63,37 @@ const Schedule = () => {
             <View style={{
                 position: "absolute",
                 top: positionOfTimeMarker.toString() + "%",
-                backgroundColor: "red",
-                padding: 8,
+                width: "100%",
+                left: 2,
+                height: 32,
             }}>
+                <View style={{
+                    width: "100%",
+                    backgroundColor: "red",
+                    height: 1,
+                    position: "relative",
+                    top: 16
+                }} />
                 <Text style = {{
+                    position: "relative",
+                    right: 0,
                     textAlign: 'center',
-                    color: COLORS.FOREGROUND_COLOR
+                    color: COLORS.FOREGROUND_COLOR,
+                    fontWeight: "bold",
+                    backgroundColor: "red",
+                    padding: 8,
+                    width: 50,
+                    height: 32,
+                    borderRadius: 8
                 }}>
                     {nowDate.getHours() % 12}:{nowDate.getMinutes()}
                 </Text>
             </View>
-            <Text>
+            <Text style={{
+                textAlign: "center",
+                height: 24,
+                lineHeight: 24
+            }}>
                 Server data last updated {formatDate(schedule.metadata.lastDataUpdateTime, false, true)}
             </Text>
         </SafeAreaView>
@@ -70,7 +101,6 @@ const Schedule = () => {
 }
 
 const calculatePosition = (now, s) => {
-    var now = 500;
     var startTime = parseInt(s[0].start.split(":")[0]) * 60;
     startTime += parseInt(s[0].start.split(":")[1]);
 

@@ -16,6 +16,7 @@ const ScheduleItem = ({ scheduleItem, height }) => {
             borderColor: COLORS.BACKGROUND_COLOR,
             borderWidth: 1,
             borderStyle: "solid",
+            marginLeft: 54,
         }}>
             <Text>{scheduleItem.name}</Text>
             <Text>{scheduleItem.start} - {scheduleItem.end}</Text>
