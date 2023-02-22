@@ -16,9 +16,13 @@ const ScheduleItem = ({ scheduleItem, height }) => {
             borderColor: COLORS.BACKGROUND_COLOR,
             borderWidth: 1,
             borderStyle: "solid",
-            marginLeft: 54,
+            borderRadius: 8,
+            marginLeft: 64,
         }}>
-            <Text>{scheduleItem.name}</Text>
+            <Text style={{
+                fontWeight: "bold",
+                fontSize: "large"
+            }}>{scheduleItem.name}</Text>
             <Text>{scheduleItem.start} - {scheduleItem.end}</Text>
         </View>
     )
