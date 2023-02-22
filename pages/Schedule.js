@@ -51,7 +51,10 @@ const Schedule = () => {
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
     // var now = 500;
 
-    var positionOfTimeMarker = calculatePosition(now, schedule.data)
+    var start = calculateMinutesFromTime(schedule.data[0].start);
+    var end = calculateMinutesFromTime(schedule.data[schedule.data.length - 1]);
+
+    var positionOfTimeMarker = ((now - startTime) / (endTime - startTime)) * 100;
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 100) positionOfTimeMarker = -100
     // ^ hehe
 
@@ -80,13 +83,13 @@ const Schedule = () => {
                     textAlign: 'center',
                     color: COLORS.FOREGROUND_COLOR,
                     fontWeight: "bold",
-                    backgroundColor: "red",
+                    backgroundColor: "#B80f0A",
                     padding: 8,
-                    width: 50,
+                    width: 58,
                     height: 32,
                     borderRadius: 8
                 }}>
-                    {nowDate.getHours() % 12}:{nowDate.getMinutes()}
+                    {nowDate.getHours() == 12 ? "12" : nowDate.getHours() % 12}:{nowDate.getMinutes() < 10 ? "0" : ""}{nowDate.getMinutes()}
                 </Text>
             </View>
             <Text style={{
@@ -100,18 +103,11 @@ const Schedule = () => {
     )
 }
 
-const calculatePosition = (now, s) => {
-    var startTime = parseInt(s[0].start.split(":")[0]) * 60;
-    startTime += parseInt(s[0].start.split(":")[1]);
-
-    var endTime = parseInt(s[s.length - 1].start.split(":")[0]) * 60 + (12 * 60);
-    endTime += parseInt(s[s.length - 1].start.split(":")[1]);
-
-    console.log("now: " + now);
-    console.log("start: " + startTime);
-    console.log("end: " + endTime);
-
-    return ((now - startTime) / (endTime - startTime)) * 100;
+const calculateMinutesFromTime = (timeString) => {
+    var time = parseInt(timeString.split(":")[0]) * 60;
+    time += parseInt(timeString.split(":")[1]);
+    return timeString;
 }
 
 export default Schedule
+export { calculateMinutesFromTime }; // used in schedule items
