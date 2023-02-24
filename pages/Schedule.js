@@ -1,22 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView, View, Text, Dimensions } from 'react-native'
 import ScheduleItem from '../components/ScheduleItem';
 import COLORS from '../util/COLORS';
 import Loading from '../util/Loading';
 import isWeb, { formatDate } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { UserSettingsContext } from '../util/contexts';
 
 const Schedule = () => {
-    // use localstorage to avoid load times every time user visits page
+    // use sessionStorage to avoid load times every time user visits page
     var storedValue;
     try {
-        storedValue = JSON.parse(localStorage.getItem("schedule-today"))
+        storedValue = JSON.parse(sessionStorage.getItem("schedule-today"))
     } catch (e) {
         storedValue = null;
     }
     const insets = useSafeAreaInsets()
     const [schedule, setSchedule] = useState(storedValue);
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
+    const { userSettingsContext } = useContext(UserSettingsContext);
+    var s;
+    try{
+        s = schedule.data;
+        if(!userSettingsContext.show0Period && schedule.data[0].name == "0 Period"){
+            s = schedule.data.slice(1)
+        }
+    }catch(e){} // haha
 
     useEffect(() => {
         if(schedule == null){
@@ -28,7 +37,7 @@ const Schedule = () => {
             .then(res => res.json())
             .then(json => {
                 setSchedule(json);
-                localStorage.setItem("schedule-today", JSON.stringify(json));
+                sessionStorage.setItem("schedule-today", JSON.stringify(json));
             })
         }
 
@@ -41,27 +50,34 @@ const Schedule = () => {
     if(schedule == null){
         return (<Loading />);
     }
-    var scheduleLength = isWeb() ? schedule.data.length - 1 : schedule.data.length;
-    var heightOfElement = (Dimensions.get("screen").height - 24 - insets.bottom - insets.top) / scheduleLength;
-    console.log("height: " + (Dimensions.get("screen").height - 24 - insets.bottom - insets.top))
-    console.log(schedule.data.length)
-    console.log(insets)
-    
+    var scheduleLength = userSettingsContext.show0Period ? schedule.data.length : schedule.data.length - 1;
+    var screenHeight = (Dimensions.get("screen").height - 24 - insets.bottom - insets.top);
+
     var nowDate = currentTime;
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    // var now = 500;
+    var now = 500;
 
-    var start = calculateMinutesFromTime(schedule.data[0].start);
-    var end = calculateMinutesFromTime(schedule.data[schedule.data.length - 1]);
+    var start = calculateMinutesFromTime(s[0].start);
+    var end = calculateMinutesFromTime(s[s.length - 1].end);
 
-    var positionOfTimeMarker = ((now - startTime) / (endTime - startTime)) * 100;
+    console.log("start: " + start);
+    console.log("end: " + end);
+    console.log("height: " + screenHeight)
+
+    var positionOfTimeMarker = ((now - start) / (end - start)) * 100;
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 100) positionOfTimeMarker = -100
     // ^ hehe
 
     return (
         <SafeAreaView style={{overflow: "hidden"}}>
             <View>
-                {schedule.data.map((e, i) => <ScheduleItem height={heightOfElement} key={i} scheduleItem={e} />)}
+                {s.map((e, i) => <ScheduleItem
+                    startTime={start}
+                    endTime={end}
+                    key={i}
+                    scheduleItem={e}
+                    screenHeight = {screenHeight}
+                />)}
             </View>
             <View style={{
                 position: "absolute",
@@ -104,9 +120,10 @@ const Schedule = () => {
 }
 
 const calculateMinutesFromTime = (timeString) => {
-    var time = parseInt(timeString.split(":")[0]) * 60;
+    var hour = parseInt(timeString.split(":")[0]);
+    var time = (hour < 7 ? hour + 12 : hour) * 60
     time += parseInt(timeString.split(":")[1]);
-    return timeString;
+    return time;
 }
 
 export default Schedule

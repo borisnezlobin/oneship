@@ -9,7 +9,7 @@ const isWeb = () => {
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 const formatDate = (date, includeYear, includeTime) => {
     var date1 = new Date(date);
-    var s = months[date1.getMonth()] + " " + date1.getDay();
+    var s = months[date1.getMonth()] + " " + date1.getDate();
     if(includeYear){
         s += " " + date1.getFullYear();
     }

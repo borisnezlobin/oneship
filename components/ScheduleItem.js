@@ -1,17 +1,24 @@
 import React, { useContext } from 'react'
-import { Text, View } from 'react-native'
+import { Dimensions, Text, View } from 'react-native'
+import { calculateMinutesFromTime } from '../pages/Schedule';
 import COLORS from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts'
 
-const ScheduleItem = ({ scheduleItem, height }) => {
+const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight }) => {
     const { userSettingsContext } = useContext(UserSettingsContext);
     if(scheduleItem.name == "0 Period" && !userSettingsContext.show0Period){
         return <></>
     }
 
+    var thisStart = calculateMinutesFromTime(scheduleItem.start);
+    var thisEnd = calculateMinutesFromTime(scheduleItem.end);
+
+    var heightOfElement = ((thisEnd - thisStart) / (endTime - startTime)) * screenHeight;
+    console.log(heightOfElement);
+
     return (
         <View style={{
-            height: height,
+            height: heightOfElement,
             backgroundColor: COLORS.FOREGROUND_COLOR,
             borderColor: COLORS.BACKGROUND_COLOR,
             borderWidth: 1,
