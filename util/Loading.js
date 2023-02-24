@@ -13,7 +13,7 @@ const Loading = ({ text }) => {
         width: "100%",
         height: "100%"
     }}>
-        <Image style={{width: 256, height: 256}} source={require("../assets/loading-transparent.gif")} />
+        <Image style={{width: 256, height: 256}} source={require("../assets/loading.gif")} />
         <Text style={{
             color: COLORS.GREEN,
             fontSize: 24,
