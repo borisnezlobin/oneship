@@ -55,7 +55,7 @@ const Schedule = () => {
 
     var nowDate = currentTime;
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    var now = 500;
+    // var now = 500;
 
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);
@@ -69,7 +69,7 @@ const Schedule = () => {
     // ^ hehe
 
     return (
-        <SafeAreaView style={{overflow: "hidden"}}>
+        <SafeAreaView style={{overflowX: "hidden", height: Dimensions.get("window").height}}>
             <View>
                 {s.map((e, i) => <ScheduleItem
                     startTime={start}
@@ -114,6 +114,7 @@ const Schedule = () => {
                 lineHeight: 24
             }}>
                 Server data last updated {formatDate(schedule.metadata.lastDataUpdateTime, false, true)}
+                {now}, {end}, {start}
             </Text>
         </SafeAreaView>
     )
