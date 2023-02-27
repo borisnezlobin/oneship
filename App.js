@@ -11,6 +11,7 @@ import Settings from './pages/Settings';
 import COLORS from './util/COLORS';
 import Schedule from './pages/Schedule';
 import { defaultSettings, UserSettingsContext } from './util/contexts';
+import CalendarPage from './pages/Calendar';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,14 +24,14 @@ export default function App() {
         <StatusBar barStyle={"dark-content"} />
         <Drawer.Navigator
           initialRouteName="Home"
-          drawerContent={(props) => <DrawerComponent {...props} />}
+          drawerContent={(props) => <DrawerComponent navigation={props.navigation} />}
           screenOptions={{
             drawerType: isWeb() ? "permanent" : "slide",
             headerShown: false
           }}
         >
           <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="Calendar" component={Calendar} />
+          <Drawer.Screen name="Calendar" component={CalendarPage} />
           <Drawer.Screen name="Surveys" component={Surveys} />
           <Drawer.Screen name="Settings" component={Settings} />
           <Drawer.Screen name="Schedule" component={Schedule} />

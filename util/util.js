@@ -5,7 +5,7 @@ const isWeb = () => {
     return Dimensions.get("window").width > 650;
 }
 
-// scary dyi weee
+// scary diy weee
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 const formatDate = (date, includeYear, includeTime) => {
     var date1 = new Date(date);
@@ -21,5 +21,19 @@ const formatDate = (date, includeYear, includeTime) => {
     return s;
 }
 
+const serverDateToCalendarDate = (date) => {
+    var month = date.split(" ")[0];
+    var day = parseInt(date.split(" ")[1]);
+    var year = date.split(" ")[2];
+    var caldate = year + "-";
+    var indexOfMonth = months.indexOf(month) + 1;
+    if(indexOfMonth < 10) caldate += "0";
+    caldate += indexOfMonth + "-";
+    if(day < 10) caldate += "0";
+    caldate += day;
+    console.log(caldate)
+    return caldate;
+}
+
 export default isWeb;
-export { formatDate };
+export { formatDate, serverDateToCalendarDate };
