@@ -4,7 +4,6 @@ import { calculateMinutesFromTime } from '../pages/Schedule';
 import COLORS from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts'
 
-var rerenders = 0;
 const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight }) => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
@@ -49,7 +48,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight }) => {
             <Text>{scheduleItem.start} - {scheduleItem.end}</Text>
             {isCurrent ?
             <Text>Ending in {thisEnd * 60 * 60 - now} seconds</Text>
-            : <Text>This class is not currently in session.{"\n" + now}, {thisStart}, {thisEnd}</Text>
+            : <Text>This class is not currently in session.</Text>
             }
         </View>
     )
