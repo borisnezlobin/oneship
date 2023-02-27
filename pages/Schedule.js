@@ -6,7 +6,9 @@ import Loading from '../util/Loading';
 import isWeb, { formatDate } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { UserSettingsContext } from '../util/contexts';
+import { Confetti } from 'phosphor-react-native';
 
+var lastUpdate = "";
 const Schedule = () => {
     // use sessionStorage to avoid load times every time user visits page
     var storedValue;
@@ -33,7 +35,8 @@ const Schedule = () => {
         }
 
         async function getData(){
-            fetch("https://paly-vikings.onrender.com/schedule-today")
+            lastUpdate = formatDate(Date.now(), true, false);
+            fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
             .then(res => res.json())
             .then(json => {
                 setSchedule(json);
@@ -50,12 +53,34 @@ const Schedule = () => {
     if(schedule == null){
         return (<Loading />);
     }
+
+    if(schedule.data[0].name == "No school"){
+        return (
+            <SafeAreaView style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+            }}>
+                <Confetti size={72} color={COLORS.GREEN} />
+                <Text style={{textAlign: "center", color: COLORS.GREEN, fontWeight: "bold"}}>
+                    No school today!
+                </Text>
+            </SafeAreaView>
+        )
+    }
+
+    if(lastUpdate !== formatDate(Date.now(), true, false)){
+        setSchedule(null);
+        return <Loading />
+    }
     var scheduleLength = userSettingsContext.show0Period ? schedule.data.length : schedule.data.length - 1;
     var screenHeight = (Dimensions.get("screen").height - 24 - insets.bottom - insets.top);
 
     var nowDate = currentTime;
-    var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    // var now = 500;
+    // var now = nowDate.getHours() * 60 + nowDate.getMinutes();
+    var now = 15 * 60;
 
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);

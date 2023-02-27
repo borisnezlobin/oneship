@@ -29,5 +29,6 @@
     "web": {
       "favicon": "./assets/logo.png"
     }
-  }
+  },
+  "developmentClient": true
 }
