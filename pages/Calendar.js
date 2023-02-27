@@ -8,6 +8,7 @@ import isWeb, { formatDate, serverDateToCalendarDate } from '../util/util';
 import BottomSheet, { BottomSheetScrollView, useBottomSheet, useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Bar from '../components/Bar';
 
 function CalendarPage({ navigation }) {
   const [calendar, setCalendar] = React.useState(null);
@@ -182,55 +183,58 @@ function CalendarPage({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={{backgroundColor: COLORS.FOREGROUND_COLOR}}>
-      {calendarElement}
-      <BottomSheet
-        style={{
-          shadowRadius: 2,
-          shadowColor: COLORS.BACKGROUND_COLOR,
-          shadowOpacity: 0.5
-        }}
-        ref={bottomSheetRef}
-        snapPoints={animatedSnapPoints}
-        handleHeight={animatedHandleHeight}
-        contentHeight={animatedContentHeight}
-        enablePanDownToClose={true}
-        index={-1}
-      >
-        <BottomSheetScrollView onLayout={handleContentLayout} style={{
-            backgroundColor: COLORS.FOREGROUND_COLOR,
-            padding: 4,
-            paddingBottom: insets.bottom
-        }}>
-          <Text style={{
-            color: COLORS.GREEN,
-            fontSize: 24,
-            fontWeight: "bold",
-            marginBottom: 8,
-            textAlign: 'center'
+    <>
+      <Bar navigation={navigation} routeName="Calendar" />
+      <SafeAreaView style={{backgroundColor: COLORS.FOREGROUND_COLOR}}>
+        {calendarElement}
+        <BottomSheet
+          style={{
+            shadowRadius: 2,
+            shadowColor: COLORS.BACKGROUND_COLOR,
+            shadowOpacity: 0.5
+          }}
+          ref={bottomSheetRef}
+          snapPoints={animatedSnapPoints}
+          handleHeight={animatedHandleHeight}
+          contentHeight={animatedContentHeight}
+          enablePanDownToClose={true}
+          index={-1}
+        >
+          <BottomSheetScrollView onLayout={handleContentLayout} style={{
+              backgroundColor: COLORS.FOREGROUND_COLOR,
+              padding: 4,
+              paddingBottom: insets.bottom
           }}>
-            {selectedDay}
-          </Text>
-          {eventsForDay.map((e, i) => {
-            if(e.title.includes("Schedule")) return;
-            var hasDescription = e.description == "No description";
-            return (
-              <View key={i} style={{margin: 2}}>
-                  <Text style={{
-                    fontWeight: 'bold',
-                    fontSize: 18,
-                    color: COLORS.GREEN,
-                    textAlign: 'center'
-                  }}>
-                    {e.title}
-                  </Text>
-                  <Text>{hasDescription ? "" : e.description}</Text>
-              </View>
-            )
-          })}
-        </BottomSheetScrollView>
-      </BottomSheet>
-    </SafeAreaView>
+            <Text style={{
+              color: COLORS.GREEN,
+              fontSize: 24,
+              fontWeight: "bold",
+              marginBottom: 8,
+              textAlign: 'center'
+            }}>
+              {selectedDay}
+            </Text>
+            {eventsForDay.map((e, i) => {
+              if(e.title.includes("Schedule")) return;
+              var hasDescription = e.description == "No description";
+              return (
+                <View key={i} style={{margin: 2}}>
+                    <Text style={{
+                      fontWeight: 'bold',
+                      fontSize: 18,
+                      color: COLORS.GREEN,
+                      textAlign: 'center'
+                    }}>
+                      {e.title}
+                    </Text>
+                    <Text>{hasDescription ? "" : e.description}</Text>
+                </View>
+              )
+            })}
+          </BottomSheetScrollView>
+        </BottomSheet>
+      </SafeAreaView>
+    </>
   );
 }
 
