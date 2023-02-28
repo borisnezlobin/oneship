@@ -15,7 +15,7 @@ function CalendarPage({ navigation }) {
   const [modalVisible, setModalVisible] = React.useState({shown: false, day: null});
   
   const bottomSheetRef = React.useRef();
-  const snapPoints = React.useMemo(() => ["CONTENT_HEIGHT"], []);
+  const snapPoints = React.useMemo(() => ["25%", "CONTENT_HEIGHT"], []);
   const {
     animatedHandleHeight,
     animatedSnapPoints,
@@ -48,7 +48,7 @@ function CalendarPage({ navigation }) {
     }
 
     doShit(); // swering bad
-  }, [calendar]);
+  }, [calendar, modalVisible]);
 
   if(calendar == null){
     return <Loading />
@@ -88,7 +88,7 @@ function CalendarPage({ navigation }) {
     onDayPress={(day) => {
       console.log("you pressed day " + JSON.stringify(day));
       setModalVisible({shown: true, day: day});
-      if(bottomSheetRef.current) bottomSheetRef.current.snapToIndex(0);
+      if(bottomSheetRef.current) bottomSheetRef.current.snapToIndex(1);
     }}
     disableAllTouchEventsForDisabledDays={true}
     disabledByDefault={true}
@@ -112,7 +112,7 @@ function CalendarPage({ navigation }) {
       textMonthFontWeight: 'bold',
       textDayHeaderFontWeight: '300',
       textDayFontSize: 16,
-      textMonthFontSize: 32,
+      textMonthFontSize: 24,
       textDayHeaderFontSize: 16,
     }}
     calendarWidth={isWeb() ? Dimensions.get("window").width - 320 : Dimensions.get("window").width}
@@ -186,9 +186,10 @@ function CalendarPage({ navigation }) {
     <>
       <SafeAreaView style={{backgroundColor: COLORS.FOREGROUND_COLOR}}>
         {calendarElement}
+        <Bar navigation={navigation} />
         <BottomSheet
           style={{
-            shadowRadius: 2,
+            shadowRadius: "2",
             shadowColor: COLORS.BACKGROUND_COLOR,
             shadowOpacity: 0.5
           }}
@@ -233,7 +234,6 @@ function CalendarPage({ navigation }) {
           </BottomSheetScrollView>
         </BottomSheet>
       </SafeAreaView>
-      <Bar navigation={navigation} />
     </>
   );
 }

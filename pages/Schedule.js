@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { SafeAreaView, View, Text, Dimensions } from 'react-native'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { SafeAreaView, View, Text, Dimensions, Modal } from 'react-native'
 import ScheduleItem from '../components/ScheduleItem';
 import COLORS from '../util/COLORS';
 import Loading from '../util/Loading';
@@ -8,10 +8,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { UserSettingsContext } from '../util/contexts';
 import { Confetti } from 'phosphor-react-native';
 import Bar from '../components/Bar';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
 var lastUpdate = "";
 const Schedule = ({ navigation }) => {
-    // use sessionStorage to avoid load times every time user visits page
     var storedValue;
     try {
         storedValue = JSON.parse(sessionStorage.getItem("schedule-today"))
@@ -21,7 +21,11 @@ const Schedule = ({ navigation }) => {
     const insets = useSafeAreaInsets()
     const [schedule, setSchedule] = useState(storedValue);
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
+    const [modalStatus, setModalStatus] = useState({shown: false, data: null});
     const { userSettingsContext } = useContext(UserSettingsContext);
+    const bottomSheetRef = useRef();
+    const snapPoints = useMemo(() => ['25%', '75%'], []);
+
     var s;
     try{
         s = schedule.data;
@@ -85,7 +89,7 @@ const Schedule = ({ navigation }) => {
 
     var nowDate = currentTime;
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    // var now = 15 * 60;
+    // var now = 13 * 60;
 
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);
@@ -98,6 +102,11 @@ const Schedule = ({ navigation }) => {
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 100) positionOfTimeMarker = -100
     // ^ hehe
 
+    const scheduleItemCallback = (data) => {
+        setModalStatus({shown: true, data: data});
+        bottomSheetRef.current.snapToIndex(1);
+    }
+
     return (
         <>
             <SafeAreaView style={{overflowX: "hidden", height: Dimensions.get("window").height}}>
@@ -108,6 +117,7 @@ const Schedule = ({ navigation }) => {
                         key={i}
                         scheduleItem={e}
                         screenHeight = {screenHeight}
+                        openModalCB={scheduleItemCallback}
                     />)}
                 </View>
                 <View style={{
@@ -116,13 +126,14 @@ const Schedule = ({ navigation }) => {
                     width: "100%",
                     left: 2,
                     height: 32,
+                    borderRadius: 8
                 }}>
                     <View style={{
                         width: "100%",
                         backgroundColor: "red",
                         height: 1,
                         position: "relative",
-                        top: 16
+                        top: 16,
                     }} />
                     <Text style = {{
                         position: "relative",
@@ -141,6 +152,31 @@ const Schedule = ({ navigation }) => {
                 </View>
             </SafeAreaView>
             <Bar navigation={navigation} />
+            {isWeb() ?
+                <Modal
+                    animationType="none"
+                    visible={modalVisible.shown}
+                    transparent={true}
+                >
+                    <Text>{JSON.stringify(modalStatus)}</Text>
+                </Modal>
+            :
+                <BottomSheet
+                    style={{
+                        shadowRadius: "2",
+                        shadowColor: COLORS.BACKGROUND_COLOR,
+                        shadowOpacity: 0.5
+                    }}
+                    enablePanDownToClose={true}
+                    index={-1}
+                    ref={bottomSheetRef}
+                    snapPoints={snapPoints}
+                >
+                    <BottomSheetView>
+                        <Text>{JSON.stringify(modalStatus)}</Text>
+                    </BottomSheetView>
+                </BottomSheet>
+            }
         </>
     )
 }
