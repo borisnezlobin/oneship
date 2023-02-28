@@ -146,7 +146,6 @@ const Schedule = ({ navigation }) => {
                     lineHeight: 24
                 }}>
                     Server data last updated {formatDate(schedule.metadata.lastDataUpdateTime, false, true)}
-                    {now}, {end}, {start}
                 </Text>
             </SafeAreaView>
         </>

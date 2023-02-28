@@ -7,17 +7,15 @@ import { UserSettingsContext } from '../util/contexts'
 const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight }) => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
+
+    var thisStart = calculateMinutesFromTime(scheduleItem.start);
+    var thisEnd = calculateMinutesFromTime(scheduleItem.end);
     var isCurrent = thisStart * 60 <= now && thisEnd * 60 >= now;
 
     const { userSettingsContext } = useContext(UserSettingsContext);
     if(scheduleItem.name == "0 Period" && !userSettingsContext.show0Period){
         return <></>
     }
-
-    if(scheduleItem.name == "Period") scheduleItem.name = "7th Period"; // WTF
-
-    var thisStart = calculateMinutesFromTime(scheduleItem.start);
-    var thisEnd = calculateMinutesFromTime(scheduleItem.end);
 
     var heightOfElement = ((thisEnd - thisStart) / (endTime - startTime)) * screenHeight;
     console.log(heightOfElement);
@@ -47,7 +45,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight }) => {
             }}>{scheduleItem.name}</Text>
             <Text>{scheduleItem.start} - {scheduleItem.end}</Text>
             {isCurrent ?
-            <Text>Ending in {thisEnd * 60 * 60 - now} seconds</Text>
+            <Text>Ending in {thisEnd * 60 - now} seconds</Text>
             : <Text>This class is not currently in session.</Text>
             }
         </View>
