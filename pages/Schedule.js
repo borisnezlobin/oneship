@@ -84,8 +84,8 @@ const Schedule = ({ navigation }) => {
     var screenHeight = (Dimensions.get("screen").height - 24 - insets.bottom - insets.top);
 
     var nowDate = currentTime;
-    // var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    var now = 15 * 60;
+    var now = nowDate.getHours() * 60 + nowDate.getMinutes();
+    // var now = 15 * 60;
 
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);
@@ -100,7 +100,6 @@ const Schedule = ({ navigation }) => {
 
     return (
         <>
-            <Bar navigation={navigation} routeName="Schedule" />
             <SafeAreaView style={{overflowX: "hidden", height: Dimensions.get("window").height}}>
                 <View>
                     {s.map((e, i) => <ScheduleItem
@@ -140,14 +139,8 @@ const Schedule = ({ navigation }) => {
                         {nowDate.getHours() == 12 ? "12" : nowDate.getHours() % 12}:{nowDate.getMinutes() < 10 ? "0" : ""}{nowDate.getMinutes()}
                     </Text>
                 </View>
-                <Text style={{
-                    textAlign: "center",
-                    height: 24,
-                    lineHeight: 24
-                }}>
-                    Server data last updated {formatDate(schedule.metadata.lastDataUpdateTime, false, true)}
-                </Text>
             </SafeAreaView>
+            <Bar navigation={navigation} />
         </>
     )
 }
