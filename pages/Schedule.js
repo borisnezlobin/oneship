@@ -155,7 +155,7 @@ const Schedule = ({ navigation }) => {
             {isWeb() ?
                 <Modal
                     animationType="none"
-                    visible={modalVisible.shown}
+                    visible={modalStatus.shown}
                     transparent={true}
                 >
                     <Text>{JSON.stringify(modalStatus)}</Text>
