@@ -19,10 +19,12 @@ const Bar = ({ navigation }) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: COLORS.GREEN,
-                top: 0,
+                bottom: insets.bottom,
                 borderRadius: 1024,
-                top: insets.top,
-                left: 8
+                right: 16,
+                shadowColor: COLORS.GREEN,
+                shadowOpacity: 1,
+                shadowOffset: "0.5",
             }}
         >
             <TouchableOpacity onPress={navigation.openDrawer}>
