@@ -36,8 +36,15 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         return <></>
     }
 
+    var thisItem;
+    console.log(JSON.stringify(userSettingsContext))
+    for(var i = 0; i < userSettingsContext.schedule.length; i++){
+        if(userSettingsContext.schedule[i].realName == scheduleItem.name){
+            thisItem = userSettingsContext.schedule[i];
+        }
+    }
+
     var heightOfElement = ((thisEnd - thisStart) / (endTime - startTime)) * screenHeight;
-    console.log(heightOfElement);
 
     useEffect(() => {
         if(classStatus == CLASS_STATUS.CURRENT){
@@ -57,13 +64,17 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                 padding: 8
             }}>
                 <TouchableOpacity onPress={() => {
-                    openModalCB(scheduleItem)
+                    openModalCB({
+                        ...thisItem,
+                        start: scheduleItem.start,
+                        end: scheduleItem.end
+                    })
                 }}>
                     <Text style={{
                         fontWeight: "bold",
                         fontSize: "large",
                         color: COLORS.GREEN,
-                    }}>{scheduleItem.name}</Text>
+                    }}>{thisItem.customName}</Text>
                     <Text>{scheduleItem.start} - {scheduleItem.end}</Text>
                     {classStatus == CLASS_STATUS.CURRENT ?
                     <Text>Ending in {thisEnd * 60 - now} seconds</Text>

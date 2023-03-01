@@ -9,6 +9,7 @@ import { UserSettingsContext } from '../util/contexts';
 import { Confetti } from 'phosphor-react-native';
 import Bar from '../components/Bar';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 var lastUpdate = "";
 const Schedule = ({ navigation }) => {
@@ -24,7 +25,7 @@ const Schedule = ({ navigation }) => {
     const [modalStatus, setModalStatus] = useState({shown: false, data: null});
     const { userSettingsContext } = useContext(UserSettingsContext);
     const bottomSheetRef = useRef();
-    const snapPoints = useMemo(() => ['25%', '75%'], []);
+    const snapPoints = useMemo(() => ['25%'], []);
 
     var s;
     try{
@@ -94,17 +95,14 @@ const Schedule = ({ navigation }) => {
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);
 
-    console.log("start: " + start);
-    console.log("end: " + end);
-    console.log("height: " + screenHeight)
-
-    var positionOfTimeMarker = ((now - start) / (end - start)) * 100;
-    if(positionOfTimeMarker < 0 || positionOfTimeMarker > 100) positionOfTimeMarker = -100
+    var positionOfTimeMarker = ((now - start) / (end - start));
+    console.log("time marker: " + positionOfTimeMarker)
+    if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
     // ^ hehe
 
     const scheduleItemCallback = (data) => {
         setModalStatus({shown: true, data: data});
-        bottomSheetRef.current.snapToIndex(1);
+        bottomSheetRef.current.snapToIndex(0);
     }
 
     return (
@@ -120,9 +118,9 @@ const Schedule = ({ navigation }) => {
                         openModalCB={scheduleItemCallback}
                     />)}
                 </View>
-                <View style={{
+                <View pointerEvents='none' style={{
                     position: "absolute",
-                    top: positionOfTimeMarker.toString() + "%",
+                    top: Dimensions.get("window").height * positionOfTimeMarker,
                     width: "100%",
                     left: 2,
                     height: 32,
@@ -152,7 +150,7 @@ const Schedule = ({ navigation }) => {
                 </View>
             </SafeAreaView>
             <Bar navigation={navigation} />
-            {isWeb() ?
+            {modalStatus.shown ? (isWeb() ?
                 <Modal
                     animationType="none"
                     visible={modalStatus.shown}
@@ -173,10 +171,57 @@ const Schedule = ({ navigation }) => {
                     snapPoints={snapPoints}
                 >
                     <BottomSheetView>
-                        <Text>{JSON.stringify(modalStatus)}</Text>
+                        <Text style={{
+                            fontWeight: 'bold',
+                            fontSize: 32,
+                            color: COLORS.GREEN,
+                            textAlign: 'center'
+                        }}>
+                            {modalStatus.data.customName}
+                        </Text>
+                        <Text style={{
+                            fontSize: 16,
+                            color: "grey",
+                            textAlign: 'center'
+                        }}>
+                            {modalStatus.data.start} - {modalStatus.data.end}
+                        </Text>
+                        <Text style={{
+                            fontSize: 16,
+                            marginTop: 8,
+                            color: "black",
+                            textAlign: 'center'
+                        }}>
+                            Taught by {modalStatus.data.teacher} in {modalStatus.data.room}
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => {}}
+                            style={{
+                                backgroundColor: COLORS.GREEN,
+                                marginTop: 24,
+                                borderRadius: 2,
+                                height: 36,
+                                width: 100,
+                                marginLeft: (Dimensions.get("window").width - 100) / 2,
+                                shadowColor: COLORS.GREEN,
+                                shadowOpacity: 1,
+                                shadowOffset: 0.5,
+                                shadowRadius: 5
+                            }}
+                        >
+                            <Text style={{
+                                fontSize: 16,
+                                marginTop: 8,
+                                fontWeight: 'bold',
+                                color: COLORS.FOREGROUND_COLOR,
+                                textAlign: 'center',
+                            }}>
+                                EDIT
+                            </Text>
+                        </TouchableOpacity>
                     </BottomSheetView>
                 </BottomSheet>
-            }
+            ) : <></>}
         </>
     )
 }
