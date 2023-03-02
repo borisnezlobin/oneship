@@ -4,6 +4,7 @@ const setLightMode = (newVal) => { isLightMode = newVal; }
 
 const COLORS = {
     GREEN: "#1C6800",
+    TEXT: isLightMode ? "#000000" : "#ffffff",
     FOREGROUND_COLOR: isLightMode ? "#ffffff" : "#19191b",
     LIGHT: isLightMode ? "#e9e9e9" : "#222222",
     BACKGROUND_COLOR: isLightMode ? "#cccccc" : "#ffffff",

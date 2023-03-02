@@ -36,13 +36,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         return <></>
     }
 
-    var thisItem;
-    console.log(JSON.stringify(userSettingsContext))
-    for(var i = 0; i < userSettingsContext.schedule.length; i++){
-        if(userSettingsContext.schedule[i].realName == scheduleItem.name){
-            thisItem = userSettingsContext.schedule[i];
-        }
-    }
+    var thisItem = userSettingsContext.schedule[scheduleItem.name];
 
     var heightOfElement = ((thisEnd - thisStart) / (endTime - startTime)) * screenHeight;
 
@@ -64,6 +58,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                 padding: 8
             }}>
                 <TouchableOpacity onPress={() => {
+                    if(thisItem.realName == "Lunch" || thisItem.realName == "PRIME") return;
                     openModalCB({
                         ...thisItem,
                         start: scheduleItem.start,
