@@ -9,11 +9,14 @@ import BottomSheet, { BottomSheetScrollView, useBottomSheet, useBottomSheetDynam
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bar from '../components/Bar';
+import Schedule from './Schedule';
+import { UserSettingsContext } from '../util/contexts';
+import CalendarScheduleDisplay from '../components/CalendarScheduleDisplay';
 
 function CalendarPage({ navigation }) {
   const [calendar, setCalendar] = React.useState(null);
   const [modalVisible, setModalVisible] = React.useState({shown: false, day: null});
-  
+  const { userSettingsContext } = React.useContext(UserSettingsContext);
   const bottomSheetRef = React.useRef();
   const snapPoints = React.useMemo(() => ["25%", "CONTENT_HEIGHT"], []);
   const {
@@ -88,7 +91,7 @@ function CalendarPage({ navigation }) {
     onDayPress={(day) => {
       console.log("you pressed day " + JSON.stringify(day));
       setModalVisible({shown: true, day: day});
-      if(bottomSheetRef.current) bottomSheetRef.current.snapToIndex(1);
+      bottomSheetRef.current?.snapToIndex(1);
     }}
     disableAllTouchEventsForDisabledDays={true}
     disabledByDefault={true}
@@ -215,8 +218,13 @@ function CalendarPage({ navigation }) {
               {selectedDay}
             </Text>
             {eventsForDay.map((e, i) => {
-              if(e.title.includes("Schedule")) return;
-              var hasDescription = e.description == "No description";
+              var description = (e.description == "No description") ? "" : e.description;
+              if(e.title.includes("Schedule")){
+                description = formatSchedule(description, userSettingsContext.schedule);
+                return (
+                  <CalendarScheduleDisplay schedule={description} day={selectedDay} />
+                )
+              }
               return (
                 <View key={i} style={{margin: 2}}>
                     <Text style={{
@@ -225,9 +233,14 @@ function CalendarPage({ navigation }) {
                       color: COLORS.GREEN,
                       textAlign: 'center'
                     }}>
-                      {e.title}
+                      {e.title + " "}
                     </Text>
-                    <Text>{hasDescription ? "" : e.description}</Text>
+                      <Text style={{
+                        fontWeight: "normal",
+                        color: COLORS.TEXT,
+                      }}>
+                        {description}
+                      </Text>
                 </View>
               )
             })}
@@ -236,6 +249,16 @@ function CalendarPage({ navigation }) {
       </SafeAreaView>
     </>
   );
+}
+
+const formatSchedule = (s, settings) => {
+  var copeSchedule = s;
+  const keys = Object.keys(settings);
+  for(var i = 0; i < keys.length; i++){
+    console.log("replacing " + settings[keys[i]].realName + " with " + settings[keys[i]].customName)
+    copeSchedule = copeSchedule.replaceAll(settings[keys[i]].realName, settings[keys[i]].customName);
+  }
+  return copeSchedule;
 }
 
 export default CalendarPage
