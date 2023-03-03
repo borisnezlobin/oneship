@@ -8,24 +8,18 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { UserSettingsContext } from '../util/contexts';
 import { Confetti } from 'phosphor-react-native';
 import Bar from '../components/Bar';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import ScheduleBottomSheet from '../components/ScheduleBottomSheet';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var lastUpdate = "";
 const Schedule = ({ navigation }) => {
-    var storedValue;
-    try {
-        storedValue = JSON.parse(sessionStorage.getItem("schedule-today"))
-    } catch (e) {
-        storedValue = null;
-    }
     const insets = useSafeAreaInsets()
-    const [schedule, setSchedule] = useState(storedValue);
+    const [schedule, setSchedule] = useState(null);
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     const [modalStatus, setModalStatus] = useState({shown: false, data: null});
     const { userSettingsContext } = useContext(UserSettingsContext);
     const bottomSheetRef = useRef();
+    console.log("schedule: " + JSON.stringify(schedule))
 
     var s;
     try{
@@ -41,13 +35,19 @@ const Schedule = ({ navigation }) => {
         }
 
         async function getData(){
+            // await AsyncStorage.removeItem("schedule")
+            var prevData = await AsyncStorage.getItem("schedule");
             lastUpdate = formatDate(Date.now(), true, false);
+            if(prevData != null && prevData){
+                setSchedule(JSON.parse(prevData));
+                return;
+            }
             fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
             .then(res => res.json())
-            .then(json => {
-                setSchedule(json);
-                sessionStorage.setItem("schedule-today", JSON.stringify(json));
-            })
+            .then(j => {
+                setSchedule(j);
+                AsyncStorage.setItem("schedule", JSON.stringify(j));
+            }).catch((e) => console.log("error: " + e))
         }
 
         setTimeout(() => {
@@ -85,11 +85,11 @@ const Schedule = ({ navigation }) => {
         return <Loading />
     }
     var scheduleLength = userSettingsContext.show0Period ? schedule.data.length : schedule.data.length - 1;
-    var screenHeight = (Dimensions.get("screen").height - 24 - insets.bottom - insets.top);
+    var screenHeight = (Dimensions.get("window").height - insets.top - insets.bottom);
 
     var nowDate = currentTime;
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    // var now = 13 * 60;
+    // var now = 7 * 60 + 55;
 
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);
@@ -105,7 +105,7 @@ const Schedule = ({ navigation }) => {
 
     return (
         <>
-            <SafeAreaView style={{overflowX: "hidden", height: Dimensions.get("window").height}}>
+            <View style={{overflowX: "hidden", top: insets.top, height: Dimensions.get("window").height}}>
                 <View>
                     {s.map((e, i) => <ScheduleItem
                         startTime={start}
@@ -116,37 +116,37 @@ const Schedule = ({ navigation }) => {
                         openModalCB={scheduleItemCallback}
                     />)}
                 </View>
-                <View pointerEvents='none' style={{
-                    position: "absolute",
-                    top: (Dimensions.get("window").height * positionOfTimeMarker) + insets.top,
+            </View>
+            <View pointerEvents='none' style={{
+                position: "absolute",
+                top: (screenHeight * positionOfTimeMarker) + insets.top - 18,
+                width: "100%",
+                left: 2,
+                height: 32,
+                borderRadius: 8
+            }}>
+                <View style={{
                     width: "100%",
-                    left: 2,
+                    backgroundColor: "red",
+                    height: 1,
+                    position: "relative",
+                    top: 16,
+                }} />
+                <Text style = {{
+                    position: "relative",
+                    right: 0,
+                    textAlign: 'center',
+                    color: COLORS.FOREGROUND_COLOR,
+                    fontWeight: "bold",
+                    backgroundColor: "#B80f0A",
+                    padding: 8,
+                    width: 58,
                     height: 32,
                     borderRadius: 8
                 }}>
-                    <View style={{
-                        width: "100%",
-                        backgroundColor: "red",
-                        height: 1,
-                        position: "relative",
-                        top: 16,
-                    }} />
-                    <Text style = {{
-                        position: "relative",
-                        right: 0,
-                        textAlign: 'center',
-                        color: COLORS.FOREGROUND_COLOR,
-                        fontWeight: "bold",
-                        backgroundColor: "#B80f0A",
-                        padding: 8,
-                        width: 58,
-                        height: 32,
-                        borderRadius: 8
-                    }}>
-                        {nowDate.getHours() == 12 ? "12" : nowDate.getHours() % 12}:{nowDate.getMinutes() < 10 ? "0" : ""}{nowDate.getMinutes()}
-                    </Text>
-                </View>
-            </SafeAreaView>
+                    {nowDate.getHours() == 12 ? "12" : nowDate.getHours() % 12}:{nowDate.getMinutes() < 10 ? "0" : ""}{nowDate.getMinutes()}
+                </Text>
+            </View>
             <Bar navigation={navigation} />
             {modalStatus.shown ? (isWeb() ?
                 <Modal
