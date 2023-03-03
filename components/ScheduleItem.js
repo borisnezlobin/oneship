@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { Dimensions, Text, View } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { Dimensions, Text, View, TouchableOpacity } from 'react-native'
 import { calculateMinutesFromTime } from '../pages/Schedule';
 import COLORS from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts'
-import BottomSheet, { BottomSheetScrollView, BottomSheetView, useBottomSheet, useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import isWeb from '../util/util';
+import { Gear } from 'phosphor-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 const CLASS_STATUS = {
@@ -17,6 +16,7 @@ const CLASS_STATUS = {
 const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModalCB }) => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
+    const insets = useSafeAreaInsets()
 
     var thisStart = calculateMinutesFromTime(scheduleItem.start);
     var thisEnd = calculateMinutesFromTime(scheduleItem.end);
@@ -46,6 +46,24 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         }
     }, [currentTime]);
 
+    var showThis = thisItem.realName != "Lunch" && thisItem.realName != "PRIME"
+
+    // don't even try to worry about this
+    const wtf = () => {
+        if(!showThis) return;
+        openModalCB({
+            ...thisItem,
+            start: scheduleItem.start,
+            end: scheduleItem.end
+        });
+
+        setTimeout(() => openModalCB({
+            ...thisItem,
+            start: scheduleItem.start,
+            end: scheduleItem.end
+        }), 100);
+    }
+
     return (
         <>
             <View style={{
@@ -55,27 +73,41 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                 backgroundColor: classStatus == CLASS_STATUS.PASSED ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR,
                 width: Dimensions.get("window").width - 64 - 2,
                 marginLeft: 64,
-                padding: 8
+                padding: 8,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: "flex-start",
             }}>
-                <TouchableOpacity onPress={() => {
-                    if(thisItem.realName == "Lunch" || thisItem.realName == "PRIME") return;
-                    openModalCB({
-                        ...thisItem,
-                        start: scheduleItem.start,
-                        end: scheduleItem.end
-                    })
-                }}>
+                <View>
                     <Text style={{
                         fontWeight: "bold",
                         fontSize: "large",
                         color: COLORS.GREEN,
-                    }}>{thisItem.customName}</Text>
+                    }}>
+                        {thisItem.customName}
+                    </Text>
                     <Text>{scheduleItem.start} - {scheduleItem.end}</Text>
                     {classStatus == CLASS_STATUS.CURRENT ?
                     <Text>Ending in {thisEnd * 60 - now} seconds</Text>
                     : <></>
                     }
+                </View>
+                {showThis ? <TouchableOpacity
+                    onPress={wtf}
+                >
+                    <Gear
+                        size={24}
+                        color={COLORS.GREEN}
+                        style={{
+                            bottom: 0,
+                            right: 0,
+                            height: 32,
+                            width: 32,
+                        }}
+                    />
                 </TouchableOpacity>
+                : <></>}
             </View>
             
         </>

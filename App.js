@@ -14,11 +14,41 @@ import { defaultSettings, UserSettingsContext } from './util/contexts';
 import CalendarPage from './pages/Calendar';
 import Bar from './components/Bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loading from './util/Loading';
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-  const [userSettingsContext, setUserSettingsContext] = React.useState(defaultSettings);
+  const [userSettingsContext, setUserSettingsContext] = React.useState(null);
+
+  React.useEffect(() => {
+    const getData = async () => {
+      const gottenSettings = await AsyncStorage.getItem("settings");
+      if(gottenSettings == null){
+        setUserSettingsContext(defaultSettings);
+        return;
+      }
+      setUserSettingsContext(JSON.parse(gottenSettings));
+    }
+
+    const setData = () => {
+      AsyncStorage.setItem("settings", JSON.stringify(userSettingsContext))
+    }
+
+    if(userSettingsContext == null){
+      getData()
+    }else{
+      setData();
+    }
+  }, [userSettingsContext])
+
+  if(userSettingsContext == null){
+    return <>
+      <StatusBar barStyle="dark-content" />
+      <Loading />
+    </>
+  }
 
   return (
     <SafeAreaProvider>
