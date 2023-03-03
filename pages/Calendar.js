@@ -15,6 +15,7 @@ import CalendarScheduleDisplay from '../components/CalendarScheduleDisplay';
 
 function CalendarPage({ navigation }) {
   const [calendar, setCalendar] = React.useState(null);
+  const [showingSchedule, setShowingSchedule] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState({shown: false, day: null});
   const { userSettingsContext } = React.useContext(UserSettingsContext);
   const bottomSheetRef = React.useRef();
@@ -83,15 +84,12 @@ function CalendarPage({ navigation }) {
     }
   }
 
-  console.log(eventsForDay);
-
   var calendarElement = <CalendarList
     markingType='custom'
     markedDates={calObjects}
     onDayPress={(day) => {
-      console.log("you pressed day " + JSON.stringify(day));
       setModalVisible({shown: true, day: day});
-      bottomSheetRef.current?.snapToIndex(1);
+      setTimeout(() => bottomSheetRef.current?.snapToIndex(1), 100);
     }}
     disableAllTouchEventsForDisabledDays={true}
     disabledByDefault={true}
@@ -202,6 +200,9 @@ function CalendarPage({ navigation }) {
           contentHeight={animatedContentHeight}
           enablePanDownToClose={true}
           index={-1}
+          onClose={() => {
+            setShowingSchedule(false);
+          }}
         >
           <BottomSheetScrollView onLayout={handleContentLayout} style={{
               backgroundColor: COLORS.FOREGROUND_COLOR,
@@ -218,13 +219,41 @@ function CalendarPage({ navigation }) {
               {selectedDay}
             </Text>
             {eventsForDay.map((e, i) => {
-              var description = (e.description == "No description") ? "" : e.description;
               if(e.title.includes("Schedule")){
-                description = formatSchedule(description, userSettingsContext.schedule);
                 return (
-                  <CalendarScheduleDisplay schedule={description} day={selectedDay} />
+                  <CalendarScheduleDisplay key={i} showingSchedule={showingSchedule} cb={(bool) => {
+                    bottomSheetRef.current?.snapToIndex(0); // running out of bandaids I is
+                    setShowingSchedule(bool)
+                  }} />
                 )
               }
+              return;
+            })}
+            {eventsForDay.map((e, i) => {
+              var description = (e.description == "No description") ? "" : e.description;
+              if(e.title.includes("Schedule") && showingSchedule){
+                return (
+                  <View key={i}>
+                    <Text style={{
+                      fontWeight: 'bold',
+                      fontSize: 18,
+                      color: COLORS.GREEN,
+                      textAlign: 'center'
+                    }}>
+                      {e.title + " "}
+                    </Text>
+                    <Text style={{
+                        fontWeight: "normal",
+                        color: COLORS.TEXT,
+                        textAlign: 'center'
+                      }}>
+                        {formatSchedule(e.description, userSettingsContext.schedule)}
+                      </Text>
+                  </View>
+                );
+              }
+              if(!e.title.includes("Schedule") && showingSchedule) return;
+              if(e.title.includes("Schedule") && !showingSchedule) return;
               return (
                 <View key={i} style={{margin: 2}}>
                     <Text style={{
@@ -235,7 +264,7 @@ function CalendarPage({ navigation }) {
                     }}>
                       {e.title + " "}
                     </Text>
-                      <Text style={{
+                    <Text style={{
                         fontWeight: "normal",
                         color: COLORS.TEXT,
                       }}>
@@ -255,7 +284,6 @@ const formatSchedule = (s, settings) => {
   var copeSchedule = s;
   const keys = Object.keys(settings);
   for(var i = 0; i < keys.length; i++){
-    console.log("replacing " + settings[keys[i]].realName + " with " + settings[keys[i]].customName)
     copeSchedule = copeSchedule.replaceAll(settings[keys[i]].realName, settings[keys[i]].customName);
   }
   return copeSchedule;

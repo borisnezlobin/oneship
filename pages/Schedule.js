@@ -35,13 +35,16 @@ const Schedule = ({ navigation }) => {
         }
 
         async function getData(){
-            // await AsyncStorage.removeItem("schedule")
-            var prevData = await AsyncStorage.getItem("schedule");
-            lastUpdate = formatDate(Date.now(), true, false);
-            if(prevData != null && prevData){
-                setSchedule(JSON.parse(prevData));
-                return;
+            lastUpdate = await AsyncStorage.getItem("lastScheduleUpdateTime");
+            if(lastUpdate == formatDate(Date.now(), true, false)){
+                var prevData = await AsyncStorage.getItem("schedule");
+                if(prevData != null && prevData){
+                    setSchedule(JSON.parse(prevData));
+                    return;
+                }
             }
+            lastUpdate = formatDate(Date.now(), true, false)
+            AsyncStorage.setItem("lastScheduleUpdateTime", lastUpdate);
             fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
             .then(res => res.json())
             .then(j => {
@@ -62,11 +65,10 @@ const Schedule = ({ navigation }) => {
     if(schedule.data[0].name == "No school"){
         return (
             <>
-                <Bar navigation={navigation} routeName="Schedule" />
                 <SafeAreaView style={{
                     width: "100%",
                     backgroundColor: COLORS.FOREGROUND_COLOR,
-                    height: Dimensions.get("window").height - insets.top - (isWeb() ? 0 : 50),
+                    height: Dimensions.get("window").height,
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
@@ -76,6 +78,7 @@ const Schedule = ({ navigation }) => {
                         No school today!
                     </Text>
                 </SafeAreaView>
+                <Bar navigation={navigation} routeName="Schedule" />
             </>
         )
     }
