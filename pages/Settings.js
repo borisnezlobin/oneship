@@ -6,9 +6,9 @@ import { UserSettingsContext } from '../util/contexts';
 function Settings({ navigation }) {
   const { userSettingsContext, setUserSettingsContext } = React.useContext(UserSettingsContext);
 
-  const change0PeriodBehaviour = () => {
+  const changeBoolValueInSettings = (keyName) => {
     var newObj = {...userSettingsContext}
-    newObj.show0Period = !userSettingsContext.show0Period;
+    newObj[keyName] = !userSettingsContext[keyName];
     setUserSettingsContext(newObj);
   }
 
@@ -17,9 +17,13 @@ function Settings({ navigation }) {
         <Text style={{ color: "#1C6800", fontSize: "larger", marginBottom: 16, fontWeight: "bold" }}>
             Settings
         </Text>
-      <Button onPress={change0PeriodBehaviour} title={(userSettingsContext.show0Period ? "Hide" : "Show") + " 0 period on schedule"}>
+      <Button onPress={() => changeBoolValueInSettings("show0Period")} title={(userSettingsContext.show0Period ? "Hide" : "Show") + " 0 period on schedule"}>
           {userSettingsContext.show0Period ? "Hide" : "Show"} 0 period on schedule
       </Button>
+      <Button onPress={() => changeBoolValueInSettings("isLightMode")} title={(userSettingsContext.isLightMode ? "Light" : "Dark") + " mode"} />
+      <Text>
+        {JSON.stringify(userSettingsContext)}
+      </Text>
     </View>
   );
 }
