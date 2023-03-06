@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { UserSettingsContext } from '../util/contexts';
 
@@ -14,16 +14,12 @@ function Settings({ navigation }) {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-            <Text style={{ color: "#1C6800", fontSize: "larger" }}>
-                Go to home page
-            </Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={change0PeriodBehaviour}>
-        <Text>
-          {userSettingsContext.show0Period ? "Hide" : "Show"} 0 period on schedule
+        <Text style={{ color: "#1C6800", fontSize: "larger", marginBottom: 16, fontWeight: "bold" }}>
+            Settings
         </Text>
-      </TouchableOpacity>
+      <Button onPress={change0PeriodBehaviour} title={(userSettingsContext.show0Period ? "Hide" : "Show") + " 0 period on schedule"}>
+          {userSettingsContext.show0Period ? "Hide" : "Show"} 0 period on schedule
+      </Button>
     </View>
   );
 }

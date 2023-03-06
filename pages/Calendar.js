@@ -10,7 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bar from '../components/Bar';
 import Schedule from './Schedule';
-import { UserSettingsContext } from '../util/contexts';
+import { RouteContext, UserSettingsContext } from '../util/contexts';
 import CalendarScheduleDisplay from '../components/CalendarScheduleDisplay';
 
 function CalendarPage({ navigation }) {
@@ -95,7 +95,7 @@ function CalendarPage({ navigation }) {
     disabledByDefault={true}
     theme={{
       backgroundColor: COLORS.FOREGROUND_COLOR,
-      calendarBackground: '#ffffff',
+      calendarBackground: COLORS.FOREGROUND_COLOR,
       textSectionTitleColor: '#b6c1cd',
       textSectionTitleDisabledColor: '#d9e1e8',
       selectedDayBackgroundColor: '#00adf5',
@@ -137,6 +137,10 @@ function CalendarPage({ navigation }) {
             height: Dimensions.get("window").height * 3/ 4,
             marginTop: Dimensions.get("window").height / 8,
             backgroundColor: COLORS.FOREGROUND_COLOR,
+            borderRadius: 8,
+            paddingHorizontal: 8,
+            paddingBottom: 8,
+            overflowY: "scroll"
         }}>
           <Text style={{
             color: COLORS.GREEN,
@@ -159,7 +163,7 @@ function CalendarPage({ navigation }) {
                   }}>
                     {e.title}
                   </Text>
-                  <Text>{hasDescription ? "" : e.description}</Text>
+                  <Text style={{color: COLORS.TEXT}}>{hasDescription ? "" : e.description}</Text>
               </View>
             )
           })}
@@ -189,10 +193,19 @@ function CalendarPage({ navigation }) {
         {calendarElement}
         <Bar navigation={navigation} />
         <BottomSheet
+          handleIndicatorStyle={{
+            backgroundColor: COLORS.TEXT
+          }}
+          backgroundStyle={{
+            backgroundColor: COLORS.FOREGROUND_COLOR
+          }}
           style={{
             shadowRadius: "2",
             shadowColor: COLORS.BACKGROUND_COLOR,
-            shadowOpacity: 0.5
+            shadowOpacity: 0.5,
+          }}
+          handleStyle={{
+            backgroundColor: COLORS.FOREGROUND_COLOR,
           }}
           ref={bottomSheetRef}
           snapPoints={animatedSnapPoints}
@@ -223,7 +236,8 @@ function CalendarPage({ navigation }) {
                 return (
                   <CalendarScheduleDisplay key={i} showingSchedule={showingSchedule} cb={(bool) => {
                     bottomSheetRef.current?.snapToIndex(0); // running out of bandaids I is
-                    setShowingSchedule(bool)
+                    setShowingSchedule(bool);
+                    setTimeout(() => bottomSheetRef.current?.snapToIndex(1), 300);
                   }} />
                 )
               }

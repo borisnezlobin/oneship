@@ -5,16 +5,16 @@ import { HouseLine, Calendar, ChartBar, Clock, GearSix } from "phosphor-react-na
 import IMAGES from "./ASSETS";
 import isWeb from "./util";
 
-function DrawerComponent({ navigation }) {
+function DrawerComponent({ navigation, currentRoute, setRoute }) {
     const iconSize = 36;
     return (
         <SafeAreaView style={{
             flex: 1,
             display: "flex",
-            marginLeft: 16,
             alignItems: 'left',
             justifyContent: 'center',
             flexDirection: "column",
+            backgroundColor: COLORS.FOREGROUND_COLOR,
         }}>
             <View style={{
                 paddingRight: 16,
@@ -28,26 +28,36 @@ function DrawerComponent({ navigation }) {
             <View style={{height: 24}} />
             <DrawerListItem
                 navigation={navigation}
+                setCurrentRoute={setRoute}
+                currentRoute={currentRoute}
                 to="Home"
                 icon={<HouseLine size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
+                setCurrentRoute={setRoute}
+                currentRoute={currentRoute}
                 to="Schedule"
                 icon={<Clock size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
+                setCurrentRoute={setRoute}
+                currentRoute={currentRoute}
                 to="Calendar"
                 icon={<Calendar size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
+                setCurrentRoute={setRoute}
+                currentRoute={currentRoute}
                 to="Surveys"
                 icon={<ChartBar size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
+                setCurrentRoute={setRoute}
+                currentRoute={currentRoute}
                 to="Settings"
                 icon={<GearSix size={iconSize} color={COLORS.GREEN} />}
             />
