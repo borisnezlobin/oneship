@@ -23,7 +23,8 @@ const defaultSettings = {
         "Advisory": new CustomScheduleItem("Advisory", null, null, null),
         "PRIME": new CustomScheduleItem("PRIME", null, null, null),
         "7th Period": new CustomScheduleItem("7th Period", null, null, null),
-    }
+    },
+    isLightMode: true,
 }
 
 const RouteContext = createContext("");

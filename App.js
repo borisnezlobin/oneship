@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StatusBar } from 'react-native';
+import { StatusBar, Text } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, useRoute } from '@react-navigation/native';
 import Home from './pages/Home';
@@ -20,6 +20,7 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
   const [routeContext, setRouteContext] = React.useState("");
+  const v = COLORS.method(false)
 
   React.useEffect(() => {
     const getData = async () => {
@@ -41,6 +42,8 @@ export default function App() {
       setData();
     }
   }, [userSettingsContext])
+
+  return <Text>data: {JSON.stringify(v)}</Text>
 
   if(userSettingsContext == null){
     return <>
