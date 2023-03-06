@@ -20,7 +20,7 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
   const [routeContext, setRouteContext] = React.useState("");
-  const v = COLORS.method(false)
+  COLORS.setLightMode(userSettingsContext ? userSettingsContext.isLightMode : true);
 
   React.useEffect(() => {
     const getData = async () => {
@@ -42,8 +42,6 @@ export default function App() {
       setData();
     }
   }, [userSettingsContext])
-
-  return <Text>data: {JSON.stringify(v)}</Text>
 
   if(userSettingsContext == null){
     return <>
