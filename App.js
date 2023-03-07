@@ -4,7 +4,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer, useRoute } from '@react-navigation/native';
 import Home from './pages/Home';
 import DrawerComponent from './util/DrawerComponent';
-import Surveys from './pages/Surveys';
 import isWeb from './util/util';
 import Settings from './pages/Settings';
 import Schedule from './pages/Schedule';
@@ -14,6 +13,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from './util/Loading';
 import getColors, { setTheme } from './util/COLORS';
+import Sports from './pages/Sports';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,10 +21,7 @@ export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
   const [routeContext, setRouteContext] = React.useState("");
   var COLORS = getColors();
-  // COLORS.setLightMode(userSettingsContext == null ? false : userSettingsContext.isLightMode);
   setTheme(userSettingsContext == null ? false : userSettingsContext.isLightMode);
-  console.log("theme: " + (userSettingsContext == null ? "null" : userSettingsContext.isLightMode));
-  console.log(COLORS.isLightMode)
 
   React.useEffect(() => {
     const getData = async () => {
@@ -68,10 +65,10 @@ export default function App() {
               }}
             >
               <Drawer.Screen name="Home" component={Home} />
-              <Drawer.Screen name="Calendar" component={CalendarPage} />
-              <Drawer.Screen name="Surveys" component={Surveys} />
-              <Drawer.Screen name="Settings" component={Settings} />
               <Drawer.Screen name="Schedule" component={Schedule} />
+              <Drawer.Screen name="Calendar" component={CalendarPage} />
+              <Drawer.Screen name="Sports" component={Sports} />
+              <Drawer.Screen name="Settings" component={Settings} />
             </Drawer.Navigator>
           </NavigationContainer>
       </UserSettingsContext.Provider>
