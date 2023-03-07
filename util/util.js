@@ -31,7 +31,6 @@ const serverDateToCalendarDate = (date) => {
     caldate += indexOfMonth + "-";
     if(day < 10) caldate += "0";
     caldate += day;
-    console.log(caldate)
     return caldate;
 }
 

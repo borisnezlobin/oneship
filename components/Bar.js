@@ -3,12 +3,13 @@ import React, { useState } from 'react'
 import { Dimensions, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import COLORS from '../util/COLORS'
+import getColors from '../util/COLORS'
 import isWeb from '../util/util'
 
 const Bar = ({ navigation }) => {
     const [opacity, setOpacity] = useState(1);
     const insets = useSafeAreaInsets();
+    var COLORS = getColors();
     if(isWeb()) return <></>;
 
     const startPress = () => {

@@ -13,14 +13,18 @@ import CalendarPage from './pages/Calendar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from './util/Loading';
-import COLORS from './util/COLORS';
+import getColors, { setTheme } from './util/COLORS';
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
   const [routeContext, setRouteContext] = React.useState("");
-  COLORS.setLightMode(userSettingsContext ? userSettingsContext.isLightMode : true);
+  var COLORS = getColors();
+  // COLORS.setLightMode(userSettingsContext == null ? false : userSettingsContext.isLightMode);
+  setTheme(userSettingsContext == null ? false : userSettingsContext.isLightMode);
+  console.log("theme: " + (userSettingsContext == null ? "null" : userSettingsContext.isLightMode));
+  console.log(COLORS.isLightMode)
 
   React.useEffect(() => {
     const getData = async () => {

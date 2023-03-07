@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Dimensions, Text, View, TouchableOpacity } from 'react-native'
 import { calculateMinutesFromTime } from '../pages/Schedule';
-import COLORS from '../util/COLORS';
+import getColors from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts'
 import { Gear } from 'phosphor-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,7 +16,7 @@ const CLASS_STATUS = {
 const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModalCB }) => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
-    const insets = useSafeAreaInsets()
+    const COLORS = getColors();
 
     var thisStart = calculateMinutesFromTime(scheduleItem.start);
     var thisEnd = calculateMinutesFromTime(scheduleItem.end);
@@ -70,9 +70,10 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                 height: heightOfElement,
                 position: "absolute",
                 top: ((thisStart - startTime) / (endTime - startTime)) * screenHeight,
-                backgroundColor: classStatus == CLASS_STATUS.PASSED ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR,
-                width: Dimensions.get("window").width - 64 - 2,
-                marginLeft: 64,
+                backgroundColor: classStatus == CLASS_STATUS.PASSED ? COLORS.LIGHT : COLORS.TEXT,
+                borderRadius: 8,
+                width: Dimensions.get("window").width - (classStatus == CLASS_STATUS.PASSED ? 0 : 66),
+                marginLeft: classStatus == CLASS_STATUS.PASSED ? 0 : 64,
                 padding: 8,
                 display: 'flex',
                 flexDirection: 'row',
@@ -87,7 +88,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                     }}>
                         {thisItem.customName}
                     </Text>
-                    <Text>{scheduleItem.start} - {scheduleItem.end}</Text>
+                    <Text style={{color: COLORS.TEXT}}>{scheduleItem.start} - {scheduleItem.end}</Text>
                     {classStatus == CLASS_STATUS.CURRENT ?
                     <Text>Ending in {thisEnd * 60 - now} seconds</Text>
                     : <></>
