@@ -1,7 +1,7 @@
 import { View, Image, SafeAreaView } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
 import getColors from "./COLORS";
-import { HouseLine, Calendar, ChartBar, Clock, GearSix, Horse } from "phosphor-react-native"
+import { HouseLine, Calendar, ChartBar, Clock, GearSix, Horse, Scroll } from "phosphor-react-native"
 import IMAGES from "./ASSETS";
 import isWeb from "./util";
 
@@ -41,6 +41,13 @@ function DrawerComponent({ navigation, currentRoute, setRoute }) {
                 currentRoute={currentRoute}
                 to="Schedule"
                 icon={<Clock size={iconSize} color={COLORS.GREEN} />}
+            />
+            <DrawerListItem
+                navigation={navigation}
+                setCurrentRoute={setRoute}
+                currentRoute={currentRoute}
+                to="Assignments"
+                icon={<Scroll size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}

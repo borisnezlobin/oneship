@@ -20,7 +20,7 @@ const Schedule = ({ navigation }) => {
     const [modalStatus, setModalStatus] = useState({shown: false, data: null});
     const { userSettingsContext } = useContext(UserSettingsContext);
     const bottomSheetRef = useRef();
-    console.log("schedule: " + JSON.stringify(schedule))
+    console.log("rerendered");
 
     var s;
     try{
@@ -31,20 +31,19 @@ const Schedule = ({ navigation }) => {
     }catch(e){} // haha
 
     useEffect(() => {
-        if(schedule == null){
-            getData();
-        }
-
+        getData()
         async function getData(){
             lastUpdate = await AsyncStorage.getItem("lastScheduleUpdateTime");
-            if(lastUpdate == formatDate(Date.now(), true, false)){
+            var rn = formatDate(Date.now(), true, false);
+            console.log("last update: " + lastUpdate + ", current: " + rn);
+            if(lastUpdate == rn && schedule == null){
                 var prevData = await AsyncStorage.getItem("schedule");
                 if(prevData != null && prevData){
                     setSchedule(JSON.parse(prevData));
                     return;
                 }
-            }
-            lastUpdate = formatDate(Date.now(), true, false)
+            }else if(lastUpdate == rn && schedule !== null) return;
+            lastUpdate = rn
             AsyncStorage.setItem("lastScheduleUpdateTime", lastUpdate);
             fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
             .then(res => res.json())
@@ -56,7 +55,7 @@ const Schedule = ({ navigation }) => {
 
         setTimeout(() => {
             setCurrentTime(new Date(Date.now()));
-        }, 1000 * 60);
+        }, 1000 * 10); // every 10 seconds is good enough imo
     }, [schedule, currentTime, modalStatus])
 
     if(schedule == null){
