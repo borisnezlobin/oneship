@@ -2,22 +2,8 @@ import BottomSheet, { BottomSheetTextInput, BottomSheetView } from '@gorhom/bott
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Dimensions, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import COLORS from '../util/COLORS'
+import getColors from '../util/COLORS'
 import { CustomScheduleItem, UserSettingsContext } from '../util/contexts';
-
-// yes I know StyleSheet is a thing
-// stfu
-const textInputStyle = {
-    alignSelf: "stretch",
-    marginTop: 4,
-    marginHorizontal: 12,
-    marginBottom: 12,
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: COLORS.LIGHT,
-    color: COLORS.GREEN,
-    textAlign: "center",
-}
 
 const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -26,6 +12,21 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
     const [room, setRoom] = useState(modalStatus.data.room);
     const { userSettingsContext, setUserSettingsContext } = useContext(UserSettingsContext);
     const snapPoints = useMemo(() => ['25%', '50%'], []);
+    const COLORS = getColors();
+
+    // yes I know StyleSheet is a thing
+    // stfu
+    const textInputStyle = {
+        alignSelf: "stretch",
+        marginTop: 4,
+        marginHorizontal: 12,
+        marginBottom: 12,
+        padding: 12,
+        borderRadius: 12,
+        backgroundColor: COLORS.LIGHT,
+        color: COLORS.GREEN,
+        textAlign: "center",
+    }
 
     useEffect(() => {
         bottomSheetRef.current?.snapToIndex(0)
@@ -66,7 +67,7 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
         <Text style={{
             fontSize: 16,
             marginTop: 8,
-            color: "black",
+            color: COLORS.TEXT,
             textAlign: 'center'
         }}>
             Taught by {modalStatus.data.teacher} in {modalStatus.data.room}
@@ -93,7 +94,7 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
                 fontSize: 16,
                 marginTop: 8,
                 fontWeight: 'bold',
-                color: COLORS.FOREGROUND_COLOR,
+                color: COLORS.isLightMode ? COLORS.FOREGROUND_COLOR : "#cccccc",
                 textAlign: 'center',
             }}>
                 EDIT
@@ -159,7 +160,7 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
                     fontSize: 16,
                     marginTop: 8,
                     fontWeight: 'bold',
-                    color: COLORS.FOREGROUND_COLOR,
+                    color: COLORS.isLightMode ? COLORS.FOREGROUND_COLOR : "#cccccc", // argh
                     textAlign: 'center',
                 }}>
                     CANCEL
@@ -182,7 +183,7 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
                     fontSize: 16,
                     marginTop: 8,
                     fontWeight: 'bold',
-                    color: COLORS.FOREGROUND_COLOR,
+                    color: COLORS.isLightMode ? COLORS.FOREGROUND_COLOR : "#cccccc",
                     textAlign: 'center',
                 }}>
                     SAVE
@@ -196,7 +197,16 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
             style={{
                 shadowRadius: "2",
                 shadowColor: COLORS.BACKGROUND_COLOR,
-                shadowOpacity: 0.5
+                shadowOpacity: 0.5,
+            }}
+            handleIndicatorStyle={{
+              backgroundColor: COLORS.GREY
+            }}
+            backgroundStyle={{
+              backgroundColor: COLORS.FOREGROUND_COLOR
+            }}
+            handleStyle={{
+              backgroundColor: COLORS.FOREGROUND_COLOR,
             }}
             enablePanDownToClose={true}
             index={-1}

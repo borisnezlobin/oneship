@@ -1,12 +1,14 @@
 import { View, Image, SafeAreaView } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
-import COLORS from "./COLORS";
+import getColors from "./COLORS";
 import { HouseLine, Calendar, ChartBar, Clock, GearSix } from "phosphor-react-native"
 import IMAGES from "./ASSETS";
 import isWeb from "./util";
 
 function DrawerComponent({ navigation, currentRoute, setRoute }) {
     const iconSize = 36;
+    const COLORS = getColors();
+    
     return (
         <SafeAreaView style={{
             flex: 1,

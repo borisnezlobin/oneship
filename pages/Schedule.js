@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { SafeAreaView, View, Text, Dimensions, Modal } from 'react-native'
 import ScheduleItem from '../components/ScheduleItem';
-import COLORS from '../util/COLORS';
+import getColors from '../util/COLORS';
 import Loading from '../util/Loading';
 import isWeb, { formatDate } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 var lastUpdate = "";
 const Schedule = ({ navigation }) => {
     const insets = useSafeAreaInsets()
+    const COLORS = getColors();
     const [schedule, setSchedule] = useState(null);
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     const [modalStatus, setModalStatus] = useState({shown: false, data: null});
@@ -108,7 +109,7 @@ const Schedule = ({ navigation }) => {
 
     return (
         <>
-            <View style={{overflowX: "hidden", top: insets.top, height: Dimensions.get("window").height}}>
+            <View style={{overflowX: "hidden", paddingTop: insets.top, height: Dimensions.get("window").height, backgroundColor: COLORS.FOREGROUND_COLOR}}>
                 <View>
                     {s.map((e, i) => <ScheduleItem
                         startTime={start}

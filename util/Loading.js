@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, SafeAreaView, Text } from 'react-native'
-import COLORS from './COLORS'
+import getColors from './COLORS'
 
 const Loading = ({ text }) => {
   return (
@@ -9,13 +9,13 @@ const Loading = ({ text }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: COLORS.FOREGROUND_COLOR,
+        backgroundColor: getColors().FOREGROUND_COLOR,
         width: "100%",
         height: "100%"
     }}>
         <Image style={{width: 256, height: 256}} source={require("../assets/loading.gif")} />
         <Text style={{
-            color: COLORS.GREEN,
+            color: getColors().GREEN,
             fontSize: 24,
             fontWeight: "bold"
         }}>{text}</Text>

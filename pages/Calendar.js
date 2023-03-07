@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, SafeAreaView, Dimensions, Modal, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Calendar, CalendarList } from 'react-native-calendars';
-import COLORS from '../util/COLORS';
+import getColors from '../util/COLORS';
 import Loading from '../util/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb, { formatDate, serverDateToCalendarDate } from '../util/util';
@@ -13,13 +13,17 @@ import Schedule from './Schedule';
 import { RouteContext, UserSettingsContext } from '../util/contexts';
 import CalendarScheduleDisplay from '../components/CalendarScheduleDisplay';
 
+var r = 0; // r for "real good naming"
 function CalendarPage({ navigation }) {
   const [calendar, setCalendar] = React.useState(null);
+  const [rerenders, setRerenders] = React.useState(0);
   const [showingSchedule, setShowingSchedule] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState({shown: false, day: null});
   const { userSettingsContext } = React.useContext(UserSettingsContext);
+  const COLORS = getColors();
   const bottomSheetRef = React.useRef();
   const snapPoints = React.useMemo(() => ["25%", "CONTENT_HEIGHT"], []);
+  r++;
   const {
     animatedHandleHeight,
     animatedSnapPoints,
@@ -52,7 +56,7 @@ function CalendarPage({ navigation }) {
     }
 
     doShit(); // swering bad
-  }, [calendar, modalVisible]);
+  }, [calendar, modalVisible, userSettingsContext]);
 
   if(calendar == null){
     return <Loading />
@@ -64,7 +68,6 @@ function CalendarPage({ navigation }) {
       ? serverDateToCalendarDate(calendar.data[i].date)
       : "";
     var hasEvents = calendar.data[i].hasOwnProperty("events") && calendar.data[i].events.length > 0;
-    if(hasEvents) console.log(calendar.data[i].events)
     calObjects[date] = {
       marked: hasEvents,
       disabled: !hasEvents,
@@ -75,7 +78,6 @@ function CalendarPage({ navigation }) {
   var selectedDay = modalVisible.shown ? formatDate(modalVisible.day.timestamp + 6000 * 60 * 60 * 4, true, false) : "";
   if(modalVisible.shown){
     for(var i = 0; i < calendar.data.length; i++){
-      console.log(calendar.data[i]);
       if(calendar.data[i].hasOwnProperty("date") && calendar.data[i].date == selectedDay){
         if(!calendar.data[i].hasOwnProperty("events")) break;
         eventsForDay = calendar.data[i].events;
@@ -85,6 +87,7 @@ function CalendarPage({ navigation }) {
   }
 
   var calendarElement = <CalendarList
+    key={r}
     markingType='custom'
     markedDates={calObjects}
     onDayPress={(day) => {
@@ -194,7 +197,7 @@ function CalendarPage({ navigation }) {
         <Bar navigation={navigation} />
         <BottomSheet
           handleIndicatorStyle={{
-            backgroundColor: COLORS.TEXT
+            backgroundColor: COLORS.GREY
           }}
           backgroundStyle={{
             backgroundColor: COLORS.FOREGROUND_COLOR
