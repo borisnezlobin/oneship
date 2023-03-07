@@ -15,7 +15,7 @@ function Settings({ navigation }) {
   }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: "space-evenly", backgroundColor: COLORS.FOREGROUND_COLOR}}>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: COLORS.FOREGROUND_COLOR}}>
         <Text style={{ color: COLORS.GREEN, fontSize: 48, marginBottom: 16, fontWeight: "bold", position: "relative", top: 0 }}>
             Settings
         </Text>
@@ -43,6 +43,7 @@ function Settings({ navigation }) {
       <TouchableOpacity onPress={() => changeBoolValueInSettings("isLightMode")}>
         <View style={{
           display: "flex",
+          marginTop: 16,
           flexDirection: "row",
           alignItems: 'center',
           justifyContent: 'center'
