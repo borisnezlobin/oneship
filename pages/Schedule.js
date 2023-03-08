@@ -87,12 +87,12 @@ const Schedule = ({ navigation }) => {
         setSchedule(null);
         return <Loading />
     }
-    var scheduleLength = userSettingsContext.show0Period ? schedule.data.length : schedule.data.length - 1;
+
     var screenHeight = (Dimensions.get("window").height - insets.top - insets.bottom);
 
     var nowDate = currentTime;
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    // var now = 7 * 60 + 55;
+    // var now = 14 * 60 + 40;
 
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);
@@ -108,7 +108,7 @@ const Schedule = ({ navigation }) => {
 
     return (
         <>
-            <View style={{overflowX: "hidden", paddingTop: insets.top, height: Dimensions.get("window").height, backgroundColor: COLORS.FOREGROUND_COLOR}}>
+            <View style={{overflowX: "hidden", paddingTop: insets.top, height: Dimensions.get("window").height, backgroundColor: COLORS.BACKGROUND_COLOR}}>
                 <View>
                     {s.map((e, i) => <ScheduleItem
                         startTime={start}
@@ -122,7 +122,7 @@ const Schedule = ({ navigation }) => {
             </View>
             <View pointerEvents='none' style={{
                 position: "absolute",
-                top: (screenHeight * positionOfTimeMarker) + insets.top - 18,
+                top: (screenHeight * positionOfTimeMarker) + insets.top - 16,
                 width: "100%",
                 left: 2,
                 height: 32,
