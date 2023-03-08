@@ -16,6 +16,7 @@ const CLASS_STATUS = {
 const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModalCB }) => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
+    // const now = 14 * 60 * 60 + 40 * 60 + 3;
     const COLORS = getColors();
 
     var thisStart = calculateMinutesFromTime(scheduleItem.start);
@@ -42,7 +43,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
 
     useEffect(() => {
         if(classStatus == CLASS_STATUS.CURRENT){
-            setTimeout(() => { setCurrentTime(new Date(Date.now())) }, 1000); // update every second
+            // setTimeout(() => { setCurrentTime(new Date(Date.now())) }, 1000); // update every second
         }
     }, [currentTime]);
 
@@ -64,6 +65,8 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         }), 100);
     }
 
+    var isSchoolInSession = now <= endTime * 60 && now >= startTime * 60;
+
     return (
         <>
             <View style={{
@@ -72,8 +75,8 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                 top: ((thisStart - startTime) / (endTime - startTime)) * screenHeight,
                 backgroundColor: classStatus == CLASS_STATUS.PASSED ? COLORS.LIGHT : COLORS.LIGHT,
                 borderRadius: 8,
-                width: Dimensions.get("window").width - (now > endTime ? 0 : 66),
-                marginLeft: now > endTime ? 0 : 64,
+                width: Dimensions.get("window").width - (isSchoolInSession ? 66 : 0),
+                marginLeft: isSchoolInSession ? 64 : 0,
                 padding: 8,
                 display: 'flex',
                 flexDirection: 'row',

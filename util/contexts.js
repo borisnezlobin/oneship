@@ -1,11 +1,28 @@
 import { createContext, useContext } from "react";
 
+class Assignment{
+    constructor(assignmentName, dueDate, importance){
+        this.assignmentName = assignmentName;
+        this.dueDate = dueDate;
+        this.importance = importance;
+    }
+}
+
 class CustomScheduleItem{
     constructor(realName, customName, teacher, room){
         this.realName = realName;
         this.customName = customName ? customName : realName;
         this.teacher = teacher;
         this.room = room;
+        this.assignments = [];
+        this.finishedAssignments = 0;
+    }
+    addAssignment(a){
+        this.assignments.push(a);
+    }
+    removeAssignment(a){
+        this.assignments.splice(this.assignments.indexOf(a), 1);
+        this.finishedAssignments++;
     }
 }
 

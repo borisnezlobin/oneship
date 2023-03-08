@@ -12,6 +12,7 @@ import Bar from '../components/Bar';
 import Schedule from './Schedule';
 import { RouteContext, UserSettingsContext } from '../util/contexts';
 import CalendarScheduleDisplay from '../components/CalendarScheduleDisplay';
+import { getCalendarDateString } from 'react-native-calendars/src/services';
 
 var r = 0; // r for "real good naming"
 function CalendarPage({ navigation }) {
@@ -63,6 +64,7 @@ function CalendarPage({ navigation }) {
   }
 
   var calObjects = {};
+  var today = getCalendarDateString(formatDate(Date.now(), true, false))
   for(var i = 0; i < calendar.data.length; i++){
     var date = calendar.data[i].hasOwnProperty("date")
       ? serverDateToCalendarDate(calendar.data[i].date)
@@ -70,6 +72,7 @@ function CalendarPage({ navigation }) {
     var hasEvents = calendar.data[i].hasOwnProperty("events") && calendar.data[i].events.length > 0;
     calObjects[date] = {
       marked: hasEvents,
+      selected: date == today,
       disabled: !hasEvents,
     }
   }
@@ -101,7 +104,7 @@ function CalendarPage({ navigation }) {
       calendarBackground: COLORS.FOREGROUND_COLOR,
       textSectionTitleColor: '#b6c1cd',
       textSectionTitleDisabledColor: '#d9e1e8',
-      selectedDayBackgroundColor: '#00adf5',
+      selectedDayBackgroundColor: COLORS.GREEN,
       selectedDayTextColor: '#ffffff',
       todayTextColor: COLORS.GREEN,
       dayTextColor: COLORS.GREEN,
