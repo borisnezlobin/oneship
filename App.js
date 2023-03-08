@@ -56,7 +56,6 @@ export default function App() {
     <SafeAreaProvider>
       <UserSettingsContext.Provider value={{ userSettingsContext, setUserSettingsContext }}>
           <NavigationContainer>
-            <StatusBar barStyle={COLORS.STATUS_BAR} />
             <Drawer.Navigator
               initialRouteName="Home"
               drawerContent={(props) => <DrawerComponent currentRoute={routeContext} setRoute={setRouteContext} navigation={props.navigation} />}
