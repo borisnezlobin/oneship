@@ -10,6 +10,8 @@ var COLORS = {
     STATUS_BAR: this.isLightMode ? "dark_content" : "light_content",
 }*/
 
+import { StatusBar } from "react-native";
+
 var COLORS = {
     isLightMode: true,
     GREEN: "#000000",
@@ -22,6 +24,7 @@ var COLORS = {
 };
 
 const setTheme = (isLightMode) => {
+    StatusBar.setBarStyle(isLightMode ? "dark-content" : "light-content", true);
     var newColors = {
         isLightMode: isLightMode,
         GREEN: isLightMode ? "#1C6800" : "#0F7D00",
