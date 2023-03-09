@@ -37,9 +37,9 @@ const defaultSettings = {
         "4th Period": new CustomScheduleItem("4th Period", null, null, null),
         "5th Period": new CustomScheduleItem("5th Period", null, null, null),
         "6th Period": new CustomScheduleItem("6th Period", null, null, null),
+        "7th Period": new CustomScheduleItem("7th Period", null, null, null),
         "Advisory": new CustomScheduleItem("Advisory", null, null, null),
         "PRIME": new CustomScheduleItem("PRIME", null, null, null),
-        "7th Period": new CustomScheduleItem("7th Period", null, null, null),
     },
     isLightMode: true,
 }

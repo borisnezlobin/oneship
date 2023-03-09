@@ -14,7 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from './util/Loading';
 import getColors, { setTheme } from './util/COLORS';
 import Sports from './pages/Sports';
-import Assignments from './pages/Assignments';
+import Assignments from './pages/assignments/Assignments';
+import CreateAssignment from './pages/assignments/CreateAssignment';
 
 const Drawer = createDrawerNavigator();
 
@@ -67,6 +68,7 @@ export default function App() {
               <Drawer.Screen name="Home" component={Home} />
               <Drawer.Screen name="Schedule" component={Schedule} />
               <Drawer.Screen name="Assignments" component={Assignments} />
+              <Drawer.Screen name="CreateAssignment" component={CreateAssignment} />
               <Drawer.Screen name="Calendar" component={CalendarPage} />
               <Drawer.Screen name="Sports" component={Sports} />
               <Drawer.Screen name="Settings" component={Settings} />
