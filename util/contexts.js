@@ -1,9 +1,10 @@
 import { createContext, useContext } from "react";
 
 class Assignment{
-    constructor(assignmentName, dueDate, importance){
+    constructor(assignmentName, description, dueDate, importance){
         this.assignmentName = assignmentName;
         this.dueDate = dueDate;
+        this.description = description
         this.importance = importance;
     }
 }
@@ -47,4 +48,4 @@ const defaultSettings = {
 const RouteContext = createContext("");
 const UserSettingsContext = createContext(defaultSettings)
 
-export { UserSettingsContext, RouteContext, defaultSettings, CustomScheduleItem }
+export { UserSettingsContext, RouteContext, defaultSettings, CustomScheduleItem, Assignment }
