@@ -7,11 +7,11 @@ import GoodTextInput from '../../components/GoodTextInput'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import getColors from '../../util/COLORS'
-import { UserSettingsContext } from '../../util/contexts'
+import { Assignment, UserSettingsContext } from '../../util/contexts'
 import { formatDate } from '../../util/util';
 
 const CreateAssignment = ({ navigation }) => {
-    const { userSettingsContext } = useContext(UserSettingsContext);
+    const { userSettingsContext, setUserSettingsContext } = useContext(UserSettingsContext);
     // don't you worry 'bout a thing, because every thing, every little thing
     // will be all right
     // *except this top 10 oneliner
@@ -39,6 +39,26 @@ const CreateAssignment = ({ navigation }) => {
         // idc if description is empty
 
         setPage(2);
+    }
+
+    const createAssignment = () => {
+        const assignment = new Assignment(title, description, Date.parse(dateDue), 1);
+        console.log("assignment: " + JSON.stringify(assignment));
+        var c;
+        for(var i = 0; i < classes.length; i++){
+            if(classes[i].realName == selectedClass){
+                c = classes[i];
+                continue;
+            }
+        }
+        console.log("class: " + JSON.stringify(c));
+        var newClass = c;
+        newClass.assignments.push(assignment);
+        console.log("new class: " + newClass);
+        var newSettings = {...userSettingsContext};
+        newSettings.schedule[selectedClass] = newClass;
+        setUserSettingsContext(newSettings);
+        navigation.navigate("Assignments");
     }
 
     if(page == 0){
@@ -197,7 +217,7 @@ const CreateAssignment = ({ navigation }) => {
                         cb={() => setPage(1)}
                         title="BACK"
                     />
-                    <PrimaryButton cb={() => setPage(1)} title="CREATE" />
+                    <PrimaryButton cb={createAssignment} title="CREATE" />
                 </View>
             </SafeAreaView>
         )

@@ -9,6 +9,7 @@ import { UserSettingsContext } from '../../util/contexts'
 
 const Assignments = ({ navigation }) => {
     const { userSettingsContext } = useContext(UserSettingsContext);
+    console.log("settings: " + JSON.stringify(userSettingsContext));
     const insets = useSafeAreaInsets();
     const COLORS = getColors();
 
