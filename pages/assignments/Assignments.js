@@ -6,10 +6,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Bar from '../../components/Bar'
 import getColors from '../../util/COLORS'
 import { UserSettingsContext } from '../../util/contexts'
+import ClassAssignments from './ClassAssignments'
 
 const Assignments = ({ navigation }) => {
     const { userSettingsContext } = useContext(UserSettingsContext);
-    console.log("settings: " + JSON.stringify(userSettingsContext));
+    
     const insets = useSafeAreaInsets();
     const COLORS = getColors();
 
@@ -21,10 +22,6 @@ const Assignments = ({ navigation }) => {
                     top: insets.top,
                     width: "100%",
                     backgroundColor: COLORS.FOREGROUND_COLOR,
-                    /*display: 'flex',
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    alignItems: 'center'*/
                 }}>
                     <Text style={{
                         fontWeight: 'bold',
@@ -48,6 +45,11 @@ const Assignments = ({ navigation }) => {
                             <FilePlus size={36} color={COLORS.GREEN} />
                         </TouchableOpacity>
                     </View>
+                </View>
+                <View style={{top: 36}}>
+                    {Object.keys(userSettingsContext.schedule).map((e, i) =>
+                        <ClassAssignments classData={userSettingsContext.schedule[e]} />
+                    )}
                 </View>
             </SafeAreaView>
             <Bar navigation={navigation} />
