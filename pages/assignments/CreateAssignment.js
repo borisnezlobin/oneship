@@ -43,7 +43,6 @@ const CreateAssignment = ({ navigation }) => {
 
     const createAssignment = () => {
         const assignment = new Assignment(title, description, Date.parse(dateDue), 1);
-        console.log("assignment: " + JSON.stringify(assignment));
         var c;
         for(var i = 0; i < classes.length; i++){
             if(classes[i].realName == selectedClass){
@@ -51,10 +50,8 @@ const CreateAssignment = ({ navigation }) => {
                 continue;
             }
         }
-        console.log("class: " + JSON.stringify(c));
         var newClass = c;
         newClass.assignments.push(assignment);
-        console.log("new class: " + newClass);
         var newSettings = {...userSettingsContext};
         newSettings.schedule[selectedClass] = newClass;
         setUserSettingsContext(newSettings);
