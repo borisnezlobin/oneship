@@ -4,6 +4,8 @@ import { Dimensions, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import getColors from '../util/COLORS'
 import { CustomScheduleItem, UserSettingsContext } from '../util/contexts';
+import PrimaryButton from './PrimaryButton';
+import SecondaryButton from './SecondaryButton';
 
 const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -15,6 +17,8 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
     const COLORS = getColors();
 
     // yes I know StyleSheet is a thing
+    // stfu
+    // yes I know that I have a component for text input
     // stfu
     const textInputStyle = {
         alignSelf: "stretch",
@@ -72,34 +76,17 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
         }}>
             Taught by {modalStatus.data.teacher} in {modalStatus.data.room}
         </Text>
-        <TouchableOpacity
-            onPress={() => {
+        <PrimaryButton
+            cb={() => {
                 setIsEditing(true);
                 bottomSheetRef.current.snapToIndex(1)
             }}
+            title="EDIT"
             style={{
-                backgroundColor: COLORS.GREEN,
-                marginTop: 24,
-                borderRadius: 2,
-                height: 36,
-                width: 100,
                 marginLeft: (Dimensions.get("window").width - 100) / 2,
-                shadowColor: COLORS.GREEN,
-                shadowOpacity: 1,
-                shadowOffset: { width: 0, height: 0.5},
-                shadowRadius: 5
+                marginTop: 24
             }}
-        >
-            <Text style={{
-                fontSize: 16,
-                marginTop: 8,
-                fontWeight: 'bold',
-                color: COLORS.isLightMode ? COLORS.FOREGROUND_COLOR : "#cccccc",
-                textAlign: 'center',
-            }}>
-                EDIT
-            </Text>
-        </TouchableOpacity>
+        />
     </>);
 
     var editingComponent = (<>
@@ -140,55 +127,14 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
             alignItems: 'center',
             width: '100%'
         }}>
-            <TouchableOpacity
-                onPress={() => {
+            <SecondaryButton
+                cb={() => {
                     setIsEditing(false);
                     bottomSheetRef.current.snapToIndex(0);
                 }}
-                style={{
-                    backgroundColor: COLORS.BACKGROUND_COLOR,
-                    borderRadius: 2,
-                    height: 36,
-                    width: 100,
-                    shadowColor: COLORS.BACKGROUND_COLOR,
-                    shadowOpacity: 1,
-                    shadowOffset: { width: 0, height: 0.5},
-                    shadowRadius: 5
-                }}
-            >
-                <Text style={{
-                    fontSize: 16,
-                    marginTop: 8,
-                    fontWeight: 'bold',
-                    color: COLORS.isLightMode ? COLORS.FOREGROUND_COLOR : "#cccccc", // argh
-                    textAlign: 'center',
-                }}>
-                    CANCEL
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={handleFormSubmit}
-                style={{
-                    backgroundColor: COLORS.GREEN,
-                    borderRadius: 2,
-                    height: 36,
-                    width: 100,
-                    shadowColor: COLORS.GREEN,
-                    shadowOpacity: 1,
-                    shadowOffset: { width: 0, height: 0.5},
-                    shadowRadius: 5
-                }}
-            >
-                <Text style={{
-                    fontSize: 16,
-                    marginTop: 8,
-                    fontWeight: 'bold',
-                    color: COLORS.isLightMode ? COLORS.FOREGROUND_COLOR : "#cccccc",
-                    textAlign: 'center',
-                }}>
-                    SAVE
-                </Text>
-            </TouchableOpacity>
+                title="CANCEL"
+            />
+            <PrimaryButton cb={handleFormSubmit} title="SAVE" />
         </View>
     </>)
 

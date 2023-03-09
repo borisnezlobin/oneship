@@ -3,9 +3,9 @@ import React, { useContext } from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import Bar from '../components/Bar'
-import getColors from '../util/COLORS'
-import { UserSettingsContext } from '../util/contexts'
+import Bar from '../../components/Bar'
+import getColors from '../../util/COLORS'
+import { UserSettingsContext } from '../../util/contexts'
 
 const Assignments = ({ navigation }) => {
     const { userSettingsContext } = useContext(UserSettingsContext);
@@ -33,17 +33,20 @@ const Assignments = ({ navigation }) => {
                     }}>
                         Assignments
                     </Text>
-                    <TouchableOpacity onPress={()=>{}} style={{
-                        display: 'flex',
-                        flexDirection: "row",
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        right: 4,
-                        top: -32
-                    }}>
-                        <FilePlus size={36} color={COLORS.GREEN} />
-                    </TouchableOpacity>
+                    <View style={{
+                            display: 'flex',
+                            flexDirection: "row",
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            position: 'absolute',
+                            right: 8,
+                            height: 36,
+                            top: 0
+                        }}>
+                        <TouchableOpacity onPress={() => navigation.navigate("CreateAssignment")}>
+                            <FilePlus size={36} color={COLORS.GREEN} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </SafeAreaView>
             <Bar navigation={navigation} />
