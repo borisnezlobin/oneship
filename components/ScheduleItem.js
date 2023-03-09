@@ -18,7 +18,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
     // const now = 14 * 60 * 60 + 40 * 60 + 3;
     const COLORS = getColors();
-
+    console.log(now);
     var thisStart = calculateMinutesFromTime(scheduleItem.start);
     var thisEnd = calculateMinutesFromTime(scheduleItem.end);
     var classStatus;
@@ -43,7 +43,9 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
 
     useEffect(() => {
         if(classStatus == CLASS_STATUS.CURRENT){
-            // setTimeout(() => { setCurrentTime(new Date(Date.now())) }, 1000); // update every second
+            setTimeout(() => { setCurrentTime(new Date(Date.now())) }, 1000); // update every second
+        }else{
+            setTimeout(() => setCurrentTime(new Date(Date.now())), 20_000); // cope moar
         }
     }, [currentTime]);
 
