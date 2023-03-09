@@ -1,16 +1,14 @@
 import * as React from 'react';
-import { Text, View, SafeAreaView, Dimensions, Modal, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { Calendar, CalendarList } from 'react-native-calendars';
+import { Text, View, SafeAreaView, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
+import { CalendarList } from 'react-native-calendars';
 import getColors from '../util/COLORS';
 import Loading from '../util/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb, { formatDate, serverDateToCalendarDate } from '../util/util';
-import BottomSheet, { BottomSheetScrollView, useBottomSheet, useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet';
-import { ScrollView } from 'react-native-gesture-handler';
+import BottomSheet, { BottomSheetScrollView, useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Bar from '../components/Bar';
-import Schedule from './Schedule';
-import { RouteContext, UserSettingsContext } from '../util/contexts';
+import { UserSettingsContext } from '../util/contexts';
 import CalendarScheduleDisplay from '../components/CalendarScheduleDisplay';
 import { getCalendarDateString } from 'react-native-calendars/src/services';
 
@@ -64,7 +62,10 @@ function CalendarPage({ navigation }) {
   }
 
   var calObjects = {};
-  var today = getCalendarDateString(formatDate(Date.now(), true, false))
+  var selected = modalVisible.shown ?
+    getCalendarDateString(formatDate(modalVisible.day.timestamp + 6000 * 60 * 60 * 4, true, false))
+  :
+    getCalendarDateString(formatDate(Date.now(), true, false))
   for(var i = 0; i < calendar.data.length; i++){
     var date = calendar.data[i].hasOwnProperty("date")
       ? serverDateToCalendarDate(calendar.data[i].date)
@@ -72,7 +73,7 @@ function CalendarPage({ navigation }) {
     var hasEvents = calendar.data[i].hasOwnProperty("events") && calendar.data[i].events.length > 0;
     calObjects[date] = {
       marked: hasEvents,
-      selected: date == today,
+      selected: date == selected,
       disabled: !hasEvents,
     }
   }

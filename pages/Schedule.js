@@ -93,6 +93,7 @@ const Schedule = ({ navigation }) => {
     var nowDate = currentTime;
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
     // var now = 14 * 60 + 40;
+    console.log(now);
 
     var start = calculateMinutesFromTime(s[0].start);
     var end = calculateMinutesFromTime(s[s.length - 1].end);
@@ -108,7 +109,7 @@ const Schedule = ({ navigation }) => {
 
     return (
         <>
-            <View style={{overflowX: "hidden", paddingTop: insets.top, height: Dimensions.get("window").height, backgroundColor: COLORS.BACKGROUND_COLOR}}>
+            <View style={{overflowX: "hidden", paddingTop: insets.top, height: Dimensions.get("window").height, backgroundColor: COLORS.FOREGROUND_COLOR}}>
                 <View>
                     {s.map((e, i) => <ScheduleItem
                         startTime={start}

@@ -27,12 +27,12 @@ const setTheme = (isLightMode) => {
     StatusBar.setBarStyle(isLightMode ? "dark-content" : "light-content", true);
     var newColors = {
         isLightMode: isLightMode,
-        GREEN: isLightMode ? "#1C6800" : "#0F7D00",
+        GREEN: isLightMode ? "#1C6800" : "#1C6800",
         GREY: "#bbbbbb",
         TEXT: isLightMode ? "#000000" : "#dddddd",
         FOREGROUND_COLOR: isLightMode ? "#ffffff" : "#222222", // #19191b
         LIGHT: isLightMode ? "#e9e9e9" : "#333333",
-        BACKGROUND_COLOR: isLightMode ? "#cccccc" : "#333333",
+        BACKGROUND_COLOR: isLightMode ? "#cccccc" : "#2b2b2b",
         STATUS_BAR: isLightMode ? "dark_content" : "light_content",
     };
     COLORS = newColors;
