@@ -62,14 +62,27 @@ export default function App() {
               drawerContent={(props) => <DrawerComponent currentRoute={routeContext} setRoute={setRouteContext} navigation={props.navigation} />}
               screenOptions={{
                 drawerType: isWeb() ? "permanent" : "slide",
-                headerShown: false
+                headerShown: false,
+                swipeEdgeWidth: 200,
               }}
             >
               <Drawer.Screen name="Home" component={Home} />
-              <Drawer.Screen name="Schedule" component={Schedule} />
+              <Drawer.Screen
+                options={{ unmountOnBlur: true }}
+                name="Schedule"
+                component={Schedule}
+              />
               <Drawer.Screen name="Assignments" component={Assignments} />
-              <Drawer.Screen name="CreateAssignment" component={CreateAssignment} />
-              <Drawer.Screen name="Calendar" component={CalendarPage} />
+              <Drawer.Screen
+                options={{ unmountOnBlur: true }}
+                name="CreateAssignment"
+                component={CreateAssignment}
+              />
+              <Drawer.Screen
+                options={{ unmountOnBlur: true }}
+                name="Calendar"
+                component={CalendarPage}
+              />
               <Drawer.Screen name="Sports" component={Sports} />
               <Drawer.Screen name="Settings" component={Settings} />
             </Drawer.Navigator>

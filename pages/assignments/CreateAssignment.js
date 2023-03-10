@@ -55,7 +55,16 @@ const CreateAssignment = ({ navigation }) => {
         var newSettings = {...userSettingsContext};
         newSettings.schedule[selectedClass] = newClass;
         setUserSettingsContext(newSettings);
+        clearData();
         navigation.navigate("Assignments");
+    }
+
+    const clearData = () => {
+        setClass(classes[0]);
+        setDescription("");
+        setDateDue(new Date());
+        setPage(0);
+        setTitle("");
     }
 
     if(page == 0){
@@ -103,8 +112,7 @@ const CreateAssignment = ({ navigation }) => {
                 }}>
                     <SecondaryButton
                         cb={() => {
-                            setTitle("");
-                            setDescription("");
+                            clearData()
                             navigation.navigate("Assignments");
                         }}
                         title="CANCEL"
