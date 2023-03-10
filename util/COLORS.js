@@ -3,6 +3,7 @@ import { StatusBar } from "react-native";
 var COLORS = {
     isLightMode: true,
     GREEN: "#000000",
+    RED: "#000000",
     ALPHA_GREEN: "#00000000",
     GREY: "#000000",
     TEXT: "#000000",
@@ -17,6 +18,7 @@ const setTheme = (isLightMode) => {
     var newColors = {
         isLightMode: isLightMode,
         GREEN: isLightMode ? "#1C6800" : "#1C6800",
+        RED: "#c40000",
         ALPHA_GREEN: isLightMode ? "#1C680099" : "#1C680099",
         GREY: "#bbbbbb",
         TEXT: isLightMode ? "#000000" : "#dddddd",

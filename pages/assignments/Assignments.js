@@ -1,6 +1,6 @@
 import { FilePlus, Scroll } from 'phosphor-react-native'
 import React, { useContext } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { Dimensions, SafeAreaView, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Bar from '../../components/Bar'
@@ -46,10 +46,17 @@ const Assignments = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{top: 36}}>
-                    {Object.keys(userSettingsContext.schedule).map((e, i) =>
-                        <ClassAssignments classData={userSettingsContext.schedule[e]} />
-                    )}
+                <View style={{
+                    top: 64,
+                    width: Dimensions.get("window").width - 16,
+                    marginLeft: 8,
+                    height: Dimensions.get("window").height - 64 - insets.bottom - insets.top - 50,
+                    justifyContent: "center",
+                }}>
+                    {Object.keys(userSettingsContext.schedule).map((e, i) => {
+                        if(e == "Lunch" || e == "PRIME" || (!userSettingsContext.show0Period && e == "0 Period")) return;
+                        return <ClassAssignments classData={userSettingsContext.schedule[e]} />
+                    })}
                 </View>
             </SafeAreaView>
             <Bar navigation={navigation} />
