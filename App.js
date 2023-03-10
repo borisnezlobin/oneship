@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { StatusBar, Text } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer, useRoute } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import Home from './pages/Home';
 import DrawerComponent from './util/DrawerComponent';
 import isWeb from './util/util';
 import Settings from './pages/Settings';
 import Schedule from './pages/Schedule';
-import { defaultSettings, RouteContext, UserSettingsContext } from './util/contexts';
+import { defaultSettings, UserSettingsContext } from './util/contexts';
 import CalendarPage from './pages/Calendar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -91,3 +91,42 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
+
+// DrawerComponent
+// Calendar?
+/*
+import React from 'react'
+import Home from './pages/Home';
+import Settings from './pages/Settings';
+import Schedule from './pages/Schedule';
+import CalendarPage from './pages/Calendar';
+import Sports from './pages/Sports';
+import Assignments from './pages/assignments/Assignments';
+import CreateAssignment from './pages/assignments/CreateAssignment';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import isWeb from './util/util';
+
+const Drawer = createDrawerNavigator();
+
+const App = () => {
+  return <Home navigation={{
+    openDrawer: () => {}
+  }} />
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            drawerType: isWeb() ? "permanent" : "slide",
+            headerShown: false,
+            swipeEdgeWidth: 200,
+          }}
+        >
+        <Drawer.Screen name="Home" component={Home} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  )
+}
+
+export default App*/

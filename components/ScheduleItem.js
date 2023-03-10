@@ -45,7 +45,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         if(classStatus == CLASS_STATUS.CURRENT){
             setTimeout(() => { setCurrentTime(new Date(Date.now())) }, 1000); // update every second
         }else{
-            setTimeout(() => setCurrentTime(new Date(Date.now())), 20_000); // cope moar
+            setTimeout(() => setCurrentTime(new Date(Date.now())), 20000); // cope moar
         }
     }, [currentTime]);
 
