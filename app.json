@@ -24,10 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.randomletters.paly"
     },
     "web": {
       "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "41ed84da-178b-42b9-92ce-f53bf17d4dca"
+      }
     }
   },
   "developmentClient": true
