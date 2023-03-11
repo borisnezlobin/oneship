@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Button, Text, View, TouchableOpacity } from 'react-native';
 import getColors from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts';
-import { Sun, Moon, Eye, EyeSlash } from "phosphor-react-native";
 import Bar from "../components/Bar"
+import { EyeIcon, EyeSlashIcon, MoonIcon, SunIcon } from 'react-native-heroicons/outline';
 
 function Settings({ navigation }) {
   const { userSettingsContext, setUserSettingsContext } = React.useContext(UserSettingsContext);
@@ -27,8 +27,8 @@ function Settings({ navigation }) {
           justifyContent: 'center'
         }}>
           {userSettingsContext.show0Period ? 
-            <Eye color={COLORS.GREEN} weight="bold" size={32} />
-          : <EyeSlash color={COLORS.GREEN} weight="bold" size={32} />
+            <EyeIcon color={COLORS.GREEN} weight="bold" size={32} />
+          : <EyeSlashIcon color={COLORS.GREEN} weight="bold" size={32} />
           }
           <Text style={{
             color: COLORS.GREEN,
@@ -49,8 +49,8 @@ function Settings({ navigation }) {
           justifyContent: 'center'
         }}>
           {userSettingsContext.isLightMode ? 
-            <Sun color={COLORS.GREEN} weight="bold" size={32} />
-          : <Moon color={COLORS.GREEN} weight="bold" size={32} />
+            <SunIcon color={COLORS.GREEN} weight="bold" size={32} />
+          : <MoonIcon color={COLORS.GREEN} weight="bold" size={32} />
           }
           <Text style={{
             color: COLORS.GREEN,

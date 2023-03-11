@@ -1,7 +1,7 @@
-import { FilePlus, Scroll } from 'phosphor-react-native'
 import React, { useContext } from 'react'
 import { Dimensions, SafeAreaView, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { DocumentPlusIcon } from 'react-native-heroicons/outline'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Bar from '../../components/Bar'
 import getColors from '../../util/COLORS'
@@ -42,7 +42,7 @@ const Assignments = ({ navigation }) => {
                             top: 0
                         }}>
                         <TouchableOpacity onPress={() => navigation.navigate("CreateAssignment")}>
-                            <FilePlus size={36} color={COLORS.GREEN} />
+                            <DocumentPlusIcon size={36} color={COLORS.GREEN} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -58,18 +58,6 @@ const Assignments = ({ navigation }) => {
                         return <ClassAssignments classData={userSettingsContext.schedule[e]} />
                     })}
                 </View>
-            </SafeAreaView>
-            <Bar navigation={navigation} />
-        </>
-    )
-
-    return (
-        <>
-            <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: "center", backgroundColor: COLORS.FOREGROUND_COLOR}}>
-                <Scroll color={COLORS.GREEN} size={128} weight="fill" />
-                <Text style={{color: COLORS.GREEN, fontWeight: 'bold', fontSize: 32, marginTop: 16}}>
-                    Coming soon!
-                </Text>
             </SafeAreaView>
             <Bar navigation={navigation} />
         </>
