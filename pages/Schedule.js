@@ -6,10 +6,10 @@ import Loading from '../util/Loading';
 import isWeb, { formatDate } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { UserSettingsContext } from '../util/contexts';
-import { Confetti } from 'phosphor-react-native';
 import Bar from '../components/Bar';
 import ScheduleBottomSheet from '../components/ScheduleBottomSheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RocketLaunchIcon } from 'react-native-heroicons/outline';
 
 var lastUpdate = "";
 const Schedule = ({ navigation }) => {
@@ -73,7 +73,7 @@ const Schedule = ({ navigation }) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    <Confetti size={72} color={COLORS.GREEN} />
+                    <RocketLaunchIcon size={72} color={COLORS.GREEN} />
                     <Text style={{textAlign: "center", color: COLORS.GREEN, fontWeight: "bold"}}>
                         No school today!
                     </Text>

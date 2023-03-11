@@ -1,4 +1,3 @@
-import { House } from 'phosphor-react-native'
 import React, { useContext, useState } from 'react'
 import { Alert, DatePickerIOS, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Text, View } from 'react-native'
 import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler'
@@ -8,7 +7,6 @@ import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import getColors from '../../util/COLORS'
 import { Assignment, UserSettingsContext } from '../../util/contexts'
-import { formatDate } from '../../util/util';
 
 const CreateAssignment = ({ navigation }) => {
     const { userSettingsContext, setUserSettingsContext } = useContext(UserSettingsContext);

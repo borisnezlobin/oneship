@@ -1,9 +1,7 @@
 import { View, Image, SafeAreaView } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
 import getColors from "./COLORS";
-import { HouseLine, Calendar, ChartBar, Clock, GearSix, Horse, Scroll } from "phosphor-react-native"
-import IMAGES from "./ASSETS";
-import isWeb from "./util";
+import { CalendarDaysIcon, ClockIcon, CogIcon, DocumentChartBarIcon, HomeIcon, TrophyIcon } from "react-native-heroicons/outline";
 
 function DrawerComponent({ navigation, currentRoute, setRoute }) {
     const iconSize = 36;
@@ -33,42 +31,42 @@ function DrawerComponent({ navigation, currentRoute, setRoute }) {
                 setCurrentRoute={setRoute}
                 currentRoute={currentRoute}
                 to="Home"
-                icon={<HouseLine size={iconSize} color={COLORS.GREEN} />}
+                icon={<HomeIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
                 setCurrentRoute={setRoute}
                 currentRoute={currentRoute}
                 to="Schedule"
-                icon={<Clock size={iconSize} color={COLORS.GREEN} />}
+                icon={<ClockIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
                 setCurrentRoute={setRoute}
                 currentRoute={currentRoute}
                 to="Assignments"
-                icon={<Scroll size={iconSize} color={COLORS.GREEN} />}
+                icon={<DocumentChartBarIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
                 setCurrentRoute={setRoute}
                 currentRoute={currentRoute}
                 to="Calendar"
-                icon={<Calendar size={iconSize} color={COLORS.GREEN} />}
+                icon={<CalendarDaysIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
                 setCurrentRoute={setRoute}
                 currentRoute={currentRoute}
                 to="Sports"
-                icon={<Horse size={iconSize} color={COLORS.GREEN} />}
+                icon={<TrophyIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
                 setCurrentRoute={setRoute}
                 currentRoute={currentRoute}
                 to="Settings"
-                icon={<GearSix size={iconSize} color={COLORS.GREEN} />}
+                icon={<CogIcon size={iconSize} color={COLORS.GREEN} />}
             />
         </SafeAreaView>
     );

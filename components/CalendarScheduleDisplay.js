@@ -1,7 +1,7 @@
 import BottomSheet, { BottomSheetView, useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet'
-import { Calendar, Clock } from 'phosphor-react-native'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { View, TouchableOpacity, Text } from 'react-native'
+import { CalendarDaysIcon, ClockIcon } from 'react-native-heroicons/outline'
 import getColors from '../util/COLORS'
 
 const CalendarScheduleDisplay = ({ cb, showingSchedule }) => {
@@ -15,8 +15,8 @@ const CalendarScheduleDisplay = ({ cb, showingSchedule }) => {
                 cb(!showingSchedule);
             }}>
                 {showingSchedule ?
-                    <Calendar size={32} color={getColors().GREEN} />
-                    : <Clock size={32} color={getColors().GREEN} />
+                    <CalendarDaysIcon size={32} color={getColors().GREEN} />
+                    : <ClockIcon size={32} color={getColors().GREEN} />
                 }
             </TouchableOpacity>
         </View>

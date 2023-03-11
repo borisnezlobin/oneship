@@ -1,7 +1,7 @@
-import { Activity, Checks } from 'phosphor-react-native';
 import React, { useContext } from 'react'
 import { View, Text, Dimensions } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { CheckIcon, FireIcon } from 'react-native-heroicons/outline';
 import getColors from '../../util/COLORS'
 import { UserSettingsContext } from '../../util/contexts';
 
@@ -41,7 +41,7 @@ const ClassAssignments = ({ classData }) => {
                     alignItems: "center",
                     flexDirection: 'row'
                 }}>
-                    <Activity color={COLORS.RED} />
+                    <FireIcon color={COLORS.RED} />
                     <Text style={{
                         textAlign: "center",
                         lineHeight: 36,
@@ -52,7 +52,7 @@ const ClassAssignments = ({ classData }) => {
                     }}>
                         {classData.assignments.length}
                     </Text>
-                    <Checks color={COLORS.GREEN} />
+                    <CheckIcon color={COLORS.GREEN} />
                     <Text style={{
                         textAlign: "center",
                         lineHeight: 36,

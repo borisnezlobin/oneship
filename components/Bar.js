@@ -1,5 +1,5 @@
-import { Equals, ListDashes } from 'phosphor-react-native'
 import React, { useState } from 'react'
+import { Bars3Icon } from "react-native-heroicons/outline"
 import { Dimensions, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -39,7 +39,7 @@ const Bar = ({ navigation }) => {
             }}
         >
             <TouchableOpacity onPressIn={startPress} onPressOut={endPress} onPress={navigation.openDrawer}>
-                <ListDashes size={24} color={COLORS.FOREGROUND_COLOR} />
+                <Bars3Icon size={24} color={COLORS.FOREGROUND_COLOR} />
             </TouchableOpacity>
         </View>
     )

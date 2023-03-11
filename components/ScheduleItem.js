@@ -3,9 +3,7 @@ import { Dimensions, Text, View, TouchableOpacity } from 'react-native'
 import { calculateMinutesFromTime } from '../pages/Schedule';
 import getColors from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts'
-import { Gear } from 'phosphor-react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import { Gear6Icon } from "react-native-heroicons/outline";
 
 const CLASS_STATUS = {
     PASSED: "passed",
@@ -102,7 +100,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                 {showThis ? <TouchableOpacity
                     onPress={wtf}
                 >
-                    <Gear
+                    <Gear6Icon
                         size={24}
                         color={COLORS.GREEN}
                         style={{
