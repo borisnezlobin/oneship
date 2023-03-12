@@ -1,4 +1,5 @@
 import { StatusBar } from "react-native";
+import * as NavigationBar from "expo-navigation-bar";
 
 var COLORS = {
     isLightMode: true,
@@ -14,7 +15,7 @@ var COLORS = {
 };
 
 const setTheme = (isLightMode) => {
-    StatusBar.setBarStyle(isLightMode ? "dark-content" : "light-content", true);
+    StatusBar.setBarStyle(isLightMode ? "dark-content" : "light-content", false);
     var newColors = {
         isLightMode: isLightMode,
         GREEN: isLightMode ? "#1C6800" : "#1C6800",
@@ -28,6 +29,8 @@ const setTheme = (isLightMode) => {
         STATUS_BAR: isLightMode ? "dark_content" : "light_content",
     };
     COLORS = newColors;
+    StatusBar.setBackgroundColor(COLORS.FOREGROUND_COLOR, false);
+    NavigationBar.setBackgroundColorAsync(COLORS.FOREGROUND_COLOR);
     return newColors;
 }
 

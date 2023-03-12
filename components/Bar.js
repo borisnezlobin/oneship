@@ -22,12 +22,12 @@ const Bar = ({ navigation }) => {
 
     return (
         <View style={{
-                position: 'absolute',
+                position: "absolute",
                 height: 48,
                 width: 48,
                 display: "flex",
-                justifyContent: 'center',
-                alignItems: 'center',
+                justifyContent: "center",
+                alignItems: "center",
                 backgroundColor: COLORS.GREEN,
                 bottom: insets.bottom + 2,
                 borderRadius: 1024,

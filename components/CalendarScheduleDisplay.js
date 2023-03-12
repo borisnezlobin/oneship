@@ -7,7 +7,7 @@ import getColors from '../util/COLORS'
 const CalendarScheduleDisplay = ({ cb, showingSchedule }) => {
     return (
         <View style={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             right: 4
         }}>

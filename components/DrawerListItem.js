@@ -28,7 +28,7 @@ const DrawerListItem = ({ navigation, currentRoute, setCurrentRoute, icon, to}) 
             }}>
                 {to}
             </Text>
-            <View style={{flexGrow: .9}} />
+            <View style={{flexGrow: 0.9}} />
         </>
     )
 
@@ -40,7 +40,7 @@ const DrawerListItem = ({ navigation, currentRoute, setCurrentRoute, icon, to}) 
                 style={{
                     display: "flex",
                     alignItems: 'center',
-                    justifyContent: 'left',
+                    justifyContent: "flex-start",
                     flexDirection: "row",
                     height: 48,
                     paddingLeft: 12,
@@ -62,7 +62,7 @@ const DrawerListItem = ({ navigation, currentRoute, setCurrentRoute, icon, to}) 
             style={{
                 display: "flex",
                 alignItems: 'center',
-                justifyContent: 'left',
+                justifyContent: "flex-start",
                 flexDirection: "row",
                 height: 56,
                 width: "100%",
