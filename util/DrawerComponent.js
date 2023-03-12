@@ -11,7 +11,7 @@ function DrawerComponent({ navigation, currentRoute, setRoute }) {
         <SafeAreaView style={{
             flex: 1,
             display: "flex",
-            alignItems: 'left',
+            alignItems: "flex-start",
             justifyContent: 'center',
             flexDirection: "column",
             backgroundColor: COLORS.FOREGROUND_COLOR,
