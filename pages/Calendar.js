@@ -306,7 +306,7 @@ const formatSchedule = (s, settings) => {
   var copeSchedule = s;
   const keys = Object.keys(settings);
   for(var i = 0; i < keys.length; i++){
-    copeSchedule = copeSchedule.replaceAll(settings[keys[i]].realName, settings[keys[i]].customName);
+    copeSchedule = copeSchedule.split(settings[keys[i]].realName).join(settings[keys[i]].customName);
   }
   return copeSchedule;
 }

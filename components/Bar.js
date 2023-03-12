@@ -28,6 +28,7 @@ const Bar = ({ navigation }) => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                overflow: "visible",
                 backgroundColor: COLORS.GREEN,
                 bottom: insets.bottom + 2,
                 borderRadius: 1024,
@@ -35,7 +36,8 @@ const Bar = ({ navigation }) => {
                 shadowColor: COLORS.GREEN,
                 shadowOpacity: 1,
                 shadowOffset: { width: 0, height: 0.5},
-                opacity: opacity
+                opacity: opacity,
+                elevation: 1,
             }}
         >
             <TouchableOpacity onPressIn={startPress} onPressOut={endPress} onPress={navigation.openDrawer}>
