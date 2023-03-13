@@ -46,6 +46,14 @@ const defaultSettings = {
 }
 
 const RouteContext = createContext("");
+const PublicationsContext = createContext(null);
 const UserSettingsContext = createContext(defaultSettings)
 
-export { UserSettingsContext, RouteContext, defaultSettings, CustomScheduleItem, Assignment }
+export {
+    UserSettingsContext,
+    RouteContext,
+    PublicationsContext,
+    defaultSettings,
+    CustomScheduleItem,
+    Assignment
+}

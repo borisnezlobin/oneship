@@ -16,12 +16,12 @@ const PrimaryButton = ({ cb, title, style }) => {
                 shadowOpacity: 1,
                 shadowOffset: { width: 0, height: 0.5},
                 shadowRadius: 5,
+                justifyContent: "center",
                 ...style
             }}
         >
             <Text style={{
                 fontSize: 16,
-                marginTop: 8,
                 fontWeight: 'bold',
                 color: COLORS.isLightMode ? COLORS.FOREGROUND_COLOR : "#cccccc",
                 textAlign: 'center',

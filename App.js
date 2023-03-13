@@ -1,28 +1,33 @@
 import * as React from 'react';
-import { StatusBar, Text } from 'react-native';
+import { StatusBar } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './pages/Home';
 import DrawerComponent from './util/DrawerComponent';
-import isWeb from './util/util';
 import Settings from './pages/Settings';
 import Schedule from './pages/Schedule';
-import { defaultSettings, UserSettingsContext } from './util/contexts';
+import { defaultSettings, PublicationsContext, UserSettingsContext } from './util/contexts';
 import CalendarPage from './pages/Calendar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loading from './util/Loading';
-import getColors, { setTheme } from './util/COLORS';
+import { setTheme } from './util/COLORS';
 import Sports from './pages/Sports';
 import Assignments from './pages/assignments/Assignments';
 import CreateAssignment from './pages/assignments/CreateAssignment';
+import Publications from './pages/Publications';
+import Publication from './pages/Publication';
+import ArticleDetails from './pages/ArticleDetails';
 
 const Drawer = createDrawerNavigator();
 
 export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
   const [routeContext, setRouteContext] = React.useState("");
-  var COLORS = getColors();
+  
+  // it'd be really funny if I just made this async and update on app load
+  // bc then there would be no visible loading time on the publications page I think
+  const [publications, setPublications] = React.useState(null);
   setTheme(userSettingsContext == null ? false : userSettingsContext.isLightMode);
 
   React.useEffect(() => {
@@ -56,12 +61,13 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <UserSettingsContext.Provider value={{ userSettingsContext, setUserSettingsContext }}>
+        <PublicationsContext.Provider value={{ publications, setPublications }}>
           <NavigationContainer>
             <Drawer.Navigator
               initialRouteName="Home"
               drawerContent={(props) => <DrawerComponent currentRoute={routeContext} setRoute={setRouteContext} navigation={props.navigation} />}
               screenOptions={{
-                drawerType: isWeb() ? "permanent" : "slide",
+                drawerType: "slide",
                 headerShown: false,
                 swipeEdgeWidth: 200,
               }}
@@ -72,6 +78,9 @@ export default function App() {
                 name="Schedule"
                 component={Schedule}
               />
+              <Drawer.Screen name="Publications" component={Publications} />
+              <Drawer.Screen name="Publication" component={Publication} />
+              <Drawer.Screen name="Article" component={ArticleDetails} />
               <Drawer.Screen name="Assignments" component={Assignments} />
               <Drawer.Screen
                 options={{ unmountOnBlur: true }}
@@ -87,46 +96,8 @@ export default function App() {
               <Drawer.Screen name="Settings" component={Settings} />
             </Drawer.Navigator>
           </NavigationContainer>
+        </PublicationsContext.Provider>
       </UserSettingsContext.Provider>
     </SafeAreaProvider>
   );
 }
-
-// DrawerComponent
-// Calendar?
-/*
-import React from 'react'
-import Home from './pages/Home';
-import Settings from './pages/Settings';
-import Schedule from './pages/Schedule';
-import CalendarPage from './pages/Calendar';
-import Sports from './pages/Sports';
-import Assignments from './pages/assignments/Assignments';
-import CreateAssignment from './pages/assignments/CreateAssignment';
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import isWeb from './util/util';
-
-const Drawer = createDrawerNavigator();
-
-const App = () => {
-  return <Home navigation={{
-    openDrawer: () => {}
-  }} />
-  return (
-    <NavigationContainer>
-      <Drawer.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            drawerType: isWeb() ? "permanent" : "slide",
-            headerShown: false,
-            swipeEdgeWidth: 200,
-          }}
-        >
-        <Drawer.Screen name="Home" component={Home} />
-      </Drawer.Navigator>
-    </NavigationContainer>
-  )
-}
-
-export default App*/
