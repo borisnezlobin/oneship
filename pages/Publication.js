@@ -4,10 +4,14 @@ import { ScrollView } from 'react-native-gesture-handler';
 import PublicationListItem from '../components/PublicationListItem';
 import getColors from '../util/COLORS';
 
+var colors = getColors()
+
 const Publication = ({ navigation, route }) => {
     const { data } = route.params;
     const COLORS = getColors();
     const r = useRef();
+    
+    const icon = logos[data.title + (!COLORS.isLightMode ? " Dark" : "")]
 
     useEffect(() => {
         if(r.current) r.current.scrollTo({y: 0, animated: true})
@@ -19,10 +23,10 @@ const Publication = ({ navigation, route }) => {
                 <Image
                     style={{
                         width: "100%",
-                        height: 150,
+                        height: 115,
                     }}
-                    source={{uri: logos[data.title]}}
-                    resizeMode="stretch"
+                    source={icon}
+                    resizeMode="contain"
                 />
                 <Text style={{width: "100%", textAlign: "center", color: COLORS.TEXT}}>
                     {data.articles.length} articles available
@@ -34,10 +38,14 @@ const Publication = ({ navigation, route }) => {
 }
 
 const logos = {
-    "C Magazine": "https://cmagazine.org/wp-content/uploads/2022/03/C-Magazine.jpg",
-    "Viking Magazine": "https://vikingsportsmag.com/wp-content/uploads/2018/08/viking-logo-1.jpeg",
-    "Verde": "https://verdemagazine.com/wp-content/uploads/2015/09/logo2-2-scaled.jpg",
-    "Paly Voice": "https://palyvoice.com/wp-content/uploads/2023/02/voicebanner-1.png",
+    "C Magazine": require("../assets/c_magazine_logo.png"),
+    "C Magazine Dark": require("../assets/c_magazine_logo_dark.png"),
+    "Viking Magazine": require("../assets/viking_logo.png"),
+    "Viking Magazine Dark": require("../assets/viking_logo.png"),
+    "Verde": require("../assets/verde_logo.png"),
+    "Verde Dark": require("../assets/verde_logo_dark.png"),
+    "Paly Voice": require("../assets/paly_voice_logo.png"),
+    "Paly Voice Dark": require("../assets/paly_voice_logo.png"),
 }
 
 export default Publication

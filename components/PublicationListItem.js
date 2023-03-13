@@ -5,6 +5,11 @@ import getColors from '../util/COLORS';
 const PublicationListItem = ({ data, navigation }) => {
     const COLORS = getColors()
 
+    if(data.teaser.includes("ChatGPT")){
+        console.log(data);
+    }
+    var teaser = data.teaser.trim().split("\n").join(" ");
+
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate("Article", { article: data })}
@@ -30,7 +35,7 @@ const PublicationListItem = ({ data, navigation }) => {
                         color: COLORS.TEXT,
                         paddingHorizontal: 8,
                     }}>
-                        {data.teaser.trim().length > 170 ? data.teaser.trim().slice(0, 170) + "..." : data.teaser.trim()}
+                        {teaser.length > 170 ? teaser.slice(0, 170) + "..." : teaser}
                     </Text>
                 </View>
                 <View
