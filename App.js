@@ -18,12 +18,14 @@ import CreateAssignment from './pages/assignments/CreateAssignment';
 import Publications from './pages/Publications';
 import Publication from './pages/Publication';
 import ArticleDetails from './pages/ArticleDetails';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
-  const [routeContext, setRouteContext] = React.useState("");
+  const navRef = React.useRef();
   
   // it'd be really funny if I just made this async and update on app load
   // bc then there would be no visible loading time on the publications page I think
@@ -62,38 +64,17 @@ export default function App() {
     <SafeAreaProvider>
       <UserSettingsContext.Provider value={{ userSettingsContext, setUserSettingsContext }}>
         <PublicationsContext.Provider value={{ publications, setPublications }}>
-          <NavigationContainer>
+          <NavigationContainer ref={navRef}>
             <Drawer.Navigator
               initialRouteName="Home"
-              drawerContent={(props) => <DrawerComponent currentRoute={routeContext} setRoute={setRouteContext} navigation={props.navigation} />}
+              drawerContent={(props) => <DrawerComponent navRef={navRef} {...props} />}
               screenOptions={{
                 drawerType: "slide",
                 headerShown: false,
                 swipeEdgeWidth: 200,
               }}
             >
-              <Drawer.Screen name="Home" component={Home} />
-              <Drawer.Screen
-                options={{ unmountOnBlur: true }}
-                name="Schedule"
-                component={Schedule}
-              />
-              <Drawer.Screen name="Publications" component={Publications} />
-              <Drawer.Screen name="Publication" component={Publication} />
-              <Drawer.Screen name="Article" component={ArticleDetails} />
-              <Drawer.Screen name="Assignments" component={Assignments} />
-              <Drawer.Screen
-                options={{ unmountOnBlur: true }}
-                name="CreateAssignment"
-                component={CreateAssignment}
-              />
-              <Drawer.Screen
-                options={{ unmountOnBlur: true }}
-                name="Calendar"
-                component={CalendarPage}
-              />
-              <Drawer.Screen name="Sports" component={Sports} />
-              <Drawer.Screen name="Settings" component={Settings} />
+              <Drawer.Screen component={StackContainer} name="Stack" />
             </Drawer.Navigator>
           </NavigationContainer>
         </PublicationsContext.Provider>
@@ -101,3 +82,45 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
+
+
+const StackContainer = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyleInterpolator: forFade,
+        gestureEnabled: false
+      }}
+    >
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        options={{ unmountOnBlur: true }}
+        name="Schedule"
+        component={Schedule}
+      />
+      <Stack.Screen name="Publications" component={Publications} />
+      <Stack.Screen name="Publication" component={Publication} />
+      <Stack.Screen name="Article" component={ArticleDetails} />
+      <Stack.Screen name="Assignments" component={Assignments} />
+      <Stack.Screen
+        options={{ unmountOnBlur: true }}
+        name="CreateAssignment"
+        component={CreateAssignment}
+      />
+      <Stack.Screen
+        options={{ unmountOnBlur: true }}
+        name="Calendar"
+        component={CalendarPage}
+      />
+      <Stack.Screen name="Sports" component={Sports} />
+      <Stack.Screen name="Settings" component={Settings} />
+    </Stack.Navigator>
+  )
+}
+
+const forFade = ({ current }) => ({
+  cardStyle: {
+    opacity: current.progress,
+  },
+});

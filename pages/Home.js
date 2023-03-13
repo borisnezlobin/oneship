@@ -8,6 +8,7 @@ import { UserSettingsContext } from '../util/contexts'
 const Home = ({ navigation }) => {
     const { userSettingsContext } = useContext(UserSettingsContext); // force rerender
     const COLORS = getColors();
+    
     return (
         <>
             <SafeAreaView style={{ flex: 1, alignItems: 'center', justifyContent: "center", backgroundColor: COLORS.FOREGROUND_COLOR}}>
