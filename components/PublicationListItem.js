@@ -5,7 +5,7 @@ import getColors from '../util/COLORS';
 const PublicationListItem = ({ data, navigation }) => {
     const COLORS = getColors()
 
-    if(data.teaser.includes("ChatGPT")){
+    if(data.title.includes("Los Gatos")){
         console.log(data);
     }
     var teaser = data.teaser.trim().split("\n").join(" ");
@@ -15,23 +15,26 @@ const PublicationListItem = ({ data, navigation }) => {
             onPress={() => navigation.navigate("Article", { article: data })}
             style={{
                 backgroundColor: COLORS.FOREGROUND_COLOR,
-                height: Dimensions.get("screen").width / 4,
-                marginVertical: 48,
-                position: "relative"
+                height: 175,
+                marginVertical: 8,
+                position: "relative",
+                width: Dimensions.get("window").width,
             }}
         >
                 <View style={{
-                    width: "75%"
+                    width: Dimensions.get("window").width - 96,
+                    height: 175
                 }}>
-                    <Text adjustsFontSizeToFit={true} numberOfLines={2} style={{
+                    <Text numberOfLines={2} style={{
                         color: COLORS.GREEN,
                         fontWeight: 'bold',
                         fontSize: 24,
                         paddingHorizontal: 8,
+                        height: 72,
                     }}>
                         {data.title}
                     </Text>
-                    <Text adjustsFontSizeToFit={true} numberOfLines={5} style={{
+                    <Text numberOfLines={5} style={{
                         color: COLORS.TEXT,
                         paddingHorizontal: 8,
                     }}>
@@ -39,19 +42,19 @@ const PublicationListItem = ({ data, navigation }) => {
                     </Text>
                 </View>
                 <View
-                    id={data.title} 
+                    id={data.title}
                     style={{
-                        height: 136,
-                        width: "25%",
+                        height: 96,
+                        width: 96,
                         position: "absolute",
-                        right: 2,
-                        top: 0,
+                        right: 4,
+                        top: (175 - 96) / 2,
                     }}
                 >
                     <Image
                         source={{ uri: data.image}}
                         style={{
-                            height: 136,
+                            height: 96,
                             width: "100%",
                         }}
                     />
