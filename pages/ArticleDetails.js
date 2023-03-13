@@ -65,6 +65,7 @@ const ArticleDetails = ({ navigation, route }) => {
             >
                 {article.authors.map((e, i) => (
                     <Text
+                        key={i}
                         onPress={() => openBrowserAsync(e.authorLink)}
                         style={{
                             color: "#0066f2"

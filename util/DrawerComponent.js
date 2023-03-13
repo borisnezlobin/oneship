@@ -1,12 +1,13 @@
 import { View, Image, SafeAreaView } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
 import getColors from "./COLORS";
-import { CalendarDaysIcon, ClockIcon, CogIcon, DocumentChartBarIcon, HomeIcon, NewspaperIcon, TrophyIcon } from "react-native-heroicons/outline";
+import { CalendarDaysIcon, ClockIcon, CogIcon, HomeIcon, NewspaperIcon, TrophyIcon } from "react-native-heroicons/outline";
 
-function DrawerComponent({ navigation, currentRoute, setRoute }) {
+function DrawerComponent({ navigation, navRef }) {
     const iconSize = 36;
     const COLORS = getColors();
-    
+    const route = navRef.current ? navRef.current.getCurrentRoute().name : "";
+
     return (
         <SafeAreaView style={{
             flex: 1,
@@ -28,43 +29,37 @@ function DrawerComponent({ navigation, currentRoute, setRoute }) {
             <View style={{height: 24}} />
             <DrawerListItem
                 navigation={navigation}
-                setCurrentRoute={setRoute}
-                currentRoute={currentRoute}
+                currentRoute={route}
                 to="Home"
                 icon={<HomeIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
-                setCurrentRoute={setRoute}
-                currentRoute={currentRoute}
+                currentRoute={route}
                 to="Schedule"
                 icon={<ClockIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
-                setCurrentRoute={setRoute}
-                currentRoute={currentRoute}
+                currentRoute={route}
                 to="Publications"
                 icon={<NewspaperIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
-                setCurrentRoute={setRoute}
-                currentRoute={currentRoute}
+                currentRoute={route}
                 to="Calendar"
                 icon={<CalendarDaysIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
-                setCurrentRoute={setRoute}
-                currentRoute={currentRoute}
+                currentRoute={route}
                 to="Sports"
                 icon={<TrophyIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}
-                setCurrentRoute={setRoute}
-                currentRoute={currentRoute}
+                currentRoute={route}
                 to="Settings"
                 icon={<CogIcon size={iconSize} color={COLORS.GREEN} />}
             />
