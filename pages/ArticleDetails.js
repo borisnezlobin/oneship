@@ -1,6 +1,6 @@
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
 import React, { useContext } from 'react'
-import { Dimensions, Image, SafeAreaView, Text, View } from 'react-native'
+import { Dimensions, Image, SafeAreaView, StatusBar, Text, View } from 'react-native'
 import PrimaryButton from "../components/PrimaryButton"
 import getColors from '../util/COLORS';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -12,6 +12,7 @@ const ArticleDetails = ({ navigation, route }) => {
     const { article } = route.params;
     const COLORS = getColors();
     const insets = useSafeAreaInsets()
+    StatusBar.setHidden(true, true)
 
     return (
         <View style={{
@@ -101,10 +102,9 @@ const ArticleDetails = ({ navigation, route }) => {
             </View>
             <View style={{
                 position: "absolute",
-                top: insets.top,
-                left: 0,
-                borderBottomRightRadius: 8,
-                borderTopRightRadius: insets.top == 0 ? 0 : 8,
+                top: insets.top + (insets.top == 0 ? 12 : 0),
+                left: 12,
+                borderRadius: 8,
                 elevation: 4,
                 shadowColor: COLORS.TEXT,
                 shadowOffset: {width: 0.5, height: 0.5},
@@ -113,9 +113,38 @@ const ArticleDetails = ({ navigation, route }) => {
                 padding: 8,
                 backgroundColor: COLORS.FOREGROUND_COLOR
             }}>
-                <TouchableOpacity onPress={navigation.goBack}>
+                <TouchableOpacity onPress={() => {
+                    navigation.goBack();
+                    StatusBar.setHidden(false, true)
+                }}>
                     <XMarkIcon color={COLORS.TEXT} size={32} />
                 </TouchableOpacity>
+            </View>
+            <View style={{
+                position: "absolute",
+                top: insets.top + 8 + (insets.top == 0 ? 12 : 0),
+                height: 36,
+                right: insets.right + 12,
+                elevation: 200,
+                shadowColor: COLORS.TEXT,
+                borderRadius: 8,
+                shadowOffset: {width: 0, height: 0},
+                shadowOpacity: 0,
+                shadowRadius: 4,
+                padding: 8,
+                color: COLORS.GREEN,
+                backgroundColor: COLORS.FOREGROUND_COLOR,
+                justifyContent: "center",
+                alignItems: "center"
+            }}>
+                <Text style={{
+                    color: COLORS.GREEN,
+                    fontWeight: "bold",
+                    width: "100%",
+                    textAlign: "center"
+                }}>
+                    {article.published}
+                </Text>
             </View>
         </View>
     )
