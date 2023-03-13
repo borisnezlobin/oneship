@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react'
-import { Alert, DatePickerIOS, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Text, View } from 'react-native'
-import { TextInput, TouchableWithoutFeedback } from 'react-native-gesture-handler'
+import { Alert, Dimensions, Keyboard, KeyboardAvoidingView, Platform, SafeAreaView, Text, View } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 import { Picker } from "@react-native-picker/picker";
 import GoodTextInput from '../../components/GoodTextInput'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import getColors from '../../util/COLORS'
 import { Assignment, UserSettingsContext } from '../../util/contexts'
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import DismissKeyboard from '../../components/DismissKeyboard';
 
 const CreateAssignment = ({ navigation }) => {
     const { userSettingsContext, setUserSettingsContext } = useContext(UserSettingsContext);
@@ -19,6 +21,7 @@ const CreateAssignment = ({ navigation }) => {
     const [description, setDescription] = useState("");
     const [selectedClass, setClass] = useState(classes[0]);
     const [page, setPage] = useState(0);
+    const insets = useSafeAreaInsets()
 
     const COLORS = getColors();
 
@@ -84,20 +87,32 @@ const CreateAssignment = ({ navigation }) => {
                 </Text>
                 <Picker
                     selectedValue={selectedClass}
+                    dropdownIconColor={COLORS.TEXT}
                     onValueChange={(itemValue, itemIndex) => 
                         setClass(itemValue)
                     }
-                    itemStyle={{
-                        color: COLORS.TEXT
-                    }}
+                    mode="dropdown"
                     style={{
-                        width: "100%",
-                        height: 200,
+                        color: COLORS.TEXT,
+                        width: Platform.OS == "android" ? Dimensions.get("window").width - 96 : "100%",
+                        height: Platform.OS == "android" ? 50 : 200,
+                        marginVertical: Platform.OS == "android" ? 75 : 0,
+                        marginHorizontal: Platform.OS == "android" ? 96 : 0,
+                        backgroundColor: Platform.OS == "android" ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR
                     }}
+                    itemStyle={{ color: COLORS.TEXT }}
                 >
                     {classes.map((e, i) => {
                         if(e.realName == "Lunch" || e.realName == "PRIME") return;
-                        return <Picker.Item key={i} label={e.customName} value={e.realName} />
+                        return <Picker.Item
+                            key={i}
+                            label={e.customName}
+                            value={e.realName}
+                            style={{
+                                color: COLORS.TEXT,
+                                backgroundColor: e.realName == selectedClass ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR
+                            }}
+                        />
                     })}
                 </Picker>
                 <View style={{
@@ -122,32 +137,36 @@ const CreateAssignment = ({ navigation }) => {
     }
 
     if(page == 1){
+        const idk = <View style={{width: "100%"}}>
+            <DismissKeyboard />
+            <Text style={{color: COLORS.GREEN, textAlign: "center", fontWeight: 'bold', fontSize: 32, marginTop: 16}}>
+                Create an assignment
+            </Text>
+            <GoodTextInput
+                placeholder="Title"
+                value={title}
+                setValue={setTitle}
+                
+            />
+            <GoodTextInput
+                placeholder="Description"
+                lines={10}
+                value={description}
+                setValue={setDescription}
+            />
+        </View>
         return (
-            <KeyboardAvoidingView behavior='padding'>
+            <KeyboardAvoidingView behavior={Platform.OS == "ios" ? 'padding' : undefined}>
                 <SafeAreaView style={{
                     height: "100%",
                     alignItems: "center",
-                    justifyContent: "space-around",
                     backgroundColor: COLORS.FOREGROUND_COLOR
                 }}>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{height: "55%"}}>
-                        <Text style={{color: COLORS.GREEN, fontWeight: 'bold', fontSize: 32, marginTop: 16}}>
-                            Create an assignment
-                        </Text>
-                        <GoodTextInput
-                            placeholder="Title"
-                            value={title}
-                            setValue={setTitle}
-                        />
-                        <GoodTextInput
-                            placeholder="Description"
-                            lines={10}
-                            value={description}
-                            setValue={setDescription}
-                        />
-                    </TouchableWithoutFeedback>
+                    {idk}
                     <View style={{
                         marginTop: 24,
+                        position: "absolute",
+                        bottom: insets.bottom,
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-around',
@@ -192,16 +211,22 @@ const CreateAssignment = ({ navigation }) => {
                     onValueChange={(itemValue, itemIndex) =>{
                         setDateDue(itemValue);
                     }}
-                    itemStyle={{
-                        color: COLORS.TEXT
-                    }}
+                    mode="dropdown"
                     style={{
-                        width: "100%",
-                        height: 200,
+                        color: COLORS.TEXT,
+                        width: Platform.OS == "android" ? Dimensions.get("window").width - 96 : "100%",
+                        height: Platform.OS == "android" ? 50 : 200,
+                        marginVertical: Platform.OS == "android" ? 75 : 0,
+                        marginHorizontal: Platform.OS == "android" ? 96 : 0,
+                        backgroundColor: Platform.OS == "android" ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR,
                     }}
+                    itemStyle={{ color: COLORS.TEXT }}
                 >
                     {pickerItems.map((e, i) => <Picker.Item
-                            style={{textAlign: "left", color: COLORS.GREEN}}
+                            style={{
+                                color: COLORS.TEXT,
+                                backgroundColor: e.toLocaleDateString("en-us", options) == dateDue ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR
+                            }}
                             value={e.toLocaleDateString("en-us", options)}
                             label={e.toLocaleDateString("en-us", options)}
                             key={i}

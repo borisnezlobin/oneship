@@ -1,7 +1,7 @@
 import { View, Image, SafeAreaView } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
 import getColors from "./COLORS";
-import { CalendarDaysIcon, ClockIcon, CogIcon, DocumentChartBarIcon, HomeIcon, TrophyIcon } from "react-native-heroicons/outline";
+import { CalendarDaysIcon, ClockIcon, CogIcon, DocumentChartBarIcon, HomeIcon, NewspaperIcon, TrophyIcon } from "react-native-heroicons/outline";
 
 function DrawerComponent({ navigation, currentRoute, setRoute }) {
     const iconSize = 36;
@@ -44,8 +44,8 @@ function DrawerComponent({ navigation, currentRoute, setRoute }) {
                 navigation={navigation}
                 setCurrentRoute={setRoute}
                 currentRoute={currentRoute}
-                to="Assignments"
-                icon={<DocumentChartBarIcon size={iconSize} color={COLORS.GREEN} />}
+                to="Publications"
+                icon={<NewspaperIcon size={iconSize} color={COLORS.GREEN} />}
             />
             <DrawerListItem
                 navigation={navigation}

@@ -15,7 +15,6 @@ import { getCalendarDateString } from 'react-native-calendars/src/services';
 var r = 0; // r for "real good naming"
 function CalendarPage({ navigation }) {
   const [calendar, setCalendar] = React.useState(null);
-  const [rerenders, setRerenders] = React.useState(0);
   const [showingSchedule, setShowingSchedule] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState({shown: false, day: null});
   const { userSettingsContext } = React.useContext(UserSettingsContext);
@@ -106,13 +105,13 @@ function CalendarPage({ navigation }) {
       textSectionTitleColor: '#b6c1cd',
       textSectionTitleDisabledColor: '#d9e1e8',
       selectedDayBackgroundColor: COLORS.GREEN,
-      selectedDayTextColor: COLORS.GREY,
-      todayTextColor: COLORS.RED,
-      todayDotColor: COLORS.RED,
+      selectedDayTextColor: COLORS.FOREGROUND_COLOR,
+      todayTextColor: COLORS.TEXT,
+      todayDotColor: COLORS.TEXT,
       dayTextColor: COLORS.GREEN,
       textDisabledColor: COLORS.GREY,
       dotColor: COLORS.GREEN,
-      selectedDotColor: COLORS.GREY,
+      selectedDotColor: COLORS.FOREGROUND_COLOR,
       arrowColor: COLORS.GREEN,
       disabledArrowColor: '#d9e1e8',
       monthTextColor: COLORS.GREEN,
