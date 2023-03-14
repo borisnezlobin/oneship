@@ -12,7 +12,7 @@ const PublicationListItem = ({ data, navigation }) => {
 
     return (
         <TouchableOpacity
-            onPress={() => navigation.navigate("Article", { article: data })}
+            onPress={() => navigation.navigate("Publications_Publication_Article", { article: data })}
             style={{
                 backgroundColor: COLORS.FOREGROUND_COLOR,
                 height: 175,

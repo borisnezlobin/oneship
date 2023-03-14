@@ -69,7 +69,7 @@ const DrawerListItem = ({ navigation, currentRoute, icon, to}) => {
                 borderBottomRightRadius: 8,
                 marginRight: 4,
                 pointer: "cursor",
-                backgroundColor: currentRoute == to ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR,
+                backgroundColor: currentRoute.split("_")[0] == to ? COLORS.LIGHT : COLORS.FOREGROUND_COLOR,
             }}
         >
             {component}
