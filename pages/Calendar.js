@@ -95,6 +95,7 @@ function CalendarPage({ navigation }) {
     markedDates={calObjects}
     onDayPress={(day) => {
       setModalVisible({shown: true, day: day});
+      setShowingSchedule(false);
       setTimeout(() => bottomSheetRef.current?.snapToIndex(1), 100);
     }}
     disableAllTouchEventsForDisabledDays={true}

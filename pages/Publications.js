@@ -5,7 +5,6 @@ import Loading from '../util/Loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bar from '../components/Bar';
 import { PublicationsContext, UserSettingsContext } from '../util/contexts';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
@@ -47,68 +46,45 @@ function Publications({ navigation }) {
   }
   return (
     <>
-      <SafeAreaView style={{backgroundColor: COLORS.FOREGROUND_COLOR, height: "100%"}}>
-        <Text style={{
-            height: 96,
-            width: "100%",
-            lineHeight: 48,
-            textAlign: 'center',
-            color: COLORS.GREEN,
-            fontWeight: 'bold',
-            fontSize: 48,
-        }}>
-            Your campus. Your news.
-        </Text>
+      <SafeAreaView
+        style={{
+          backgroundColor: COLORS.FOREGROUND_COLOR,
+          height: Dimensions.get("window").height
+        }}
+      >
         <View style={{
-            height: Dimensions.get("window").height - insets.top - insets.bottom - 96,
+            height: Dimensions.get("window").height - insets.top - insets.bottom,
             width: "100%",
             display: "flex",
             alignItems: "stretch",
             justifyContent: "center"
         }}>
             {publications.map((e, i) => {
-                console.log(logos[e.title]);
                 return (
                     <TouchableOpacity
                         onPress={() => navigation.navigate("Publication", { data: e })}
                         key={i}
                         style={{
-                            flex: 1 / publications.length,
+                            flex: 1,
+                            marginTop: 8,
+                            marginHorizontal: 8,
                             position: "relative",
                             display: "flex",
                             justifyContent: 'center',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            backgroundColor: COLORS.LIGHT + "99",
+                            borderRadius: 32,
                         }}
                     >
-                        <LinearGradient
-                            colors={["transparent", COLORS.ALPHA_GREEN]}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                position: 'absolute',
-                                zIndex: 1000,
-                            }}
-                            start={{x: 0, y: 0.5}}
-                            end={{x: 1, y: 2}}
-                            locations={[0.1, 1]}
-                        />
-                        <Text style={{
-                            fontWeight: 'bold',
-                            fontSize: 24,
-                            color: COLORS.GREEN
-                        }}>
-                            {e.title}
-                        </Text>
-                        {
-                            /* <Image
-                            source={{uri: logos[e.title]}}
-                            style={{
-                                width: "100%",
-                                height: "100%"
-                            }}
-                            resizeMode="stretch"
-                        />*/
-                        }
+                      <Image
+                        source={logos[e.title + (COLORS.isLightMode ? "" : " Dark")]}
+                        style={{
+                            position: "absolute",
+                            width: "75%",
+                            height: "50%",
+                        }}
+                        resizeMode="contain"
+                      />
                     </TouchableOpacity>
                 )
             })}
@@ -120,10 +96,14 @@ function Publications({ navigation }) {
 }
 
 const logos = {
-    "C Magazine": "https://cmagazine.org/wp-content/uploads/2022/03/C-Magazine.jpg",
-    "Viking Magazine": "https://vikingsportsmag.com/wp-content/uploads/2018/08/viking-logo-1.jpeg",
-    "Verde": "https://verdemagazine.com/wp-content/uploads/2015/09/logo2-2-scaled.jpg",
-    "Paly Voice": "https://palyvoice.com/wp-content/uploads/2023/02/voicebanner-1.png",
+  "C Magazine": require("../assets/c_magazine_logo.png"),
+  "C Magazine Dark": require("../assets/c_magazine_logo_dark.png"),
+  "Viking Magazine": require("../assets/viking_logo.png"),
+  "Viking Magazine Dark": require("../assets/viking_logo.png"),
+  "Verde": require("../assets/verde_logo.png"),
+  "Verde Dark": require("../assets/verde_logo_dark.png"),
+  "Paly Voice": require("../assets/paly_voice_logo.png"),
+  "Paly Voice Dark": require("../assets/paly_voice_logo.png"),
 }
 
 
