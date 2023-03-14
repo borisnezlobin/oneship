@@ -5,8 +5,6 @@ import Bar from '../components/Bar';
 import PublicationListItem from '../components/PublicationListItem';
 import getColors from '../util/COLORS';
 
-var colors = getColors()
-
 const Publication = ({ navigation, route }) => {
     const { data } = route.params;
     const COLORS = getColors();
@@ -26,7 +24,7 @@ const Publication = ({ navigation, route }) => {
                         width: "100%",
                         height: 115,
                     }}
-                    source={icon}
+                    source={{ uri: icon }}
                     resizeMode="contain"
                 />
                 <Text style={{width: "100%", textAlign: "center", color: COLORS.TEXT}}>
@@ -39,15 +37,17 @@ const Publication = ({ navigation, route }) => {
     )
 }
 
+const remoteUrl = "https://paly-vikings.onrender.com/assets/external/";
+
 const logos = {
-    "C Magazine": require("../assets/c_magazine_logo.png"),
-    "C Magazine Dark": require("../assets/c_magazine_logo_dark.png"),
-    "Viking Magazine": require("../assets/viking_logo.png"),
-    "Viking Magazine Dark": require("../assets/viking_logo.png"),
-    "Verde": require("../assets/verde_logo.png"),
-    "Verde Dark": require("../assets/verde_logo_dark.png"),
-    "Paly Voice": require("../assets/paly_voice_logo.png"),
-    "Paly Voice Dark": require("../assets/paly_voice_logo.png"),
+    "C Magazine": (remoteUrl + "c_magazine_logo.png"),
+    "C Magazine Dark": (remoteUrl + "c_magazine_logo_dark.png"),
+    "Viking Magazine": (remoteUrl + "viking_logo.png"),
+    "Viking Magazine Dark": (remoteUrl + "viking_logo.png"),
+    "Verde": (remoteUrl + "verde_logo.png"),
+    "Verde Dark": (remoteUrl + "verde_logo_dark.png"),
+    "Paly Voice": (remoteUrl + "paly_voice_logo.png"),
+    "Paly Voice Dark": (remoteUrl + "paly_voice_logo.png"),
 }
 
 export default Publication
