@@ -12,7 +12,6 @@ const ArticleDetails = ({ navigation, route }) => {
     const { article } = route.params;
     const COLORS = getColors();
     const insets = useSafeAreaInsets()
-    StatusBar.setHidden(true, true)
 
     return (
         <View style={{
@@ -113,10 +112,7 @@ const ArticleDetails = ({ navigation, route }) => {
                 padding: 8,
                 backgroundColor: COLORS.FOREGROUND_COLOR
             }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.goBack();
-                    StatusBar.setHidden(false, true)
-                }}>
+                <TouchableOpacity onPress={navigation.goBack}>
                     <XMarkIcon color={COLORS.TEXT} size={32} />
                 </TouchableOpacity>
             </View>

@@ -1,12 +1,20 @@
-import { View, Image, SafeAreaView } from "react-native";
+import { View, Image, SafeAreaView, StatusBar } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
 import getColors from "./COLORS";
 import { CalendarDaysIcon, ClockIcon, CogIcon, HomeIcon, NewspaperIcon, TrophyIcon } from "react-native-heroicons/outline";
+
+const screensWithoutStatusBar = ["Publications_Publication_Article"]
 
 function DrawerComponent({ navigation, navRef }) {
     const iconSize = 36;
     const COLORS = getColors();
     const route = navRef.current ? navRef.current.getCurrentRoute().name : "";
+
+    if(screensWithoutStatusBar.includes(navRef.current?.getCurrentRoute().name)){
+        StatusBar.setHidden(true, true);
+    }else{
+        StatusBar.setHidden(false, true);
+    }
 
     return (
         <SafeAreaView style={{
@@ -24,7 +32,10 @@ function DrawerComponent({ navigation, navRef }) {
                 justifyContent: "center",
                 alignItems: "center"
             }}>
-                <Image source={require("../assets/logo-transparent.png")} style={{width: 128, height: 128}} />
+                <Image
+                    source={{ uri: "https://paly-vikings.onrender.com/assets/internal/logo-transparent.png"}}
+                    style={{width: 128, height: 128}}
+                />
             </View>
             <View style={{height: 24}} />
             <DrawerListItem
