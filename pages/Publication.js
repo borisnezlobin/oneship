@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { SafeAreaView, Text, Image } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
+import Bar from '../components/Bar';
 import PublicationListItem from '../components/PublicationListItem';
 import getColors from '../util/COLORS';
 
@@ -33,6 +34,7 @@ const Publication = ({ navigation, route }) => {
                 </Text>
                 {data.articles.map((e, i) => <PublicationListItem data={e} navigation={navigation} key={i} />)}
             </ScrollView>
+            <Bar navigation={navigation} />
         </SafeAreaView>
     )
 }

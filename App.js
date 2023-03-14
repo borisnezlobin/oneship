@@ -100,8 +100,8 @@ const StackContainer = () => {
         component={Schedule}
       />
       <Stack.Screen name="Publications" component={Publications} />
-      <Stack.Screen name="Publication" component={Publication} />
-      <Stack.Screen name="Article" component={ArticleDetails} />
+      <Stack.Screen name="Publications_Publication" component={Publication} />
+      <Stack.Screen name="Publications_Publication_Article" component={ArticleDetails} />
       <Stack.Screen name="Assignments" component={Assignments} />
       <Stack.Screen
         options={{ unmountOnBlur: true }}

@@ -62,7 +62,7 @@ function Publications({ navigation }) {
             {publications.map((e, i) => {
                 return (
                     <TouchableOpacity
-                        onPress={() => navigation.navigate("Publication", { data: e })}
+                        onPress={() => navigation.navigate("Publications_Publication", { data: e })}
                         key={i}
                         style={{
                             flex: 1,
