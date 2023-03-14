@@ -3,7 +3,7 @@ import { Dimensions, Text, View, TouchableOpacity } from 'react-native'
 import { calculateMinutesFromTime } from '../pages/Schedule';
 import getColors from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts'
-import { Gear6Icon } from "react-native-heroicons/outline";
+import { CogIcon } from "react-native-heroicons/outline";
 
 const CLASS_STATUS = {
     PASSED: "passed",
@@ -16,7 +16,6 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
     // const now = 14 * 60 * 60 + 40 * 60 + 3;
     const COLORS = getColors();
-    console.log(now);
     var thisStart = calculateMinutesFromTime(scheduleItem.start);
     var thisEnd = calculateMinutesFromTime(scheduleItem.end);
     var classStatus;
@@ -68,53 +67,49 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
     var isSchoolInSession = now <= endTime * 60 && now >= startTime * 60;
 
     return (
-        <>
-            <View style={{
-                height: heightOfElement,
-                position: "absolute",
-                top: ((thisStart - startTime) / (endTime - startTime)) * screenHeight,
-                backgroundColor: classStatus == CLASS_STATUS.PASSED ? COLORS.LIGHT : COLORS.LIGHT,
-                borderRadius: 8,
-                width: Dimensions.get("window").width - (isSchoolInSession ? 66 : 0),
-                marginLeft: isSchoolInSession ? 64 : 0,
-                padding: 8,
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: "flex-start",
-            }}>
-                <View>
-                    <Text style={{
-                        fontWeight: "bold",
-                        fontSize: "large",
-                        color: COLORS.GREEN,
-                    }}>
-                        {thisItem.customName}
-                    </Text>
-                    <Text style={{color: COLORS.TEXT}}>{scheduleItem.start} - {scheduleItem.end}</Text>
-                    {classStatus == CLASS_STATUS.CURRENT ?
-                    <Text>Ending in {thisEnd * 60 - now} seconds</Text>
-                    : <></>
-                    }
-                </View>
-                {showThis ? <TouchableOpacity
-                    onPress={wtf}
-                >
-                    <Gear6Icon
-                        size={24}
-                        color={COLORS.GREEN}
-                        style={{
-                            bottom: 0,
-                            right: 0,
-                            height: 32,
-                            width: 32,
-                        }}
-                    />
-                </TouchableOpacity>
-                : <></>}
+        <View style={{
+            height: heightOfElement,
+            position: "absolute",
+            top: ((thisStart - startTime) / (endTime - startTime)) * screenHeight,
+            backgroundColor: classStatus == CLASS_STATUS.PASSED ? COLORS.LIGHT : COLORS.LIGHT,
+            borderRadius: 8,
+            width: Dimensions.get("window").width - (isSchoolInSession ? 66 : 0),
+            marginLeft: isSchoolInSession ? 64 : 0,
+            padding: 8,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: "flex-start",
+        }}>
+            <View>
+                <Text style={{
+                    fontWeight: "bold",
+                    color: COLORS.GREEN,
+                }}>
+                    {thisItem.customName}
+                </Text>
+                <Text style={{color: COLORS.TEXT}}>{scheduleItem.start} - {scheduleItem.end}</Text>
+                {classStatus == CLASS_STATUS.CURRENT ?
+                <Text style={{color: COLORS.TEXT}}>Ending in {thisEnd * 60 - now} seconds</Text>
+                : <></>
+                }
             </View>
-            
-        </>
+            {showThis ? <TouchableOpacity
+                onPress={wtf}
+            >
+                <CogIcon
+                    size={36}
+                    color={COLORS.GREEN}
+                    style={{
+                        bottom: 0,
+                        right: 0,
+                        height: 32,
+                        width: 32,
+                    }}
+                />
+            </TouchableOpacity>
+            : <></>}
+        </View>
     )
 }
 
