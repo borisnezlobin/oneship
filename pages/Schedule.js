@@ -20,7 +20,6 @@ const Schedule = ({ navigation }) => {
     const [modalStatus, setModalStatus] = useState({shown: false, data: null});
     const { userSettingsContext } = useContext(UserSettingsContext);
     const bottomSheetRef = useRef();
-    console.log("rerendered");
 
     var s;
     try{
@@ -106,6 +105,8 @@ const Schedule = ({ navigation }) => {
         setModalStatus({shown: true, data: data});
         bottomSheetRef.current?.snapToIndex(0);
     }
+
+    console.log("s: " + JSON.stringify(schedule))
 
     return (
         <>
