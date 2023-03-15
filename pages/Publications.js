@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Bar from '../components/Bar';
 import { PublicationsContext, UserSettingsContext } from '../util/contexts';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import CONFIG from '../util/config';
 
 
 function Publications({ navigation }) {
@@ -22,7 +23,7 @@ function Publications({ navigation }) {
         return JSON.parse(data);
       }
       const getDataFromServer = async () => {
-        const res = await fetch("https://paly-vikings.onrender.com/publications/all");
+        const res = await fetch(CONFIG.SERVER_URL + "/publications/all");
         const data = await res.json();
         return data;
       }
@@ -95,7 +96,7 @@ function Publications({ navigation }) {
   );
 }
 
-const remoteUrl = "https://paly-vikings.onrender.com/assets/external/";
+const remoteUrl = CONFIG.SERVER_URL + "/assets/external/";
 
 const logos = {
     "C Magazine": (remoteUrl + "c_magazine_logo.png"),

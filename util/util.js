@@ -7,6 +7,7 @@ const isWeb = () => {
 
 // scary diy weee
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 const formatDate = (date, includeYear, includeTime) => {
     var date1 = new Date(date);
     var s = months[date1.getMonth()] + " " + date1.getDate();
@@ -19,6 +20,10 @@ const formatDate = (date, includeYear, includeTime) => {
         s += date1.getMinutes();
     }
     return s;
+}
+
+const dateToSportsEventDay = (date) => {
+    return days[date.getDay() - 1] + ", " + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
 }
 
 const serverDateToCalendarDate = (date) => {
@@ -35,4 +40,4 @@ const serverDateToCalendarDate = (date) => {
 }
 
 export default isWeb;
-export { formatDate, serverDateToCalendarDate };
+export { formatDate, serverDateToCalendarDate, dateToSportsEventDay };

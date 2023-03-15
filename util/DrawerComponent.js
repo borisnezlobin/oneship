@@ -2,6 +2,7 @@ import { View, Image, SafeAreaView, StatusBar } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
 import getColors from "./COLORS";
 import { CalendarDaysIcon, ClockIcon, CogIcon, HomeIcon, NewspaperIcon, TrophyIcon } from "react-native-heroicons/outline";
+import CONFIG from "./config";
 
 const screensWithoutStatusBar = ["Publications_Publication_Article"]
 
@@ -33,7 +34,7 @@ function DrawerComponent({ navigation, navRef }) {
                 alignItems: "center"
             }}>
                 <Image
-                    source={{ uri: "https://paly-vikings.onrender.com/assets/internal/logo-transparent.png"}}
+                    source={{ uri: CONFIG.SERVER_URL + "/assets/internal/logo-transparent.png"}}
                     style={{width: 128, height: 128}}
                 />
             </View>
