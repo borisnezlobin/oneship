@@ -1,6 +1,6 @@
 import BottomSheet, { BottomSheetTextInput, BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { Dimensions, Text, View } from 'react-native';
+import { Dimensions, Platform, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import getColors from '../util/COLORS'
 import { CustomScheduleItem, UserSettingsContext } from '../util/contexts';
@@ -13,7 +13,7 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
     const [teacher, setTeacher] = useState(modalStatus.data.teacher);
     const [room, setRoom] = useState(modalStatus.data.room);
     const { userSettingsContext, setUserSettingsContext } = useContext(UserSettingsContext);
-    const snapPoints = useMemo(() => ['25%', '50%'], []);
+    const snapPoints = [isEditing ? "50%" : "25%"]
     const COLORS = getColors();
 
     // yes I know StyleSheet is a thing
@@ -79,7 +79,7 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
         <PrimaryButton
             cb={() => {
                 setIsEditing(true);
-                bottomSheetRef.current.snapToIndex(1)
+                bottomSheetRef.current.snapToIndex(0)
             }}
             title="EDIT"
             style={{
@@ -141,9 +141,12 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
     return (
         <BottomSheet
             style={{
-                shadowRadius: "2",
+                shadowRadius: 2,
                 shadowColor: COLORS.BACKGROUND_COLOR,
                 shadowOpacity: 0.5,
+                borderWidth: Platform.OS == "android" ? 1 : 0,
+                borderRadius: 8,
+                borderColor: COLORS.BACKGROUND_COLOR
             }}
             handleIndicatorStyle={{
               backgroundColor: COLORS.GREY
