@@ -32,7 +32,7 @@ export default function App() {
   const notificationListener = React.useRef();
   const responseListener = React.useRef();
   setExpoPushToken(token);
-  sendLocalNotification("4th Period starting in 5 minutes", "Head to room 410!", null, null)
+  // sendLocalNotification("4th Period starting in 5 minutes", "Head to room 410!", null, null)
   const navRef = React.useRef();
   
   // it'd be really funny if I just made this async and update on app load

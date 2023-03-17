@@ -19,7 +19,7 @@ const Home = ({ navigation }) => {
     
 
     if(loading){
-        withSpring(scaleValue, {
+        spring(scaleValue, {
             toValue: 1,
             damping: 15,
             mass: 1,
@@ -27,9 +27,9 @@ const Home = ({ navigation }) => {
             overshootClamping: false,
             restSpeedThreshold: 0.001,
             restDisplacementThreshold: 0.001,
-        })
+        }).start()
     }else{
-        withSpring(scaleValue, {
+        spring(scaleValue, {
             toValue: 20,
             damping: 15,
             mass: 1,
@@ -37,7 +37,7 @@ const Home = ({ navigation }) => {
             overshootClamping: false,
             restSpeedThreshold: 0.001,
             restDisplacementThreshold: 0.001,
-        })
+        }).start()
     }
 
     return <Loading scale={scaleValue} />

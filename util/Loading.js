@@ -1,18 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Image, SafeAreaView, View, Text, Dimensions, StatusBar } from 'react-native'
 import Animated, { interpolate, Value } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import getColors from './COLORS'
 
-const Loading = ({ scaleValue }) => {
-
+const Loading = ({ scaleValue, loading = true }) => {
+  const [scale, setScale] = useState(1);
   const isLightMode = false;
   const insets = {top: 1, bottom: 1};
   if(!scaleValue) scaleValue = new Value(1);
 
-  console.log(scaleValue);
-  const scale = scaleValue._value;
-  console.log("scale: " + scale)
+  const animate = (s) => {
+    if(s < 0) return;
+    console.log(s);
+    setScale(s - 1/100);
+    setTimeout(() => animate(s - 1/100), 0.05);
+  }
+
+  if(!loading && scale == 1){
+    animate(scale);
+  }else if(loading && scale !== 1){
+    setScale(1)
+  }
 
   if(scale < 2 && insets.top !== 0){
     StatusBar.setBarStyle("light-content", true)
@@ -20,7 +29,7 @@ const Loading = ({ scaleValue }) => {
     StatusBar.setBarStyle("dark-content", true)
   }
 
-  if(scale > 15) return <></>;
+  if(scale < 0.01) return <></>;
 
   return (
     <View pointerEvents='none'>

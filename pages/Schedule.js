@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, Dimensions, Modal } from 'react-native'
 import ScheduleItem from '../components/ScheduleItem';
 import getColors from '../util/COLORS';
 import Loading from '../util/Loading';
-import isWeb, { formatDate } from '../util/util';
+import isWeb, { formatDate, sendLocalNotification } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { UserSettingsContext } from '../util/contexts';
 import Bar from '../components/Bar';
@@ -100,6 +100,17 @@ const Schedule = ({ navigation }) => {
     var positionOfTimeMarker = ((now - start) / (end - start));
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
     // ^ hehe
+
+    for(var i = schedule.data.length - 1; i >= 0; i--){
+        if(schedule.data[i].start - 5 >= now){
+            sendLocalNotification(
+                schedule.data[i].name + " starting in 5 minutes!",
+                "Are you ready?",
+                {},
+                { minutes: schedule.data[i].start - 5 - now }
+            )
+        }else{ break; }
+    }
 
     const scheduleItemCallback = (data) => {
         setModalStatus({shown: true, data: data});
