@@ -1,8 +1,16 @@
 import { Dimensions } from "react-native"
+import * as Notifications from "expo-notifications"
 
 // uh
 const isWeb = () => {
     return Dimensions.get("window").width > 650;
+}
+
+var expoPushToken = null;
+
+const setExpoPushToken = (s) => {
+    expoPushToken = s;
+    console.log(expoPushToken);
 }
 
 // scary diy weee
@@ -39,5 +47,58 @@ const serverDateToCalendarDate = (date) => {
     return caldate;
 }
 
+async function allowsNotificationsAsync() {
+    const settings = await Notifications.getPermissionsAsync();
+    return (
+      settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+    );
+}
+
+const sendLocalNotification = async (title, body, data, scheduling) => {
+    const itIsPermissibleToSendNotifications = await allowsNotificationsAsync();
+
+    if(itIsPermissibleToSendNotifications){
+        Notifications.scheduleNotificationAsync({
+            content: {
+                title: title,
+                body: body,
+                data: data
+            },
+            trigger: scheduling !== null ? scheduling : {
+                seconds: 1 // lol it can't be 0 oh well
+            }
+        })
+    }else{
+        await Notifications.requestPermissionsAsync({ ios: { allowAlert: true }});
+        sendLocalNotification(title, body, data, scheduling);
+    }
+}
+
+// use later maybe
+async function sendPushNotification(title, body, data) {
+    if(expoPushToken == null){
+        console.log("failed to send notification");
+        return;
+    }
+    const message = {
+      to: expoPushToken,
+      sound: 'default',
+      title: title,
+      body: body,
+      data: data,
+    };
+  
+    await fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+    });
+    console.log("sent notification")
+}
+
 export default isWeb;
-export { formatDate, serverDateToCalendarDate, dateToSportsEventDay };
+export { formatDate, serverDateToCalendarDate, dateToSportsEventDay, setExpoPushToken, sendLocalNotification };

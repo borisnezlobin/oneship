@@ -16,12 +16,10 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
     var now = currentTime.getHours() * 60 * 60 + currentTime.getMinutes() * 60 + currentTime.getSeconds();
     // const now = 14 * 60 * 60 + 40 * 60 + 3;
     const COLORS = getColors();
-    var thisStart = calculateMinutesFromTime(scheduleItem.start);
-    var thisEnd = calculateMinutesFromTime(scheduleItem.end);
     var classStatus;
-    if(thisStart * 60 > now){
+    if(scheduleItem.start * 60 > now){
         classStatus = CLASS_STATUS.FUTURE;
-    }else if(thisEnd * 60 < now){
+    }else if(scheduleItem.end * 60 < now){
         classStatus = CLASS_STATUS.PASSED
     }else{
         classStatus = CLASS_STATUS.CURRENT;
@@ -34,9 +32,9 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         return <></>
     }
 
-    var thisItem = userSettingsContext.schedule[scheduleItem.name];
+    var thisItem = userSettingsContext.schedule[scheduleItem.name.split("/")[0]]; // because cope (CAASP testing lol)
 
-    var heightOfElement = ((thisEnd - thisStart) / (endTime - startTime)) * screenHeight;
+    var heightOfElement = ((scheduleItem.end - scheduleItem.start) / (endTime - startTime)) * screenHeight;
 
     useEffect(() => {
         if(classStatus == CLASS_STATUS.CURRENT){
@@ -46,7 +44,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         }
     }, [currentTime]);
 
-    var showThis = thisItem.realName != "Lunch" && thisItem.realName != "PRIME"
+    var showThis = !thisItem.realName.includes("Lunch") && !thisItem.realName.includes("PRIME")
 
     // don't even try to worry about this
     const wtf = () => {
@@ -70,7 +68,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         <View style={{
             height: heightOfElement,
             position: "absolute",
-            top: ((thisStart - startTime) / (endTime - startTime)) * screenHeight,
+            top: ((scheduleItem.start - startTime) / (endTime - startTime)) * screenHeight,
             backgroundColor: classStatus == CLASS_STATUS.PASSED ? COLORS.LIGHT : COLORS.LIGHT,
             borderRadius: 8,
             width: Dimensions.get("window").width - (isSchoolInSession ? 66 : 0),
@@ -88,9 +86,9 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                 }}>
                     {thisItem.customName}
                 </Text>
-                <Text style={{color: COLORS.TEXT}}>{scheduleItem.start} - {scheduleItem.end}</Text>
+                <Text style={{color: COLORS.TEXT}}>{scheduleItem.startString} - {scheduleItem.endString}</Text>
                 {classStatus == CLASS_STATUS.CURRENT ?
-                <Text style={{color: COLORS.TEXT}}>Ending in {thisEnd * 60 - now} seconds</Text>
+                <Text style={{color: COLORS.TEXT}}>Ending in {scheduleItem.end * 60 - now} seconds</Text>
                 : <></>
                 }
             </View>

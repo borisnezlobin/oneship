@@ -41,7 +41,7 @@ const Schedule = ({ navigation }) => {
                     setSchedule(JSON.parse(prevData));
                     return;
                 }
-            }else if(lastUpdate == rn && schedule !== null) return;
+            }else if(lastUpdate == rn) return;
             lastUpdate = rn
             AsyncStorage.setItem("lastScheduleUpdateTime", lastUpdate);
             fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
@@ -94,8 +94,8 @@ const Schedule = ({ navigation }) => {
     // var now = 14 * 60 + 40;
     console.log(now);
 
-    var start = calculateMinutesFromTime(s[0].start);
-    var end = calculateMinutesFromTime(s[s.length - 1].end);
+    var start = s[0].start;
+    var end = s[s.length - 1].end;
 
     var positionOfTimeMarker = ((now - start) / (end - start));
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
