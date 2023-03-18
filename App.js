@@ -83,7 +83,6 @@ export default function App() {
 
   if(userSettingsContext == null){
     return <>
-      <StatusBar barStyle="dark-content" />
       <Loading />
     </>
   }
@@ -94,7 +93,6 @@ export default function App() {
         <PublicationsContext.Provider value={{ publications, setPublications }}>
           <NavigationContainer ref={navRef}>
             <Drawer.Navigator
-              initialRouteName="Home"
               drawerContent={(props) => <DrawerComponent navRef={navRef} {...props} />}
               screenOptions={{
                 drawerType: "slide",
@@ -123,7 +121,6 @@ const StackContainer = () => {
     >
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
-        options={{ unmountOnBlur: true }}
         name="Schedule"
         component={Schedule}
       />
@@ -132,19 +129,16 @@ const StackContainer = () => {
       <Stack.Screen name="Publications_Publication_Article" component={ArticleDetails} />
       <Stack.Screen name="Assignments" component={Assignments} />
       <Stack.Screen
-        options={{ unmountOnBlur: true }}
         name="CreateAssignment"
         component={CreateAssignment}
       />
       <Stack.Screen
-        options={{ unmountOnBlur: true }}
         name="Calendar"
         component={CalendarPage}
       />
       <Stack.Screen
         name="Sports"
         component={Sports}
-        options={{ unmountOnBlur: true }}
       />
       <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>

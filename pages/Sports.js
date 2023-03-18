@@ -163,6 +163,7 @@ const Sports = ({ navigation }) => {
                 </BottomSheetView>
             </BottomSheet>
             : <></> }
+            <Loading loading={false} />
         </Transitioning.View>
     )
 }

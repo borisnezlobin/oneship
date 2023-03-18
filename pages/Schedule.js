@@ -10,8 +10,10 @@ import Bar from '../components/Bar';
 import ScheduleBottomSheet from '../components/ScheduleBottomSheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RocketLaunchIcon } from 'react-native-heroicons/outline';
+import { getAllScheduledNotificationsAsync } from 'expo-notifications';
 
 var lastUpdate = "";
+var wasLoadingLastUpdate = true;
 const Schedule = ({ navigation }) => {
     const insets = useSafeAreaInsets()
     const COLORS = getColors();
@@ -32,33 +34,46 @@ const Schedule = ({ navigation }) => {
     useEffect(() => {
         getData()
         async function getData(){
+            wasLoadingLastUpdate = false; // 1984
             lastUpdate = await AsyncStorage.getItem("lastScheduleUpdateTime");
             var rn = formatDate(Date.now(), true, false);
-            console.log("last update: " + lastUpdate + ", current: " + rn);
             if(lastUpdate == rn && schedule == null){
                 var prevData = await AsyncStorage.getItem("schedule");
                 if(prevData != null && prevData){
-                    setSchedule(JSON.parse(prevData));
+                    console.log("schedule: rerendered from local storage")
+                    setSchedule({
+                        data: JSON.parse(prevData).data,
+                        hasSetNotifications: true, // because like uh
+                        // it really seems about right
+                    });
                     return;
                 }
             }else if(lastUpdate == rn) return;
+            wasLoadingLastUpdate = true;
             lastUpdate = rn
             AsyncStorage.setItem("lastScheduleUpdateTime", lastUpdate);
             fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
             .then(res => res.json())
             .then(j => {
-                setSchedule(j);
+                console.log("schedule: rerendered from server")
+                setSchedule({
+                    data: j.data,
+                    hasSetNotifications: false
+                });
                 AsyncStorage.setItem("schedule", JSON.stringify(j));
             }).catch((e) => console.log("error: " + e))
         }
 
         setTimeout(() => {
-            setCurrentTime(new Date(Date.now()));
+            // setCurrentTime(new Date(Date.now()));
         }, 1000 * 10); // every 10 seconds is good enough imo
     }, [schedule, currentTime, modalStatus])
 
     if(schedule == null){
-        return (<Loading />);
+        console.log("returned loading because schedule is null");
+        return (
+            <Loading />
+        );
     }
 
     if(schedule.data[0].name == "No school"){
@@ -84,15 +99,15 @@ const Schedule = ({ navigation }) => {
 
     if(lastUpdate !== formatDate(Date.now(), true, false)){
         setSchedule(null);
-        return <Loading />
+        wasLoadingLastUpdate = true;
+        return <Loading loading={true} />
     }
 
     var screenHeight = (Dimensions.get("window").height - insets.top - insets.bottom);
 
     var nowDate = currentTime;
     var now = nowDate.getHours() * 60 + nowDate.getMinutes();
-    // var now = 14 * 60 + 40;
-    console.log(now);
+    // var now = 10 * 60;
 
     var start = s[0].start;
     var end = s[s.length - 1].end;
@@ -101,15 +116,24 @@ const Schedule = ({ navigation }) => {
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
     // ^ hehe
 
-    for(var i = schedule.data.length - 1; i >= 0; i--){
-        if(schedule.data[i].start - 5 >= now){
-            sendLocalNotification(
-                schedule.data[i].name + " starting in 5 minutes!",
-                "Are you ready?",
-                {},
-                { minutes: schedule.data[i].start - 5 - now }
-            )
-        }else{ break; }
+    console.log("now: " + now);
+    if(schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
+        for(var i = schedule.data.length - 1; i >= 0; i--){
+            console.log("start: " + (schedule.data[i].start - 5).toString());
+            if(schedule.data[i].start - 5 >= now){
+                sendLocalNotification(
+                    schedule.data[i].name + " starting in 5 minutes!",
+                    "Are you ready?",
+                    {},
+                    { minute: schedule.data[i].start - 5 - now }
+                )
+                console.log("set notification for " + schedule.data[i].name);
+            }else{ break; }
+        }
+        setSchedule({
+            data: schedule.data,
+            hasSetNotifications: true
+        });
     }
 
     const scheduleItemCallback = (data) => {
@@ -117,12 +141,10 @@ const Schedule = ({ navigation }) => {
         bottomSheetRef.current?.snapToIndex(0);
     }
 
-    console.log("s: " + JSON.stringify(schedule))
-
     return (
         <>
             <View style={{overflowX: "hidden", paddingTop: insets.top, height: Dimensions.get("window").height, backgroundColor: COLORS.FOREGROUND_COLOR}}>
-                <View>
+                <View onLayout={() => wasLoadingLastUpdate = false}>
                     {s.map((e, i) => <ScheduleItem
                         startTime={start}
                         endTime={end}
@@ -174,6 +196,7 @@ const Schedule = ({ navigation }) => {
                 </Modal>
             : <ScheduleBottomSheet bottomSheetRef={bottomSheetRef} modalStatus={modalStatus} setModal={setModalStatus} />
             ) : <></>}
+            <Loading animate={wasLoadingLastUpdate} loading={false} text="SCHEDULE" />
         </>
     )
 }
