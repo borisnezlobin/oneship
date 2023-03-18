@@ -1,40 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, SafeAreaView, View, Text, Dimensions, StatusBar } from 'react-native'
-import Animated, { interpolate, Value } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import getColors from './COLORS'
 
-const Loading = ({ scaleValue, loading = true }) => {
+// well at least it looks cool so actually just don't worry about any of this code
+const Loading = ({ loading = true, insets = { top: 0 }, text="LOADING", animate = false }) => {
   const [scale, setScale] = useState(1);
   const isLightMode = false;
-  const insets = {top: 1, bottom: 1};
-  if(!scaleValue) scaleValue = new Value(1);
 
-  const animate = (s) => {
-    if(s < 0) return;
-    console.log(s);
-    setScale(s - 1/100);
-    setTimeout(() => animate(s - 1/100), 0.05);
-  }
-
-  if(!loading && scale == 1){
-    animate(scale);
-  }else if(loading && scale !== 1){
-    setScale(1)
-  }
-
-  if(scale < 2 && insets.top !== 0){
-    StatusBar.setBarStyle("light-content", true)
-  }else if(insets.top !== 0){
-    StatusBar.setBarStyle("dark-content", true)
-  }
+  useEffect(() => {
+    if (scale < 0) return;
+    if(loading) return;
+    if(!loading && !animate && scale !== 0){
+      setScale(0);
+    }
+    const timer = setTimeout(() => {
+      setScale(scale - 1/75);
+    }, 0.001);
+    return () => clearTimeout(timer);
+  }, [scale]);
 
   if(scale < 0.01) return <></>;
 
   return (
-    <View pointerEvents='none'>
-      <Animated.View style={{
-        width: scale * 1000,
+    <View style={{position: "absolute", top: 0}}>
+      <View style={{
+        width: 1000 * scale,
         height: 1000 * scale,
         position: "absolute",
         left: Dimensions.get("window").width / 2 - (500 * scale),
@@ -42,77 +32,58 @@ const Loading = ({ scaleValue, loading = true }) => {
         backgroundColor: isLightMode ? "#6d9959" : "#27401b",
         borderRadius: 1024,
       }} />
-      <Animated.View style={{
-        width: 850 * scale,
-        height: 850 * scale,
+      <View style={{
+        width: 850 * (scale - 0.2) * 1.25,
+        height: 850 * (scale - 0.2) * 1.25,
         position: "absolute",
-        left: Dimensions.get("window").width / 2 - (425 * scale),
-        top: Dimensions.get("window").height / 2 - (425 * scale),
+        left: Dimensions.get("window").width / 2 - (425 * (scale - 0.2) * 1.25),
+        top: Dimensions.get("window").height / 2 - (425 * (scale - 0.2) * 1.25),
         backgroundColor: isLightMode ? "#55883f" : "#264818",
         borderRadius: 1024
       }} />
-      <Animated.View style={{
-        width: 600 * scale,
-        height: 600 * scale,
+      <View style={{
+        width: 600 * (scale - 0.4) * 1.6,
+        height: 600 * (scale - 0.4) * 1.6,
         position: "absolute",
-        left: Dimensions.get("window").width / 2 - (300 * scale),
-        top: Dimensions.get("window").height / 2 - (300 * scale),
+        left: Dimensions.get("window").width / 2 - (300 * (scale - 0.4) * 1.6),
+        top: Dimensions.get("window").height / 2 - (300 * (scale - 0.4) * 1.6),
         backgroundColor: isLightMode ? "#3b7824" : "#255015",
         borderRadius: 1024
       }} />
-      <Animated.View style={{
-        width: 384 * scale,
-        height: 384 * scale,
+      <View style={{
+        width: 384 * (scale - 0.6) * 2.5,
+        height: 384 * (scale - 0.6) * 2.5,
         position: "absolute",
-        left: Dimensions.get("window").width / 2 - (192 * scale),
-        top: Dimensions.get("window").height / 2 - (192 * scale),
+        left: Dimensions.get("window").width / 2 - (192 * (scale - 0.6) * 2.5),
+        top: Dimensions.get("window").height / 2 - (192 * (scale - 0.6) * 2.5),
         backgroundColor: "#1C6800",
         borderRadius: 1024
       }} />
-      <Animated.View style={{
-        width: 192 * scale,
-        height: 192 * scale,
+      <View style={{
+        width: 192 * (scale - 0.75) * 4,
+        height: 192 * (scale - 0.75) * 4,
         position: "absolute",
-        left: Dimensions.get("window").width / 2 - (96 * scale),
-        top: Dimensions.get("window").height / 2 - (96 * scale),
+        left: Dimensions.get("window").width / 2 - (96 * (scale - 0.75) * 4),
+        top: Dimensions.get("window").height / 2 - (96 * (scale - 0.75) * 4),
         backgroundColor: getColors().FOREGROUND_COLOR,
         borderRadius: 1024,
         justifyContent: "center",
         alignItems: "center"
       }}>
         <Image style={{
-          width: 128 * scale,
-          height: 128 * scale,
+          width: 128 * (scale - 0.75) * 4,
+          height: 128 * (scale - 0.75) * 4,
           borderRadius: 1024,
         }} source={require("../assets/logo-transparent.png")} />
         <Text style={{
           fontWeight: "bold",
-          fontSize: 12 * scale,
+          fontSize: scale >= 0.8 ? 12 * (scale - 0.75) * 4 : 0.001,
           color: getColors().GREEN
         }}>
-          LOADING
+          {text}
         </Text>
-      </Animated.View>
+      </View>
     </View>
-  )
-
-  return (
-    <SafeAreaView style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: getColors().FOREGROUND_COLOR,
-        width: "100%",
-        height: "100%"
-    }}>
-        <Image style={{width: 256, height: 256}} source={require("../assets/loading.gif")} />
-        <Text style={{
-            color: getColors().GREEN,
-            fontSize: 24,
-            fontWeight: "bold"
-        }}>{text}</Text>
-    </SafeAreaView>
   )
 }
 

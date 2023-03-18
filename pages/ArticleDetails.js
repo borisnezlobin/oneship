@@ -1,6 +1,6 @@
 import { TouchableOpacity } from '@gorhom/bottom-sheet';
-import React, { useContext } from 'react'
-import { Dimensions, Image, SafeAreaView, StatusBar, Text, View } from 'react-native'
+import React from 'react'
+import { Dimensions, Image, Text, View } from 'react-native'
 import PrimaryButton from "../components/PrimaryButton"
 import getColors from '../util/COLORS';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -101,7 +101,7 @@ const ArticleDetails = ({ navigation, route }) => {
             </View>
             <View style={{
                 position: "absolute",
-                top: insets.top + (insets.top == 0 ? 12 : 0),
+                top: insets.top + (insets.top == 0 ? 12 : 2),
                 left: 12,
                 borderRadius: 8,
                 elevation: 4,

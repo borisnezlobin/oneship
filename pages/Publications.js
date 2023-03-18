@@ -10,7 +10,8 @@ import CONFIG from '../util/config';
 
 
 function Publications({ navigation }) {
-    const {publications, setPublications} = React.useContext(PublicationsContext)
+  const [imagesLoaded, setLoadedImages] = React.useState(0);
+  const {publications, setPublications} = React.useContext(PublicationsContext)
   const { userSettingsContext } = React.useContext(UserSettingsContext);
   const COLORS = getColors();
   const insets = useSafeAreaInsets();
@@ -18,23 +19,13 @@ function Publications({ navigation }) {
 
   React.useEffect(() => {
     const doShit = async () => {
-      const getDataFromStorage = async () => {
-        const data = await AsyncStorage.getItem("publications");
-        return JSON.parse(data);
-      }
       const getDataFromServer = async () => {
         const res = await fetch(CONFIG.SERVER_URL + "/publications/all");
         const data = await res.json();
         return data;
       }
       if(publications == null){
-        var maybeData = await getDataFromStorage();
-        if(maybeData != null){
-          setPublications(maybeData);
-          return;
-        }
         const data = await getDataFromServer();
-        AsyncStorage.setItem("publications", JSON.stringify(data));
         setPublications(data); // surely it won't be null
       }
     }
@@ -43,8 +34,11 @@ function Publications({ navigation }) {
   }, [publications, userSettingsContext]);
 
   if(publications == null){
-    return <Loading />
+    return <Loading loading={true} />
   }
+
+  console.log(imagesLoaded + ", " + publications.length);
+
   return (
     <>
       <SafeAreaView
@@ -84,6 +78,7 @@ function Publications({ navigation }) {
                             width: "75%",
                             height: "50%",
                         }}
+                        onLoad={() => setLoadedImages(imagesLoaded + 1)}
                         resizeMode="contain"
                       />
                     </TouchableOpacity>
@@ -92,6 +87,7 @@ function Publications({ navigation }) {
         </View>
       </SafeAreaView>
       <Bar navigation={navigation} />
+      <Loading key={imagesLoaded} animate={true} loading={imagesLoaded < publications.length} insets={insets} />
     </>
   );
 }

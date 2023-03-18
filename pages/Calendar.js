@@ -13,6 +13,7 @@ import CalendarScheduleDisplay from '../components/CalendarScheduleDisplay';
 import { getCalendarDateString } from 'react-native-calendars/src/services';
 
 var r = 0; // r for "real good naming"
+var wasLoadingLastUpdate = true;
 function CalendarPage({ navigation }) {
   const [calendar, setCalendar] = React.useState(null);
   const [showingSchedule, setShowingSchedule] = React.useState(false);
@@ -42,6 +43,7 @@ function CalendarPage({ navigation }) {
         return data;
       }
       if(calendar == null){
+        wasLoadingLastUpdate = true;
         var maybeData = await getDataFromStorage();
         if(maybeData != null){
           setCalendar(maybeData);
@@ -57,6 +59,7 @@ function CalendarPage({ navigation }) {
   }, [calendar, modalVisible, userSettingsContext]);
 
   if(calendar == null){
+    wasLoadingLastUpdate = true;
     return <Loading />
   }
 
@@ -197,7 +200,7 @@ function CalendarPage({ navigation }) {
 
   return (
     <>
-      <SafeAreaView style={{backgroundColor: COLORS.FOREGROUND_COLOR}}>
+      <SafeAreaView onLayout={() => wasLoadingLastUpdate = false} style={{backgroundColor: COLORS.FOREGROUND_COLOR}}>
         {calendarElement}
         <Bar navigation={navigation} />
         <BottomSheet
@@ -298,6 +301,7 @@ function CalendarPage({ navigation }) {
           </BottomSheetScrollView>
         </BottomSheet>
       </SafeAreaView>
+      <Loading loading={false} animate={wasLoadingLastUpdate} insets={insets} />
     </>
   );
 }
