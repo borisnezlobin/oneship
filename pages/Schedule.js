@@ -37,6 +37,7 @@ const Schedule = ({ navigation }) => {
             wasLoadingLastUpdate = false; // 1984
             lastUpdate = await AsyncStorage.getItem("lastScheduleUpdateTime");
             var rn = formatDate(Date.now(), true, false);
+            console.log("current: " + rn + ", last udpate:" + lastUpdate)
             if(lastUpdate == rn && schedule == null){
                 var prevData = await AsyncStorage.getItem("schedule");
                 if(prevData != null && prevData){
@@ -51,7 +52,6 @@ const Schedule = ({ navigation }) => {
             }else if(lastUpdate == rn) return;
             wasLoadingLastUpdate = true;
             lastUpdate = rn
-            AsyncStorage.setItem("lastScheduleUpdateTime", lastUpdate);
             fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
             .then(res => res.json())
             .then(j => {
@@ -61,6 +61,7 @@ const Schedule = ({ navigation }) => {
                     hasSetNotifications: false
                 });
                 AsyncStorage.setItem("schedule", JSON.stringify(j));
+                AsyncStorage.setItem("lastScheduleUpdateTime", lastUpdate);
             }).catch((e) => console.log("error: " + e))
         }
 
@@ -93,6 +94,7 @@ const Schedule = ({ navigation }) => {
                     </Text>
                 </SafeAreaView>
                 <Bar navigation={navigation} routeName="Schedule" />
+                <Loading animate={wasLoadingLastUpdate} loading={false} />
             </>
         )
     }
@@ -115,8 +117,7 @@ const Schedule = ({ navigation }) => {
     var positionOfTimeMarker = ((now - start) / (end - start));
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
     // ^ hehe
-
-    console.log("now: " + now);
+    
     if(schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
         for(var i = schedule.data.length - 1; i >= 0; i--){
             console.log("start: " + (schedule.data[i].start - 5).toString());
@@ -125,7 +126,9 @@ const Schedule = ({ navigation }) => {
                     schedule.data[i].name + " starting in 5 minutes!",
                     "Are you ready?",
                     {},
-                    { minute: schedule.data[i].start - 5 - now }
+                    {
+                        seconds: (schedule.data[i].start - 5 - now) * 60
+                    }
                 )
                 console.log("set notification for " + schedule.data[i].name);
             }else{ break; }

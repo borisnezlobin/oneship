@@ -32,7 +32,9 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         return <></>
     }
 
+    console.log(scheduleItem.name.split("/")[0])
     var thisItem = userSettingsContext.schedule[scheduleItem.name.split("/")[0]]; // because cope (CAASP testing lol)
+    console.log(thisItem)
 
     var heightOfElement = ((scheduleItem.end - scheduleItem.start) / (endTime - startTime)) * screenHeight;
 
@@ -44,7 +46,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         }
     }, [currentTime]);
 
-    var showThis = !thisItem.realName.includes("Lunch") && !thisItem.realName.includes("PRIME")
+    var showThis = thisItem && (!thisItem.realName.includes("Lunch") && !thisItem.realName.includes("PRIME"))
 
     // don't even try to worry about this
     const wtf = () => {
@@ -84,7 +86,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                     fontWeight: "bold",
                     color: COLORS.GREEN,
                 }}>
-                    {thisItem.customName}
+                    {thisItem ? thisItem.customName : scheduleItem.name}
                 </Text>
                 <Text style={{color: COLORS.TEXT}}>{scheduleItem.startString} - {scheduleItem.endString}</Text>
                 {classStatus == CLASS_STATUS.CURRENT ?
