@@ -14,7 +14,7 @@ const Loading = ({ loading = true, insets = { top: 0 }, text="LOADING", animate 
       setScale(0);
     }
     const timer = setTimeout(() => {
-      setScale(scale - 1/75);
+      setScale(scale - 1/25);
     }, 0.001);
     return () => clearTimeout(timer);
   }, [scale]);
@@ -42,42 +42,42 @@ const Loading = ({ loading = true, insets = { top: 0 }, text="LOADING", animate 
         borderRadius: 1024
       }} />
       <View style={{
-        width: 600 * (scale - 0.4) * 1.6,
-        height: 600 * (scale - 0.4) * 1.6,
+        width: 600 * (scale - 0.3) * 1.5,
+        height: 600 * (scale - 0.3) * 1.5,
         position: "absolute",
-        left: Dimensions.get("window").width / 2 - (300 * (scale - 0.4) * 1.6),
-        top: Dimensions.get("window").height / 2 - (300 * (scale - 0.4) * 1.6),
+        left: Dimensions.get("window").width / 2 - (300 * (scale - 0.3) * 1.5),
+        top: Dimensions.get("window").height / 2 - (300 * (scale - 0.3) * 1.5),
         backgroundColor: isLightMode ? "#3b7824" : "#255015",
         borderRadius: 1024
       }} />
       <View style={{
-        width: 384 * (scale - 0.6) * 2.5,
-        height: 384 * (scale - 0.6) * 2.5,
+        width: 384 * (scale - 0.4) * 1.6,
+        height: 384 * (scale - 0.4) * 1.6,
         position: "absolute",
-        left: Dimensions.get("window").width / 2 - (192 * (scale - 0.6) * 2.5),
-        top: Dimensions.get("window").height / 2 - (192 * (scale - 0.6) * 2.5),
+        left: Dimensions.get("window").width / 2 - (192 * (scale - 0.4) * 1.6),
+        top: Dimensions.get("window").height / 2 - (192 * (scale - 0.4) * 1.6),
         backgroundColor: "#1C6800",
         borderRadius: 1024
       }} />
       <View style={{
-        width: 192 * (scale - 0.75) * 4,
-        height: 192 * (scale - 0.75) * 4,
+        width: 192 * (scale - 0.25) * 1.3,
+        height: 192 * (scale - 0.25) * 1.3,
         position: "absolute",
-        left: Dimensions.get("window").width / 2 - (96 * (scale - 0.75) * 4),
-        top: Dimensions.get("window").height / 2 - (96 * (scale - 0.75) * 4),
+        left: Dimensions.get("window").width / 2 - (96 * (scale - 0.25) * 1.3),
+        top: Dimensions.get("window").height / 2 - (96 * (scale - 0.25) * 1.3),
         backgroundColor: getColors().FOREGROUND_COLOR,
         borderRadius: 1024,
         justifyContent: "center",
         alignItems: "center"
       }}>
         <Image style={{
-          width: 128 * (scale - 0.75) * 4,
-          height: 128 * (scale - 0.75) * 4,
+          width: 128 * (scale - 0.25) * 1.3,
+          height: 128 * (scale - 0.25) * 1.3,
           borderRadius: 1024,
         }} source={require("../assets/logo-transparent.png")} />
         <Text style={{
           fontWeight: "bold",
-          fontSize: scale >= 0.8 ? 12 * (scale - 0.75) * 4 : 0.001,
+          fontSize: scale >= 0.25 ? 12 * (scale - 0.25) * 1.3 : 0.001,
           color: getColors().GREEN
         }}>
           {text}

@@ -65,7 +65,7 @@ const sendLocalNotification = async (title, body, data, scheduling) => {
                 data: data
             },
             trigger: scheduling !== null ? scheduling : {
-                seconds: 1 // lol it can't be 0 oh well
+                seconds: 1, // lol it can't be 0 oh well
             }
         })
     }else{

@@ -87,7 +87,13 @@ function Publications({ navigation }) {
         </View>
       </SafeAreaView>
       <Bar navigation={navigation} />
-      <Loading key={imagesLoaded} animate={true} loading={imagesLoaded < publications.length} insets={insets} />
+      <Loading
+        key={imagesLoaded}
+        animate={true}
+        loading={imagesLoaded < publications.length}
+        insets={insets}
+        text={"LOADING (" + imagesLoaded + "/" + publications.length + ")"}
+      />
     </>
   );
 }
