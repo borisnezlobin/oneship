@@ -42,6 +42,7 @@ const defaultSettings = {
         "Advisory": new CustomScheduleItem("Advisory", null, null, null),
         "PRIME": new CustomScheduleItem("PRIME", null, null, null),
     },
+    remind: 5,
     isLightMode: true,
 }
 

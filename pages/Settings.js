@@ -117,7 +117,12 @@ function Settings({ navigation }) {
           }
         </View>
         <Picker
-          selectedValue={5}
+          selectedValue={userSettingsContext.remind}
+          onValueChange={(newVal) => {
+            var newObj = {...userSettingsContext};
+            newObj.remind = newVal;
+            setUserSettingsContext(newObj);
+          }}
         >
           <Picker.Item value={-1} label="Don't remind me" />
           <Picker.Item value={0.001} label="0 minutes" />

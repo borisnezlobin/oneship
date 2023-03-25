@@ -118,12 +118,12 @@ const Schedule = ({ navigation }) => {
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
     // ^ hehe
     
-    if(schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
+    if(userSettingsContext.remind !== -1 && schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
         for(var i = schedule.data.length - 1; i >= 0; i--){
             if(schedule.data[i].start - 5 >= now){
                 sendLocalNotification(
-                    schedule.data[i].name + " starting in 5 minutes!",
-                    "Are you ready?",
+                    schedule.data[i].name,
+                    "Starting in " + userSettingsContext.remind.toString() + " minute" + (userSettingsContext.remind !== 1 ? "s" : ""),
                     {},
                     {
                         seconds: (schedule.data[i].start - 5 - now) * 60
