@@ -55,10 +55,15 @@ export default function App() {
 
     // SETTINGS
     const getData = async () => {
-      const gottenSettings = await AsyncStorage.getItem("settings");
+      var gottenSettings = await AsyncStorage.getItem("settings");
       if(gottenSettings == null){
         setUserSettingsContext(defaultSettings);
         return;
+      }
+      for(var key in Object.keys(defaultSettings)){
+        if(!gottenSettings.hasOwnProperty(key)){
+          gottenSettings[key] = defaultSettings[key];
+        }
       }
       setUserSettingsContext(JSON.parse(gottenSettings));
     }
