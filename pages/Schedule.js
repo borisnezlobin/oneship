@@ -120,7 +120,6 @@ const Schedule = ({ navigation }) => {
     
     if(schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
         for(var i = schedule.data.length - 1; i >= 0; i--){
-            console.log("start: " + (schedule.data[i].start - 5).toString());
             if(schedule.data[i].start - 5 >= now){
                 sendLocalNotification(
                     schedule.data[i].name + " starting in 5 minutes!",
@@ -131,6 +130,7 @@ const Schedule = ({ navigation }) => {
                     }
                 )
                 console.log("set notification for " + schedule.data[i].name);
+                console.log("it will trigger in " + ((schedule.data[i].start - 5 - now) * 60).toString() + " seconds");
             }else{ break; }
         }
         setSchedule({
