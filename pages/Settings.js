@@ -104,18 +104,6 @@ function Settings({ navigation }) {
         </Text>
         { /* NOTIFICATIONS */ }
         <View style={{padding: 16}}>
-        <View style={{
-          display: "flex",
-          marginTop: 16,
-          flexDirection: "row",
-          alignItems: 'center',
-          justifyContent: 'flex-start'
-        }}>
-          {userSettingsContext.isLightMode ? 
-            <SunIcon color={COLORS.GREEN} weight="bold" size={32} />
-          : <MoonIcon color={COLORS.GREEN} weight="bold" size={32} />
-          }
-        </View>
         <Picker
           selectedValue={userSettingsContext.remind}
           onValueChange={(newVal) => {
