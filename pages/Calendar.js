@@ -93,7 +93,7 @@ function CalendarPage({ navigation }) {
   }
 
   var calendarElement = <CalendarList
-    key={r}
+    key={userSettingsContext.isLightMode}
     markingType='custom'
     markedDates={calObjects}
     onDayPress={(day) => {
@@ -134,69 +134,6 @@ function CalendarPage({ navigation }) {
     scrollEnabled={true}
     showScrollIndicator={true}
   />;
-
-  const modalContent = !modalVisible.shown ? <></> : (
-    <TouchableWithoutFeedback onPress={() => setModalVisible({shown: false, day: null})}>
-      <View style={{
-        backgroundColor: "rgba(0, 0, 0, 0.9)",
-        width: Dimensions.get("window").width,
-        height: Dimensions.get("window").height
-      }}>
-        <View style={{
-            width: Dimensions.get("window").width * 2 / 3,
-            marginLeft: Dimensions.get("window").width / 6,
-            height: Dimensions.get("window").height * 3/ 4,
-            marginTop: Dimensions.get("window").height / 8,
-            backgroundColor: COLORS.FOREGROUND_COLOR,
-            borderRadius: 8,
-            paddingHorizontal: 8,
-            paddingBottom: 8,
-            overflowY: "scroll"
-        }}>
-          <Text style={{
-            color: COLORS.GREEN,
-            fontWeight: "bold",
-            fontSize: 32,
-            marginBottom: 8,
-            textAlign: 'center'
-          }}>
-            {selectedDay}
-          </Text>
-          {eventsForDay.map((e, i) => {
-            if(e.title.includes("Schedule")) return;
-            var hasDescription = e.description == "No description";
-            return (
-              <View key={i}>
-                  <Text style={{
-                    fontWeight: 'bold',
-                    fontSize: 18,
-                    color: COLORS.GREEN
-                  }}>
-                    {e.title}
-                  </Text>
-                  <Text style={{color: COLORS.TEXT}}>{hasDescription ? "" : e.description}</Text>
-              </View>
-            )
-          })}
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
-  )
-
-  if(isWeb()){
-    return (
-      <>
-        {calendarElement}
-        <Modal
-          animationType="none"
-          visible={modalVisible.shown}
-          transparent={true}
-        >
-          {modalContent}
-        </Modal>
-      </>
-    );
-  }
 
   return (
     <>
@@ -243,7 +180,7 @@ function CalendarPage({ navigation }) {
               {selectedDay}
             </Text>
             {eventsForDay.map((e, i) => {
-              if(e.title.includes("Schedule")){
+              if(e.title.includes("Schedule") || e.title.includes("Minimum Day")){
                 return (
                   <CalendarScheduleDisplay key={i} showingSchedule={showingSchedule} cb={(bool) => {
                     bottomSheetRef.current?.snapToIndex(0); // running out of bandaids I is
@@ -256,7 +193,7 @@ function CalendarPage({ navigation }) {
             })}
             {eventsForDay.map((e, i) => {
               var description = (e.description == "No description") ? "" : e.description;
-              if(e.title.includes("Schedule") && showingSchedule){
+              if((e.title.includes("Schedule") || e.title.includes("Minimum Day")) && showingSchedule){
                 return (
                   <View key={i}>
                     <Text style={{
@@ -277,8 +214,8 @@ function CalendarPage({ navigation }) {
                   </View>
                 );
               }
-              if(!e.title.includes("Schedule") && showingSchedule) return;
-              if(e.title.includes("Schedule") && !showingSchedule) return;
+              if((!e.title.includes("Schedule") || !e.title.includes("Minimum Day")) && showingSchedule) return;
+              if((e.title.includes("Schedule") || e.title.includes("Minimum Day")) && !showingSchedule) return;
               return (
                 <View key={i} style={{margin: 2}}>
                     <Text style={{

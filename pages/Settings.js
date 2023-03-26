@@ -3,7 +3,7 @@ import { Button, Text, View, TouchableOpacity } from 'react-native';
 import getColors from '../util/COLORS';
 import { UserSettingsContext } from '../util/contexts';
 import Bar from "../components/Bar"
-import { BellAlertIcon, BellSlashIcon, EyeIcon, EyeSlashIcon, MoonIcon, SunIcon } from 'react-native-heroicons/outline';
+import { EyeIcon, EyeSlashIcon, MoonIcon, SunIcon } from 'react-native-heroicons/outline';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from "@react-native-picker/picker";
 
@@ -114,8 +114,9 @@ function Settings({ navigation }) {
         >
           <Picker.Item value={-1} label="Don't remind me" />
           <Picker.Item value={0.001} label="0 minutes" />
-          <Picker.Item value={1} label="1 minutes" />
+          <Picker.Item value={1} label="1 minute" />
           <Picker.Item value={2} label="2 minutes" />
+          <Picker.Item value={3} label="3 minutes" />
           <Picker.Item value={5} label="5 minutes" />
           <Picker.Item value={10} label="10 minutes" />
           <Picker.Item value={15} label="15 minutes" />
