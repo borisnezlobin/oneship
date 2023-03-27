@@ -66,7 +66,7 @@ const Schedule = ({ navigation }) => {
         }
 
         setTimeout(() => {
-            // setCurrentTime(new Date(Date.now()));
+            setCurrentTime(new Date(Date.now()));
         }, 1000 * 10); // every 10 seconds is good enough imo
     }, [schedule, currentTime, modalStatus])
 
