@@ -126,7 +126,7 @@ const Schedule = ({ navigation }) => {
                     "Starting in " + userSettingsContext.remind.toString() + " minute" + (userSettingsContext.remind !== 1 ? "s" : ""),
                     {},
                     {
-                        seconds: (schedule.data[i].start - 5 - now) * 60
+                        seconds: (schedule.data[i].start - userSettingsContext.remind - now) * 60
                     }
                 )
                 console.log("set notification for " + schedule.data[i].name);
