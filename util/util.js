@@ -74,6 +74,24 @@ const sendLocalNotification = async (title, body, data, scheduling) => {
     }
 }
 
+const sendNotificationsForSchedule = async (schedule, time, now) => {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    if(time !== -1){
+        for(var i = schedule.length - 1; i >= 0; i--){
+            if(schedule[i].start - 5 >= now){
+                sendLocalNotification(
+                    schedule[i].name,
+                    "Starting in " + time.toString() + " minute" + (time !== 1 ? "s" : ""),
+                    {},
+                    {
+                        seconds: (schedule[i].start - time - now) * 60
+                    }
+                )
+            }else{ break; }
+        }
+    }
+}
+
 // use later maybe
 async function sendPushNotification(title, body, data) {
     if(expoPushToken == null){
@@ -101,4 +119,11 @@ async function sendPushNotification(title, body, data) {
 }
 
 export default isWeb;
-export { formatDate, serverDateToCalendarDate, dateToSportsEventDay, setExpoPushToken, sendLocalNotification };
+export {
+    formatDate,
+    serverDateToCalendarDate,
+    dateToSportsEventDay,
+    setExpoPushToken,
+    sendLocalNotification,
+    sendNotificationsForSchedule
+};

@@ -111,6 +111,9 @@ function Settings({ navigation }) {
             newObj.remind = newVal;
             setUserSettingsContext(newObj);
           }}
+          itemStyle={{
+            color: COLORS.TEXT
+          }}
         >
           <Picker.Item value={-1} label="Don't remind me" />
           <Picker.Item value={0.001} label="0 minutes" />
