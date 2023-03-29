@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, Dimensions, Modal } from 'react-native'
 import ScheduleItem from '../components/ScheduleItem';
 import getColors from '../util/COLORS';
 import Loading from '../util/Loading';
-import isWeb, { formatDate, sendLocalNotification } from '../util/util';
+import isWeb, { formatDate, sendLocalNotification, sendNotificationsForSchedule } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ScheduleContext, UserSettingsContext } from '../util/contexts';
 import Bar from '../components/Bar';
@@ -40,43 +40,10 @@ const Schedule = ({ navigation }) => {
     }catch(e){} // haha
 
     useEffect(() => {
-        // getData()
-        async function getData(){
-            wasLoadingLastUpdate = false; // 1984
-            lastUpdate = await AsyncStorage.getItem("lastScheduleUpdateTime");
-            var rn = formatDate(Date.now(), true, false);
-            console.log("current: " + rn + ", last udpate:" + lastUpdate)
-            if(lastUpdate == rn && schedule == null){
-                var prevData = await AsyncStorage.getItem("schedule");
-                if(prevData != null && prevData){
-                    console.log("schedule: rerendered from local storage")
-                    setSchedule({
-                        data: JSON.parse(prevData).data,
-                        hasSetNotifications: true, // because like uh
-                        // it really seems about right
-                    });
-                    return;
-                }
-            }else if(lastUpdate == rn) return;
-            wasLoadingLastUpdate = true;
-            lastUpdate = rn
-            fetch("https://paly-vikings.onrender.com/schedule/" + lastUpdate)
-            .then(res => res.json())
-            .then(j => {
-                console.log("schedule: rerendered from server")
-                setSchedule({
-                    data: j.data,
-                    hasSetNotifications: false
-                });
-                AsyncStorage.setItem("schedule", JSON.stringify(j));
-                AsyncStorage.setItem("lastScheduleUpdateTime", lastUpdate);
-            }).catch((e) => console.log("error: " + e))
-        }
-
         setTimeout(() => {
             setCurrentTime(new Date(Date.now()));
         }, 1000 * 10); // every 10 seconds is good enough imo
-    }, [schedule, currentTime, modalStatus])
+    }, [currentTime])
 
     if(schedule.schedule[0].name == "No school"){
         return (
@@ -100,11 +67,10 @@ const Schedule = ({ navigation }) => {
         )
     }
 
-    /* if(lastUpdate !== formatDate(Date.now(), true, false)){
-        setSchedule(null);
+    if(schedule.lastUpdate !== formatDate(Date.now(), true, false)){
         wasLoadingLastUpdate = true;
         return <Loading loading={true} />
-    } */
+    }
 
     var screenHeight = (Dimensions.get("window").height - insets.top - insets.bottom);
 
@@ -119,24 +85,7 @@ const Schedule = ({ navigation }) => {
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
     // ^ hehe
     
-    /*if(userSettingsContext.remind !== -1 && schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
-        for(var i = schedule.schedule.length - 1; i >= 0; i--){
-            if(schedule.schedule[i].start - 5 >= now){
-                sendLocalNotification(
-                    schedule.schedule[i].name,
-                    "Starting in " + userSettingsContext.remind.toString() + " minute" + (userSettingsContext.remind !== 1 ? "s" : ""),
-                    {},
-                    {
-                        seconds: (schedule.schedule[i].start - userSettingsContext.remind - now) * 60
-                    }
-                )
-            }else{ break; }
-        }
-        setSchedule({
-            data: schedule.schedule,
-            hasSetNotifications: true
-        });
-    }*/
+   sendNotificationsForSchedule(schedule.schedule, userSettingsContext.remind, now);
 
     const scheduleItemCallback = (data) => {
         setModalStatus({shown: true, data: data});
