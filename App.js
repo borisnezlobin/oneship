@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { StatusBar } from 'react-native';
+import { AppState, StatusBar } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './pages/Home';
 import DrawerComponent from './util/DrawerComponent';
 import Settings from './pages/Settings';
 import Schedule from './pages/Schedule';
-import { defaultSettings, PublicationsContext, UserSettingsContext } from './util/contexts';
+import { defaultSettings, PublicationsContext, ScheduleContext, UserSettingsContext } from './util/contexts';
 import CalendarPage from './pages/Calendar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,22 +21,20 @@ import ArticleDetails from './pages/ArticleDetails';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import { sendLocalNotification, sendPushNotification, setExpoPushToken } from './util/util';
+import { formatDate, setExpoPushToken } from './util/util';
+import CONFIG from './util/config';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
+  const [schedule, setSchedule] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const notificationListener = React.useRef();
   const responseListener = React.useRef();
   setExpoPushToken(token);
-  // sendLocalNotification("4th Period starting in 5 minutes", "Head to room 410!", null, null)
   const navRef = React.useRef();
-  
-  // it'd be really funny if I just made this async and update on app load
-  // bc then there would be no visible loading time on the publications page I think
   const [publications, setPublications] = React.useState(null);
   setTheme(userSettingsContext == null ? false : userSettingsContext.isLightMode);
 
@@ -55,7 +53,14 @@ export default function App() {
 
     // SETTINGS
     const getData = async () => {
-      var gottenSettings = await AsyncStorage.getItem("settings");
+      try{
+        console.log("getting user settings");
+        var gottenSettings = JSON.parse(await AsyncStorage.getItem("settings"));
+        console.log("got settings: " + JSON.stringify(gottenSettings));
+      }catch(e){
+        console.log("FAILED TO GET USER SETTINGS: " + e);
+        return;
+      }
       if(gottenSettings == null){
         setUserSettingsContext(defaultSettings);
         return;
@@ -65,7 +70,7 @@ export default function App() {
           gottenSettings[key] = defaultSettings[key];
         }
       }
-      setUserSettingsContext(JSON.parse(gottenSettings));
+      setUserSettingsContext(gottenSettings);
     }
 
     const setData = () => {
@@ -78,13 +83,57 @@ export default function App() {
       setData();
     }
 
+    // SCHEDULE
+    const getScheduleFromServer = async (d) => {
+      console.log("getting server schedule");
+      var gottenSchedule = await fetch(CONFIG.SERVER_URL + "/schedule/" + d);
+      if(gottenSchedule.status !== 200){
+        alert("A server error occured: " + gottenSchedule.statusText);
+        return;
+      }else{
+        const resData = (await gottenSchedule.json());
+        console.log("response data: " + JSON.stringify(resData));
+        const s = {
+          lastUpdate: d,
+          schedule: resData.data,
+        };
+        console.log("setting schedule to: " + JSON.stringify(s));
+        AsyncStorage.setItem("schedule", JSON.stringify(s));
+        setSchedule(s);
+      }
+    }
+
+    var getScheduleFromStorage = async () => {
+      console.log("getting schedule")
+      const gottenSchedule = JSON.parse(await AsyncStorage.getItem("schedule"));
+      console.log("gotten schedule: " + gottenSchedule)
+      var todayDate = formatDate(Date.now(), true, false);
+      if(gottenSchedule == null || gottenSchedule.lastUpdate !== todayDate){
+        getScheduleFromServer(todayDate);
+        return;
+      }else{
+        console.log("got schedule from local storage")
+        setSchedule(gottenSchedule);
+      }
+    }
+
+    var appStateSubscription = AppState.addEventListener("change", (_) => {
+      console.log("calling getScheduleFromStorage");
+      if(schedule !== null) getScheduleFromStorage();
+    });
+
+    if(schedule == null) getScheduleFromStorage();
+
     return () => {
       Notifications.removeNotificationSubscription(
         notificationListener.current
       );
       Notifications.removeNotificationSubscription(responseListener.current);
+      appStateSubscription.remove();
     };
-  }, [userSettingsContext])
+  }, [userSettingsContext, schedule])
+
+  console.log("schedule: " + schedule)
 
   if(userSettingsContext == null){
     return <>
@@ -96,18 +145,20 @@ export default function App() {
     <SafeAreaProvider>
       <UserSettingsContext.Provider value={{ userSettingsContext, setUserSettingsContext }}>
         <PublicationsContext.Provider value={{ publications, setPublications }}>
-          <NavigationContainer ref={navRef}>
-            <Drawer.Navigator
-              drawerContent={(props) => <DrawerComponent navRef={navRef} {...props} />}
-              screenOptions={{
-                drawerType: "slide",
-                headerShown: false,
-                swipeEdgeWidth: 200,
-              }}
-            >
-              <Drawer.Screen component={StackContainer} name="Stack" />
-            </Drawer.Navigator>
-          </NavigationContainer>
+          <ScheduleContext.Provider value={{ schedule, setSchedule }}>
+            <NavigationContainer ref={navRef}>
+              <Drawer.Navigator
+                drawerContent={(props) => <DrawerComponent navRef={navRef} {...props} />}
+                screenOptions={{
+                  drawerType: "slide",
+                  headerShown: false,
+                  swipeEdgeWidth: 200,
+                }}
+              >
+                <Drawer.Screen component={StackContainer} name="Stack" />
+              </Drawer.Navigator>
+            </NavigationContainer>
+          </ScheduleContext.Provider>
         </PublicationsContext.Provider>
       </UserSettingsContext.Provider>
     </SafeAreaProvider>
@@ -165,8 +216,6 @@ Notifications.setNotificationHandler({
 });
 
 
-
-
 async function registerForPushNotificationsAsync() {
   let token;
   if (Device.isDevice) {
@@ -197,46 +246,3 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
-
-/*
-export default function App() {
-  const [expoPushToken, setExpoPushToken] = useState('');
-  const [notification, setNotification] = useState(false);
-  const notificationListener = useRef();
-  const responseListener = useRef();
-
-  useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
-
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-      Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
-      <Text>Your expo push token: {expoPushToken}</Text>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Title: {notification && notification.request.content.title} </Text>
-        <Text>Body: {notification && notification.request.content.body}</Text>
-        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
-      </View>
-      <Button
-        title="Press to Send Notification"
-        onPress={async () => {
-          await sendPushNotification(expoPushToken);
-        }}
-      />
-    </View>
-  );
-}
-*/

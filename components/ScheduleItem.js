@@ -32,9 +32,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         return <></>
     }
 
-    console.log(scheduleItem.name.split("/")[0])
     var thisItem = userSettingsContext.schedule[scheduleItem.name.split("/")[0]]; // because cope (CAASP testing lol)
-    console.log(thisItem)
 
     var heightOfElement = ((scheduleItem.end - scheduleItem.start) / (endTime - startTime)) * screenHeight;
 
@@ -53,14 +51,14 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
         if(!showThis) return;
         openModalCB({
             ...thisItem,
-            start: scheduleItem.start,
-            end: scheduleItem.end
+            start: scheduleItem.startString,
+            end: scheduleItem.endString
         });
 
         setTimeout(() => openModalCB({
             ...thisItem,
-            start: scheduleItem.start,
-            end: scheduleItem.end
+            start: scheduleItem.startString,
+            end: scheduleItem.endString
         }), 100);
     }
 

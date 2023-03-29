@@ -5,7 +5,7 @@ import getColors from '../util/COLORS';
 import Loading from '../util/Loading';
 import isWeb, { formatDate, sendLocalNotification } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { UserSettingsContext } from '../util/contexts';
+import { ScheduleContext, UserSettingsContext } from '../util/contexts';
 import Bar from '../components/Bar';
 import ScheduleBottomSheet from '../components/ScheduleBottomSheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,22 +17,30 @@ var wasLoadingLastUpdate = true;
 const Schedule = ({ navigation }) => {
     const insets = useSafeAreaInsets()
     const COLORS = getColors();
-    const [schedule, setSchedule] = useState(null);
+    const { schedule, setSchedule } = useContext(ScheduleContext);
+    console.log("Schedule.js says that schedule is: " + JSON.stringify(schedule))
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     const [modalStatus, setModalStatus] = useState({shown: false, data: null});
     const { userSettingsContext } = useContext(UserSettingsContext);
     const bottomSheetRef = useRef();
 
+    if(schedule == null){
+        console.log("returned loading because schedule is null");
+        return (
+            <Loading />
+        );
+    }
+
     var s;
     try{
-        s = schedule.data;
-        if(!userSettingsContext.show0Period && schedule.data[0].name == "0 Period"){
-            s = schedule.data.slice(1)
+        s = schedule.schedule;
+        if(!userSettingsContext.show0Period && schedule.schedule[0].name == "0 Period"){
+            s = schedule.schedule.slice(1)
         }
     }catch(e){} // haha
 
     useEffect(() => {
-        getData()
+        // getData()
         async function getData(){
             wasLoadingLastUpdate = false; // 1984
             lastUpdate = await AsyncStorage.getItem("lastScheduleUpdateTime");
@@ -70,14 +78,7 @@ const Schedule = ({ navigation }) => {
         }, 1000 * 10); // every 10 seconds is good enough imo
     }, [schedule, currentTime, modalStatus])
 
-    if(schedule == null){
-        console.log("returned loading because schedule is null");
-        return (
-            <Loading />
-        );
-    }
-
-    if(schedule.data[0].name == "No school"){
+    if(schedule.schedule[0].name == "No school"){
         return (
             <>
                 <SafeAreaView style={{
@@ -99,11 +100,11 @@ const Schedule = ({ navigation }) => {
         )
     }
 
-    if(lastUpdate !== formatDate(Date.now(), true, false)){
+    /* if(lastUpdate !== formatDate(Date.now(), true, false)){
         setSchedule(null);
         wasLoadingLastUpdate = true;
         return <Loading loading={true} />
-    }
+    } */
 
     var screenHeight = (Dimensions.get("window").height - insets.top - insets.bottom);
 
@@ -118,26 +119,24 @@ const Schedule = ({ navigation }) => {
     if(positionOfTimeMarker < 0 || positionOfTimeMarker > 1) positionOfTimeMarker = -100
     // ^ hehe
     
-    if(userSettingsContext.remind !== -1 && schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
-        for(var i = schedule.data.length - 1; i >= 0; i--){
-            if(schedule.data[i].start - 5 >= now){
+    /*if(userSettingsContext.remind !== -1 && schedule.hasOwnProperty("hasSetNotifications") && !schedule.hasSetNotifications){
+        for(var i = schedule.schedule.length - 1; i >= 0; i--){
+            if(schedule.schedule[i].start - 5 >= now){
                 sendLocalNotification(
-                    schedule.data[i].name,
+                    schedule.schedule[i].name,
                     "Starting in " + userSettingsContext.remind.toString() + " minute" + (userSettingsContext.remind !== 1 ? "s" : ""),
                     {},
                     {
-                        seconds: (schedule.data[i].start - userSettingsContext.remind - now) * 60
+                        seconds: (schedule.schedule[i].start - userSettingsContext.remind - now) * 60
                     }
                 )
-                console.log("set notification for " + schedule.data[i].name);
-                console.log("it will trigger in " + ((schedule.data[i].start - 5 - now) * 60).toString() + " seconds");
             }else{ break; }
         }
         setSchedule({
-            data: schedule.data,
+            data: schedule.schedule,
             hasSetNotifications: true
         });
-    }
+    }*/
 
     const scheduleItemCallback = (data) => {
         setModalStatus({shown: true, data: data});
