@@ -15,3 +15,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_PALO_ALTO_HIGH_SCHOOL }}'
           projectId: palo-alto-high-school
           entrypoint: paly-web
+          channelId: 'dev'
