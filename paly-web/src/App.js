@@ -1,22 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
+import { Anchor } from "phosphor-react"
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+        <Anchor color="#1c8000" size={128} />
+        <p className='bigText'>OneShip</p>
+        <p style={{ margin: 0 }}>Coming soon!</p>
+        <div style={{ margin: 8 }} />
+        <p className='btn'>
+          Interested? Join our Discord!
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
       </header>
     </div>
   );
