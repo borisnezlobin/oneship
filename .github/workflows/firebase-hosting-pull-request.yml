@@ -2,10 +2,10 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on PR
-'on': commit
+'on': push
 jobs:
   build_and_preview:
-    if: '${{ github.event.commit.head.repo.full_name == github.repository }}'
+    if: '${{ github.event.push.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
