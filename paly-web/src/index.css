@@ -1,13 +1,68 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: "Montserrat Alternates", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --green: rgb(28, 128, 0);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.link{
+  color: var(--green);
+  font-weight: bold;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--green);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.link:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.btn{
+  background-color: var(--green);
+  color: white;
+  font-weight: bolder;
+  padding: 8px 32px;
+  border: none;
+  font-size: large;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px var(--green);
+  height: 36px;
+  line-height: 36px;
+  transition: all .25s ease-in-out;
+  cursor: pointer;
+}
+
+.btn:hover{
+  box-shadow: 0px 0px 20px var(--green);
+}
+
+.btn:active{
+  box-shadow: none;
+}
+
+.bigText{
+  font-weight: bolder;
+  color: var(--green);
+  font-size: 64px;
+  margin: 4px;
 }
