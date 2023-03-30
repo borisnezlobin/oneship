@@ -3,16 +3,14 @@ import { SafeAreaView, View, Text, Dimensions, Modal } from 'react-native'
 import ScheduleItem from '../components/ScheduleItem';
 import getColors from '../util/COLORS';
 import Loading from '../util/Loading';
-import isWeb, { formatDate, sendLocalNotification, sendNotificationsForSchedule } from '../util/util';
+import isWeb, { formatDate, sendNotificationsForSchedule } from '../util/util';
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { ScheduleContext, UserSettingsContext } from '../util/contexts';
 import Bar from '../components/Bar';
 import ScheduleBottomSheet from '../components/ScheduleBottomSheet';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RocketLaunchIcon } from 'react-native-heroicons/outline';
-import { getAllScheduledNotificationsAsync } from 'expo-notifications';
 
-var lastUpdate = "";
+var isTimeoutSet = false;
 var wasLoadingLastUpdate = true;
 const Schedule = ({ navigation }) => {
     const insets = useSafeAreaInsets()
@@ -37,12 +35,16 @@ const Schedule = ({ navigation }) => {
         if(!userSettingsContext.show0Period && schedule.schedule[0].name == "0 Period"){
             s = schedule.schedule.slice(1)
         }
-    }catch(e){} // haha
+    }catch(e){}
 
     useEffect(() => {
-        setTimeout(() => {
-            setCurrentTime(new Date(Date.now()));
-        }, 1000 * 10); // every 10 seconds is good enough imo
+        if(!isTimeoutSet){
+            isTimeoutSet = true;
+            setTimeout(() => {
+                isTimeoutSet = false;
+                setCurrentTime(new Date(Date.now()));
+            }, 1000 * 10); // every 10 seconds is good enough imo
+        }
     }, [currentTime])
 
     if(schedule.schedule[0].name == "No school"){

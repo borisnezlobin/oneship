@@ -54,7 +54,7 @@ async function allowsNotificationsAsync() {
     );
 }
 
-const sendLocalNotification = async (title, body, data, scheduling) => {
+const sendLocalNotification = async (title, body, data, scheduling, category) => {
     const itIsPermissibleToSendNotifications = await allowsNotificationsAsync();
 
     if(itIsPermissibleToSendNotifications){
@@ -62,11 +62,14 @@ const sendLocalNotification = async (title, body, data, scheduling) => {
             content: {
                 title: title,
                 body: body,
-                data: data
+                data: data,
+                sound: "default",
+                vibrate: [250, 250, 250, 250],
+                categoryIdentifier: category
             },
             trigger: scheduling !== null ? scheduling : {
                 seconds: 1, // lol it can't be 0 oh well
-            }
+            },
         })
     }else{
         await Notifications.requestPermissionsAsync({ ios: { allowAlert: true }});
@@ -85,7 +88,8 @@ const sendNotificationsForSchedule = async (schedule, time, now) => {
                     {},
                     {
                         seconds: (schedule[i].start - time - now) * 60
-                    }
+                    },
+                    "schedule"
                 )
             }else{ break; }
         }
