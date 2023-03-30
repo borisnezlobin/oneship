@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "palyoneship",
-    "public": "public",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",
