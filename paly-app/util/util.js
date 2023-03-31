@@ -87,7 +87,7 @@ const sendNotificationsForSchedule = async (schedule, time, now) => {
                     "Starting in " + time.toString() + " minute" + (time !== 1 ? "s" : ""),
                     {},
                     {
-                        seconds: (schedule[i].start - time - now) * 60
+                        seconds: (schedule[i].start * 60 - time * 60 - (now * 60 + new Date(Date.now()).getSeconds()))
                     },
                     "schedule"
                 )

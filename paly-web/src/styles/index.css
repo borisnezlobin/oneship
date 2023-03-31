@@ -6,6 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --green: rgb(28, 128, 0);
+  --red: #60010a;
+  --dark-blue: #282c34;
 }
 
 .link{
@@ -65,4 +67,18 @@ body {
   color: var(--green);
   font-size: 64px;
   margin: 4px;
+}
+
+.mediumText{
+  font-weight: bolder;
+  color: var(--green);
+  font-size: 24px;
+  margin: 4px
+}
+
+.flex{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
