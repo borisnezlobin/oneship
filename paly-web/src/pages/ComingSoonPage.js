@@ -1,20 +1,28 @@
 import React from 'react'
-import '../styles/App.css';
 import { Anchor } from "phosphor-react"
-import { toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 
 const ComingSoonPage = () => {
     return (
-        <div className="App App-header">
+        <div className='flex' style={{
+          height: "100vh",
+          backgroundColor: "var(--dark-blue)",
+          width: "100vw",
+          color: "white"
+        }}>
+          <Toaster position='bottom-right' />
           <Anchor color="#1c8000" size={128} />
           <p className='bigText'>OneShip</p>
-          <p style={{ margin: 0 }}>Coming soon!</p>
-          <div style={{ margin: 8, height: 32 }} />
+          <p style={{ margin: 0, fontSize: "x-large" }}>Coming soon!</p>
+          <div style={{ margin: 8, height: 16 }} />
           <btn className='btn' onClick={() => {
             window.open("https://discord.gg/CVHr8mKJeC");
           }}>
             Interested? Join our Discord!
           </btn>
+          <p style={{ marginTop: 16, marginBottom: 0 }}>
+            OR
+          </p>
           <p className='link' onClick={() => {
               navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
               toast("Link copied!", {
@@ -25,7 +33,7 @@ const ComingSoonPage = () => {
                   }
               });
           }}>
-            Using a Chromebook? Copy the invite link!
+            Copy the invite link
           </p>
         </div>
     );
