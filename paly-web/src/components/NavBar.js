@@ -5,7 +5,7 @@ import CONFIG from '../util/config';
 import logo from "./logo-transparent.png"
 import NavBarItem from './NavBarItem';
 
-const darkBGPages = ["About", "Schedule"]
+const darkBGPages = ["About", "Schedule", "Barcode"]
 
 const NavBar = () => {
     const [currentPage, setCurrentPage] = useState("About")

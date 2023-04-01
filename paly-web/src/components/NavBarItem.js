@@ -9,7 +9,7 @@ const NavBarItem = ({ to, image, current, setCurrent}) => {
             className={classes.navbarItem}
             onClick={() => {
                 setCurrent(to);
-                nav("/" + to)
+                nav("/" + to.toLowerCase())
             }}
             style={{
                 backgroundColor: current == to ? "rgba(125, 125, 125, 0.125)" : ""

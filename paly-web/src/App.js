@@ -8,6 +8,7 @@ import { formatDate } from "./util/util";
 import { ScheduleContext } from "./util/contexts"
 import ComingSoonPage from "./pages/ComingSoonPage";
 import NavBar from "./components/NavBar";
+import BarcodePage from "./pages/BarcodePage";
 
 function App() {
   const [schedule, setSchedule] = useState(null)
@@ -54,6 +55,7 @@ function App() {
       <Routes>
         <Route path="/about" element={<HomePage />} />
         <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/barcode" element={<BarcodePage />} />
       </Routes>
     </ScheduleContext.Provider>
   );

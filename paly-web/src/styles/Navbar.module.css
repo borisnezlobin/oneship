@@ -3,9 +3,9 @@
     top: 0;
     left: 0;
     height: 100vh;
-    width: 299.5px;
+    width: 299px;
     background-color: white;
-    border-right: 0.5px solid grey;
+    border-right: 1px solid grey;
     display: flex;
     flex-direction: column;
     justify-content: center;
