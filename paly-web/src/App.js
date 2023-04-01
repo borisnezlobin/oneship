@@ -6,7 +6,6 @@ import SchedulePage from "./pages/SchedulePage";
 import CONFIG from "./util/config";
 import { formatDate } from "./util/util";
 import { ScheduleContext } from "./util/contexts"
-import ComingSoonPage from "./pages/ComingSoonPage";
 import NavBar from "./components/NavBar";
 import BarcodePage from "./pages/BarcodePage";
 

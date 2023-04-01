@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import React, { useContext, useEffect, useState } from 'react'
 import { ScheduleContext } from '../util/contexts'
 import ScheduleItem from '../components/ScheduleItem';
@@ -56,7 +55,6 @@ const SchedulePage = () => {
             }}>
                 <div style={{
                     width: window.innerWidth - CONFIG.NAVBAR_WIDTH - 8,
-                    top: 10,
                     height: 1,
                     backgroundColor: "var(--red)",
                     position: "absolute",

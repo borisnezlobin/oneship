@@ -1,4 +1,4 @@
-import { Barcode, Calendar, Clock, Download, DownloadSimple, Info } from 'phosphor-react';
+import { Barcode, Calendar, Clock, DownloadSimple, Info } from 'phosphor-react';
 import React, { useState } from 'react'
 import classes from "../styles/Navbar.module.css";
 import CONFIG from '../util/config';
