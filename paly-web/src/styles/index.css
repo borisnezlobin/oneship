@@ -1,8 +1,7 @@
 body {
   margin: 0;
-  font-family: "Montserrat Alternates", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  overflow-x: hidden;
+  font-family: Raleway, monospace; /* because like what are backup options */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --green: rgb(28, 128, 0);
