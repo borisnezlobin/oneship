@@ -1,5 +1,5 @@
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+// const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 const formatDate = (date, includeYear, includeTime) => {
     var date1 = new Date(date);
     var s = months[date1.getMonth()] + " " + date1.getDate();

@@ -53,7 +53,7 @@ const BarcodePage = () => {
                         border: "1px solid var(--green)",
                         color: "var(--green)",
                         height: 48,
-                        padding: "8px 16px",
+                        padding: "4px 16px",
                         width: "300px",
                         backgroundColor: "var(--dark-blue)",
                         fontFamily: "'Montserrat Alternates', monospace",

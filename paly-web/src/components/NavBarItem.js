@@ -12,7 +12,7 @@ const NavBarItem = ({ to, image, current, setCurrent}) => {
                 nav("/" + to.toLowerCase())
             }}
             style={{
-                backgroundColor: current == to ? "rgba(125, 125, 125, 0.125)" : ""
+                backgroundColor: current === to ? "rgba(125, 125, 125, 0.125)" : ""
             }}
         >
             {image}
