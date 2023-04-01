@@ -7,6 +7,9 @@ body {
   --green: rgb(28, 128, 0);
   --red: #60010a;
   --dark-blue: #282c34;
+  --bg: var(--dark-blue);
+  --text: white;
+  background-color: var(--bg);
 }
 
 .link{

@@ -4,7 +4,7 @@
     left: 0;
     height: 100vh;
     width: 299px;
-    background-color: white;
+    background-color: var(--bg);
     border-right: 1px solid grey;
     display: flex;
     flex-direction: column;

@@ -22,11 +22,11 @@ const HomePage = () => {
           margin: 32,
           borderRadius: 1024,
         }} />
-        <btn className='btn' onClick={() => {
+        <div className='btn' onClick={() => {
           window.open("https://discord.gg/CVHr8mKJeC");
         }}>
           Like it? Join our Discord!
-        </btn>
+        </div>
         <p style={{ marginTop: 24, marginBottom: 0 }}>
           OR
         </p>

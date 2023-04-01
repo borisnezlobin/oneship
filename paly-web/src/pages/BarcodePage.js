@@ -10,8 +10,8 @@ const BarcodePage = () => {
         const canvas = canvasRef.current;
         const link = document.createElement('a');
         link.download = 'barcode.png';
-        console.log(canvas.renderElementRef.current);
-        link.href = canvas.renderElementRef.current.src;
+        console.log("link: " + canvas.renderElementRef.current.src.toString());
+        link.href = canvas.renderElementRef.current.src.toString();
         link.click();
     }
 

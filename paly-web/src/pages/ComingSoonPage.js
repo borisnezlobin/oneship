@@ -6,20 +6,20 @@ const ComingSoonPage = () => {
     return (
         <div className='flex' style={{
           height: "100vh",
-          backgroundColor: "var(--dark-blue)",
+          backgroundColor: "var(--bg)",
           width: "100vw",
-          color: "white"
+          color: "var(--text)"
         }}>
           <Toaster position='bottom-right' />
-          <Anchor color="#1c8000" size={128} />
+          <Anchor color="var(--green)" size={128} />
           <p className='bigText'>OneShip</p>
           <p style={{ margin: 0, fontSize: "x-large" }}>Coming soon!</p>
           <div style={{ margin: 8, height: 16 }} />
-          <btn className='btn' onClick={() => {
+          <div className='btn' onClick={() => {
             window.open("https://discord.gg/CVHr8mKJeC");
           }}>
             Interested? Join our Discord!
-          </btn>
+          </div>
           <p style={{ marginTop: 16, marginBottom: 0 }}>
             OR
           </p>
@@ -27,7 +27,7 @@ const ComingSoonPage = () => {
               navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
               toast("Link copied!", {
                   style: {
-                      backgroundColor: "#1c8000",
+                      backgroundColor: "var(--green)",
                       fontWeight: "bold",
                       color: "white",
                   }

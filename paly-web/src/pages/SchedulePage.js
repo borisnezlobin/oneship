@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ScheduleContext } from '../util/contexts'
 import ScheduleItem from '../components/ScheduleItem';
-import CONFIG from '../util/config';
+import CONFIG, { DEFAULT_PAGE_STYLES } from '../util/config';
 
 const SchedulePage = () => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
@@ -21,6 +21,16 @@ const SchedulePage = () => {
         )
     }
 
+    if(schedule.data[0].name === "No school"){
+        return (
+            <div className='flex' style={DEFAULT_PAGE_STYLES}>
+                <p className='bigText'>
+                    No school today!
+                </p>
+            </div>
+        )
+    }
+
     const startTime = schedule.data[0].start;
     const endTime = schedule.data[schedule.data.length - 1].end;
 
@@ -28,7 +38,7 @@ const SchedulePage = () => {
 
     return (
         <div style={{
-            backgroundColor: "var(--dark-blue)",
+            backgroundColor: "var(--bg)",
             paddingLeft: CONFIG.NAVBAR_WIDTH,
             height: window.innerHeight
         }}>
@@ -43,7 +53,7 @@ const SchedulePage = () => {
                 left: 8 + CONFIG.NAVBAR_WIDTH,
                 top: window.innerHeight * ((now - startTime) / (endTime - startTime)),
                 backgroundColor: "var(--red)",
-                color: "white",
+                color: "var(--text)",
                 fontWeight: "bold",
                 width: 128,
                 textAlign: "center",
