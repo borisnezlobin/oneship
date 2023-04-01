@@ -10,7 +10,7 @@ const DEFAULT_PAGE_STYLES = {
     width: window.innerWidth - CONFIG.NAVBAR_WIDTH + 1,
     height: window.innerHeight,
     position: "absolute",
-    color: "white"
+    color: "var(--text)"
 };
 
 

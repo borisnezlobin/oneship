@@ -5,13 +5,12 @@ import CONFIG from '../util/config';
 import logo from "./logo-transparent.png"
 import NavBarItem from './NavBarItem';
 
-const darkBGPages = ["About", "Schedule", "Barcode"]
 
 const NavBar = () => {
     const [currentPage, setCurrentPage] = useState("About")
     return (
         <div className={classes.navbarContainer} style={{
-            backgroundColor: darkBGPages.includes(currentPage) ? "var(--dark-blue)" : "white"
+            backgroundColor: "var(--bg)"
         }}>
             <img
                 src={logo}
