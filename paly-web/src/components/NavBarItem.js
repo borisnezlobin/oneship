@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router'
 import classes from "../styles/Navbar.module.css"
 
-const NavBarItem = ({ to, image, current, setCurrent}) => {
+const NavBarItem = ({ to, image, current, setCurrent, isSidebar }) => {
     const nav = useNavigate();
     return (
         <div
@@ -12,7 +12,9 @@ const NavBarItem = ({ to, image, current, setCurrent}) => {
                 nav("/" + to.toLowerCase())
             }}
             style={{
-                backgroundColor: current === to ? "rgba(125, 125, 125, 0.125)" : ""
+                backgroundColor: current === to ? "rgba(125, 125, 125, 0.125)" : "",
+                justifyContent: isSidebar ? undefined : "center",
+                padding: isSidebar ? undefined : "12px 0px"
             }}
         >
             {image}

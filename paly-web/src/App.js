@@ -56,7 +56,10 @@ function App() {
   return (
     <div id="app-root" style={{
       "--bg": isLightMode ? "white" : "#19191b",
-      "--text": isLightMode ? "black" : "white"
+      "--text": isLightMode ? "black" : "white",
+      overflow: window.innerWidth < CONFIG.NAVBAR_WIDTH + 500 ? "hidden" : undefined,
+      width: window.innerWidth < CONFIG.NAVBAR_WIDTH + 500 ? "100vw" : undefined,
+      height: window.innerWidth < CONFIG.NAVBAR_WIDTH + 500 ? "100vh" : undefined
     }}>
       <ScheduleContext.Provider value={{ schedule, setSchedule }}>
         <Toaster position="bottom-right" />

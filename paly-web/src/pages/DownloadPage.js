@@ -13,7 +13,7 @@ const DownloadPage = () => {
                 <GooglePlayLogo color='var(--green)' size={128} weight="thin" />
             </div>
             <p className='bigText' style={{ fontWeight: "lighter" }}>
-                There's a mobile app?
+                There's going to be a mobile app!?
             </p>
         </div>
     )
