@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ScheduleContext } from '../util/contexts'
 import ScheduleItem from '../components/ScheduleItem';
 import CONFIG, { DEFAULT_PAGE_STYLES } from '../util/config';
+import { Confetti } from 'phosphor-react';
 
 const SchedulePage = () => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
@@ -24,7 +25,8 @@ const SchedulePage = () => {
     if(schedule.data[0].name === "No school"){
         return (
             <div className='flex' style={DEFAULT_PAGE_STYLES}>
-                <p className='bigText'>
+                <Confetti weight='light' color='var(--green)' size={128} />
+                <p className='mediumText'>
                     No school today!
                 </p>
             </div>

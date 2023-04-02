@@ -8,9 +8,15 @@ import { formatDate } from "./util/util";
 import { ScheduleContext } from "./util/contexts"
 import NavBar from "./components/NavBar";
 import BarcodePage from "./pages/BarcodePage";
+import LightDarkMode from "./components/LightDarkMode";
+import CalendarPage from "./pages/CalendarPage";
+import DownloadPage from "./pages/DownloadPage";
 
 function App() {
-  const [schedule, setSchedule] = useState(null)
+  const [schedule, setSchedule] = useState(null);
+  const [isLightMode, setIsLightMode] = useState(
+    localStorage.getItem("lightMode") == null ?
+    false : JSON.parse(localStorage.getItem("lightMode")));
 
   useEffect(() => {
     const getScheduleFromServer = async (now) => {
@@ -48,15 +54,24 @@ function App() {
   console.log("rerendered and schedule is " + JSON.stringify(schedule));
 
   return (
-    <ScheduleContext.Provider value={{ schedule, setSchedule }}>
-      <Toaster position="bottom-right" />
-      <NavBar />
-      <Routes>
-        <Route path="/about" element={<HomePage />} />
-        <Route path="/schedule" element={<SchedulePage />} />
-        <Route path="/barcode" element={<BarcodePage />} />
-      </Routes>
-    </ScheduleContext.Provider>
+    <div id="app-root" style={{
+      "--bg": isLightMode ? "white" : "#19191b",
+      "--text": isLightMode ? "black" : "white"
+    }}>
+      <ScheduleContext.Provider value={{ schedule, setSchedule }}>
+        <Toaster position="bottom-right" />
+        <NavBar />
+        <LightDarkMode isLightMode={isLightMode} setLightMode={setIsLightMode} />
+        <Routes>
+          <Route path="/about" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/calendar" element={<CalendarPage />} />
+          <Route path="/download" element={<DownloadPage />} />
+          <Route path="/schedule" element={<SchedulePage />} />
+          <Route path="/barcode" element={<BarcodePage />} />
+        </Routes>
+      </ScheduleContext.Provider>
+    </div>
   );
 }
 

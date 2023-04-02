@@ -28,7 +28,7 @@ const HomePage = () => {
           Like it? Join our Discord!
         </div>
         <p style={{ marginTop: 24, marginBottom: 0 }}>
-          OR
+          Or
         </p>
         <p className='link' onClick={() => {
             navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
