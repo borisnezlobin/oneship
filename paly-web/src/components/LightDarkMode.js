@@ -6,6 +6,7 @@ const LightDarkMode = ({ isLightMode, setLightMode }) => {
 
     const setMode = (light) => {
         localStorage.setItem("lightMode", JSON.stringify(light));
+        document.getElementById("root").style.backgroundColor = "var(--bg)"
     }
 
     setMode(isLightMode);

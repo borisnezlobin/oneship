@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { DEFAULT_PAGE_STYLES } from '../util/config';
+import CONFIG, { DEFAULT_PAGE_STYLES } from '../util/config';
 import Barcode from "react-barcode"
 
 const BarcodePage = () => {
@@ -34,16 +34,18 @@ const BarcodePage = () => {
             </div>
             <div className='flex' style={{
                 borderRadius: 8,
-                backgroundColor: "white"
+                backgroundColor: "white",
+                boxShadow: "0px 0px 5px grey",
+                padding: 8
             }}>
                 <Barcode
                     value={studentId}
                     lineColor='black'
-                    width={3}
+                    width={2}
                     format="CODE39"
                     font={"Montserrat Alternates"}
                     ref={canvasRef}
-                    margin={24}
+                    margin={window.innerWidth < CONFIG.NAVBAR_WIDTH + 500 ? 8 : 24}
                 />
             </div>
             <div className='flex'>
