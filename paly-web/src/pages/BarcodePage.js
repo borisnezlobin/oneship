@@ -39,7 +39,7 @@ const BarcodePage = () => {
                 padding: 8
             }}>
                 <Barcode
-                    value={studentId.length == 0 ? "95042069" : studentId}
+                    value={studentId.length === 0 ? "95042069" : studentId}
                     lineColor='black'
                     width={2}
                     format="CODE39"

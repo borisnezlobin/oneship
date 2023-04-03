@@ -10,8 +10,7 @@ import NavBarItem from './NavBarItem';
 const NavBar = () => {
     const location = useLocation().pathname.replace("/", "");
     const path = location.charAt(0).toUpperCase() + location.slice(1);
-    console.log("path: \'" + path + "\'")
-    const [currentPage, setCurrentPage] = useState(path.length == 0 ? "About" : path);
+    const [currentPage, setCurrentPage] = useState(path.length === 0 ? "About" : path);
     const [shown, setShown] = useState(false);
     const isSidebar = window.innerWidth >= CONFIG.NAVBAR_WIDTH + 500;
     if(!isSidebar) CONFIG.NAVBAR_WIDTH = 0;
