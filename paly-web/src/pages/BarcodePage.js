@@ -3,7 +3,7 @@ import CONFIG, { DEFAULT_PAGE_STYLES } from '../util/config';
 import Barcode from "react-barcode"
 
 const BarcodePage = () => {
-    const [studentId, setStudentId] = useState("95000000");
+    const [studentId, setStudentId] = useState("");
     const canvasRef = useRef();
 
     const saveBarcode = () => {
@@ -39,7 +39,7 @@ const BarcodePage = () => {
                 padding: 8
             }}>
                 <Barcode
-                    value={studentId}
+                    value={studentId.length == 0 ? "95042069" : studentId}
                     lineColor='black'
                     width={2}
                     format="CODE39"
@@ -58,7 +58,7 @@ const BarcodePage = () => {
                         padding: "4px 16px",
                         width: "300px",
                         backgroundColor: "var(--bg)",
-                        fontFamily: "'Montserrat Alternates', monospace",
+                        fontFamily: "Roboto, system-ui",
                         fontWeight: "bolder",
                         fontSize: "large",
                         textAlign: "center",

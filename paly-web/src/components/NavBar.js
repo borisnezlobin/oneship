@@ -1,5 +1,6 @@
 import { Barcode, Calendar, Clock, DownloadSimple, Info, List } from 'phosphor-react';
 import React, { useState } from 'react'
+import { useLocation } from 'react-router';
 import classes from "../styles/Navbar.module.css";
 import CONFIG from '../util/config';
 import logo from "./logo-transparent.png"
@@ -7,7 +8,10 @@ import NavBarItem from './NavBarItem';
 
 
 const NavBar = () => {
-    const [currentPage, setCurrentPage] = useState("About");
+    const location = useLocation().pathname.replace("/", "");
+    const path = location.charAt(0).toUpperCase() + location.slice(1);
+    console.log("path: \'" + path + "\'")
+    const [currentPage, setCurrentPage] = useState(path.length == 0 ? "About" : path);
     const [shown, setShown] = useState(false);
     const isSidebar = window.innerWidth >= CONFIG.NAVBAR_WIDTH + 500;
     if(!isSidebar) CONFIG.NAVBAR_WIDTH = 0;
@@ -23,8 +27,8 @@ const NavBar = () => {
                 <img
                     src={logo}
                     alt="Paly Logo"
-                    width={CONFIG.NAVBAR_WIDTH - 100}
-                    height={CONFIG.NAVBAR_WIDTH - 100}
+                    width={CONFIG.NAVBAR_WIDTH}
+                    height={CONFIG.NAVBAR_WIDTH}
                 />
             :
                 <img
@@ -80,7 +84,7 @@ const NavBar = () => {
     return (
         <>
             {isSidebar || shown ?
-                <div className={classes.navbarContainer + " flex"} style={{
+                <div className={classes.navbarContainer + " flex " + classes.open} style={{
                     width: !isSidebar ? "100vw" : undefined,
                     position: isSidebar ? "relative" : "absolute",
                     zIndex: 3,
@@ -88,7 +92,14 @@ const NavBar = () => {
                 }}>
                     {contents}
                 </div>
-            : <></>
+            : !isSidebar ? <div className={classes.navbarContainer + " flex " + classes.closed} style={{
+                    width: !isSidebar ? "100vw" : undefined,
+                    position: isSidebar ? "relative" : "absolute",
+                    zIndex: 3,
+                    overflow: isSidebar ? undefined : "hidden"
+                }}>
+                    {contents}
+                </div> : <></>
             }
             {!isSidebar && !shown ?
                 <div className={classes.openMenuButton + " flex"} onClick={() => setShown(true)}>

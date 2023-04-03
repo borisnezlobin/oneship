@@ -16,7 +16,7 @@ function App() {
   const [schedule, setSchedule] = useState(null);
   const [isLightMode, setIsLightMode] = useState(
     localStorage.getItem("lightMode") == null ?
-    false : JSON.parse(localStorage.getItem("lightMode")));
+    true : JSON.parse(localStorage.getItem("lightMode")));
 
   useEffect(() => {
     const getScheduleFromServer = async (now) => {
