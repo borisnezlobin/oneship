@@ -3,9 +3,24 @@
     top: 0;
     left: 0;
     height: 100vh;
-    width: 299px;
+    width: calc(25vw - 1px);
     background-color: var(--bg);
     border-right: 1px solid grey;
+    transition: all .25s ease-in-out;
+}
+
+.closed{
+    opacity: 0;
+    top: 50vh;
+    height: 0;
+    pointer-events: none;
+}
+
+.open{
+    opacity: 1;
+    top: 0;
+    height: 100vh;
+    pointer-events: all;
 }
 
 .navbarItem{
@@ -16,7 +31,7 @@
     padding: 8px 0px;
     padding-left: 12px;
     margin-right: 10px;
-    width: 290px;
+    width: calc(25vw - 25px);
     gap: 12px;
     border: none;
     outline: none;
@@ -31,11 +46,11 @@
 
 .openMenuButton{
     position: absolute;
-    bottom: 8px;
+    bottom: 0;
     right: 8px;
     z-index: 3;
     background-color: var(--green);
-    box-shadow: 0px 0px 3px grey;
+    box-shadow: 0px 0px 10px var(--green);
     border-radius: 1024px;
     padding: 12px;
 }

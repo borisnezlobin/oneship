@@ -1,6 +1,6 @@
 var CONFIG = {
     SERVER_URL: "https://paly-vikings.onrender.com",
-    NAVBAR_WIDTH: 300,
+    NAVBAR_WIDTH: window.innerHeight * 0.25,
 }
 
 const DEFAULT_PAGE_STYLES = {

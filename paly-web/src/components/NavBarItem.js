@@ -14,7 +14,8 @@ const NavBarItem = ({ to, image, current, setCurrent, isSidebar }) => {
             style={{
                 backgroundColor: current === to ? "rgba(125, 125, 125, 0.125)" : "",
                 justifyContent: isSidebar ? undefined : "center",
-                padding: isSidebar ? undefined : "12px 0px"
+                padding: isSidebar ? undefined : "12px 0px",
+                width: isSidebar ? undefined : "75vw"
             }}
         >
             {image}
