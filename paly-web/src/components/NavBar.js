@@ -12,7 +12,7 @@ const NavBar = () => {
     const path = location.charAt(0).toUpperCase() + location.slice(1);
     const [currentPage, setCurrentPage] = useState(path.length === 0 ? "About" : path);
     const [shown, setShown] = useState(false);
-    const isSidebar = window.innerWidth >= CONFIG.NAVBAR_WIDTH + 500;
+    const isSidebar = window.innerWidth > 750;
     if(!isSidebar) CONFIG.NAVBAR_WIDTH = 0;
 
     const itemCallback = (newPage) => {
@@ -26,16 +26,11 @@ const NavBar = () => {
                 <img
                     src={logo}
                     alt="Paly Logo"
-                    width={CONFIG.NAVBAR_WIDTH}
-                    height={CONFIG.NAVBAR_WIDTH}
+                    width={CONFIG.NAVBAR_WIDTH - 100}
+                    height={CONFIG.NAVBAR_WIDTH - 100}
                 />
             :
-                <img
-                    src={logo}
-                    alt="Paly Logo"
-                    width={window.innerWidth - 200}
-                    height={window.innerWidth - 200}
-                />
+                <></>
             }
             <NavBarItem
                 to="Schedule"
@@ -83,9 +78,9 @@ const NavBar = () => {
     return (
         <>
             {isSidebar || shown ?
-                <div className={classes.navbarContainer + " flex " + classes.open} style={{
+                <div className={"flex " + classes.navbarContainer + " " + classes.open} style={{
                     width: !isSidebar ? "100vw" : undefined,
-                    position: isSidebar ? "relative" : "absolute",
+                    position: isSidebar ? undefined : "absolute",
                     zIndex: 3,
                     overflow: isSidebar ? undefined : "hidden"
                 }}>

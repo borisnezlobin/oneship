@@ -1,6 +1,7 @@
 import React from 'react'
 import { Anchor } from "phosphor-react"
 import { toast, Toaster } from 'react-hot-toast';
+import { SUCCESS_TOAST_STYLES } from '../util/config';
 
 const ComingSoonPage = () => {
     return (
@@ -25,13 +26,7 @@ const ComingSoonPage = () => {
           </p>
           <p className='link' onClick={() => {
               navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
-              toast("Link copied!", {
-                  style: {
-                      backgroundColor: "var(--green)",
-                      fontWeight: "bold",
-                      color: "white",
-                  }
-              });
+              toast("Link copied!", SUCCESS_TOAST_STYLES);
           }}>
             Copy the invite link
           </p>

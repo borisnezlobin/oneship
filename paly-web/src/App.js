@@ -5,7 +5,7 @@ import HomePage from "./pages/HomePage";
 import SchedulePage from "./pages/SchedulePage";
 import CONFIG from "./util/config";
 import { formatDate } from "./util/util";
-import { ScheduleContext } from "./util/contexts"
+import { CalendarContext, ScheduleContext } from "./util/contexts"
 import NavBar from "./components/NavBar";
 import BarcodePage from "./pages/BarcodePage";
 import LightDarkMode from "./components/LightDarkMode";
@@ -14,6 +14,7 @@ import DownloadPage from "./pages/DownloadPage";
 
 function App() {
   const [schedule, setSchedule] = useState(null);
+  const [calendar, setCalendar] = useState(null);
   const [isLightMode, setIsLightMode] = useState(
     localStorage.getItem("lightMode") == null ?
     true : JSON.parse(localStorage.getItem("lightMode")));
@@ -49,30 +50,53 @@ function App() {
     if(schedule == null || schedule.lastUpdate !== now){
       getScheduleFromStorage(now);
     }
-  }, [schedule])
+
+
+
+    const getCalendar = async () => {
+      const date = new Date(Date.now());
+      const today = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate()
+      console.log(today);
+      // lol some clown left a google calendar api key unencoded on their website ¯\_(ツ)_/¯
+      // (it was paly.win and I want that domain)
+      const res = await fetch("https://clients6.google.com/calendar/v3/calendars/palycalendar@gmail.com/events?calendarId=palycalendar@gmail.com&singleEvents=true&maxResults=250&sanitizeHtml=true&timeMin=" + today + "T00:00:00-07:00&key=AIzaSyBNlYH01_9Hc5S1J9vuFmu2nUqBZJNAXxs");
+      const json = await res.json();
+      setCalendar(json.items);
+    }
+    if(calendar == null) getCalendar();
+  }, [schedule, calendar])
   
   console.log("rerendered and schedule is " + JSON.stringify(schedule));
+  console.log("calendar:");
+  console.log(calendar);
+
+  const isSmallScreen = window.innerWidth < 750;
 
   return (
     <div id="app-root" style={{
       "--bg": isLightMode ? "white" : "#19191b",
       "--text": isLightMode ? "black" : "white",
-      overflow: window.innerWidth < CONFIG.NAVBAR_WIDTH + 500 ? "hidden" : undefined,
-      width: window.innerWidth < CONFIG.NAVBAR_WIDTH + 500 ? "100vw" : undefined,
-      height: window.innerWidth < CONFIG.NAVBAR_WIDTH + 500 ? "100vh" : undefined
+      "--calendar-width": isSmallScreen ? "100vw" : "75vw",
+      "--calendar-left": isSmallScreen ? "0" : "25vw",
+      "--calendar-day-width": isSmallScreen ? "calc(14.2857vw - 9.1428px)" : "calc(10.714vw - 9.1428px)", // yeah
+      overflow: isSmallScreen ? "hidden" : undefined,
+      width: isSmallScreen ? "100vw" : undefined,
+      height: isSmallScreen ? "100vh" : undefined
     }}>
       <ScheduleContext.Provider value={{ schedule, setSchedule }}>
-        <Toaster position="bottom-right" />
-        <NavBar />
-        <LightDarkMode isLightMode={isLightMode} setLightMode={setIsLightMode} />
-        <Routes>
-          <Route path="/about" element={<HomePage />} />
-          <Route path="/" element={<HomePage />} />
-          <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/download" element={<DownloadPage />} />
-          <Route path="/schedule" element={<SchedulePage />} />
-          <Route path="/barcode" element={<BarcodePage />} />
-        </Routes>
+        <CalendarContext.Provider value={{ calendar }}>
+          <Toaster position="bottom-right" />
+          <NavBar />
+          <LightDarkMode isLightMode={isLightMode} setLightMode={setIsLightMode} />
+          <Routes>
+            <Route path="/about" element={<HomePage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/download" element={<DownloadPage />} />
+            <Route path="/schedule" element={<SchedulePage />} />
+            <Route path="/barcode" element={<BarcodePage />} />
+          </Routes>
+        </CalendarContext.Provider>
       </ScheduleContext.Provider>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react'
-import CONFIG, { DEFAULT_PAGE_STYLES } from '../util/config'
+import CONFIG, { DEFAULT_PAGE_STYLES, SUCCESS_TOAST_STYLES } from '../util/config'
 import { Anchor } from 'phosphor-react'
 import { toast } from 'react-hot-toast'
 
@@ -32,13 +32,7 @@ const HomePage = () => {
         </p>
         <p className='link' onClick={() => {
             navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
-            toast("Link copied!", {
-                style: {
-                    backgroundColor: "#1c8000",
-                    fontWeight: "bold",
-                    color: "white",
-                }
-            });
+            toast("Link copied!", SUCCESS_TOAST_STYLES);
         }}>
           Copy the invite link
         </p>
