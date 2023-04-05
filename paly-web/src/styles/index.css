@@ -22,8 +22,10 @@ body{
   --fc-button-active-bg-color: var(--green);
   --fc-button-active-border-color: var(--green);
   --fc-today-bg-color: #1c800022;
-  --fc-event-bg-color: var(--green);
-  --fc-event-border-color: var(--green);
+  --fc-event-bg-color: rgba(125, 125, 125, 0.125);
+  --fc-event-border-color: #cccccc00;
+  --fc-event-text-color: var(--text);
+  --today-button-display: none;
 
   background-color: var(--bg);
 }
@@ -113,6 +115,26 @@ body{
   height: 100vh;
 }
 
-.fc-event-main{
-  padding: 4px;
+.fc-daygrid-block-event{
+  height: 36px;
+  overflow: auto;
+}
+
+.fc-daygrid-event{
+  height: 36px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.fc-header-toolbar{
+  margin: 24px;
+}
+
+.fc-toolbar-chunk{
+  padding-right: 24px;
+}
+
+.fc-today-button.fc-button-primary:disabled{
+  display: none;
 }

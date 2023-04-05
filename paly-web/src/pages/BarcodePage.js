@@ -35,7 +35,7 @@ const BarcodePage = () => {
             <div className='flex' style={{
                 borderRadius: 8,
                 backgroundColor: "white",
-                boxShadow: "0px 0px 5px grey",
+                border: "1px solid grey",
                 padding: 8
             }}>
                 <Barcode
