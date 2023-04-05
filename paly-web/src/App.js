@@ -11,7 +11,6 @@ import BarcodePage from "./pages/BarcodePage";
 import LightDarkMode from "./components/LightDarkMode";
 import CalendarPage from "./pages/CalendarPage";
 import DownloadPage from "./pages/DownloadPage";
-import GenerativeArt from "./components/codethaticopied/GenerativeArt";
 
 function App() {
   const [schedule, setSchedule] = useState(null);

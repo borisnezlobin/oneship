@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Spring } from 'react-spring';
 
 import {
-  getDevicePixelRatio,
   getScaledCanvasProps,
 } from './canvas.helpers';
 import useMousePosition from './use-mouse-position.hook';
@@ -130,13 +129,6 @@ const GenerativeArt = ({
       return;
     }
     contextRef.current = canvasRef.current.getContext('2d');
-
-    const devicePixelRatio = getDevicePixelRatio();
-
-    const s = getScaledCanvasProps(width, height);
-    console.log(s);
-    var scale = Math.min(window.innerHeight, window.innerWidth * 0.75);
-    // setTimeout(() => contextRef.current.scale(devicePixelRatio, devicePixelRatio), 2000);
   }, [canvasRef]);
 
   const strokeColor = React.useRef(null);

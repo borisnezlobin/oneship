@@ -7,6 +7,7 @@ import { Calendar } from 'phosphor-react';
 
 const CalendarPage = () => {
     const [selectedEvent, setSelectedEvent] = useState(null);
+    console.log(selectedEvent); // eslint
     const { calendar } = useContext(CalendarContext);
 
     if(calendar == null){
@@ -29,9 +30,9 @@ const CalendarPage = () => {
         
         events.push({
             title: calendar[i].summary.split(" - ")[0],
-            start: start == end ? "" : start,
-            end: start == end ? "": end,
-            allDay: start == end,
+            start: start === end ? "" : start,
+            end: start === end ? "": end,
+            allDay: start === end,
             extendedProps: {
                 url: calendar[i].htmlLink,
                 desc: calendar[i].description
@@ -57,7 +58,7 @@ const CalendarPage = () => {
 
 function renderEventContent(eventInfo) {
     console.log(eventInfo);
-    var timeToDisplay = eventInfo.timeText == "12a" ? "" : eventInfo.timeText + "m";
+    var timeToDisplay = eventInfo.timeText === "12a" ? "" : eventInfo.timeText + "m";
     return (
         <div style={{
             overflow: "hidden",
