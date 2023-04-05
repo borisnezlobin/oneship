@@ -11,7 +11,7 @@ const CalendarPage = () => {
 
     if(calendar == null){
         return (
-            <div>
+            <div className='flex' style={DEFAULT_PAGE_STYLES}>
                 <Calendar size={128} color="var(--green)" weight='thin' />
                 <p className='mediumText'>
                     Loading calendar data...
@@ -25,11 +25,13 @@ const CalendarPage = () => {
         if(calendar[i].summary === "Schedule") continue;
         var start = calendar[i].start.dateTime === undefined ? calendar[i].start.date : calendar[i].start.dateTime;
         var end = calendar[i].end.dateTime === undefined ? calendar[i].end.date : calendar[i].end.dateTime;
+
         
         events.push({
             title: calendar[i].summary.split(" - ")[0],
-            start: start,
-            end: end,
+            start: start == end ? "" : start,
+            end: start == end ? "": end,
+            allDay: start == end,
             extendedProps: {
                 url: calendar[i].htmlLink,
                 desc: calendar[i].description
@@ -46,7 +48,7 @@ const CalendarPage = () => {
                 eventContent={renderEventContent}
                 eventClick={(e) => {
                     setSelectedEvent(e);
-                    console.log(selectedEvent)
+                    console.log(e)
                 }}
             />
         </div>
@@ -54,11 +56,23 @@ const CalendarPage = () => {
 }
 
 function renderEventContent(eventInfo) {
+    console.log(eventInfo);
+    var timeToDisplay = eventInfo.timeText == "12a" ? "" : eventInfo.timeText + "m";
     return (
-      <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-      </>
+        <div style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            width: "10.8vw",
+            padding: 4,
+            cursor: "pointer"
+        }}>
+            <b style={{ fontWeight: "bold" }}>
+                {timeToDisplay}
+            </b>
+            <span>
+                {" "}{eventInfo.event.title}
+            </span>
+        </div>
     )
 }
 

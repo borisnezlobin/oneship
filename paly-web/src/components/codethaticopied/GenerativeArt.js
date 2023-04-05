@@ -1,18 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Spring } from 'react-spring/renderprops.cjs';
+import { Spring } from 'react-spring';
 
 import {
   getDevicePixelRatio,
   getScaledCanvasProps,
-} from '@helpers/canvas.helpers';
-import useMousePosition from '@hooks/use-mouse-position.hook';
-import useBoundingBox from '@hooks/use-bounding-box.hook';
-import { clamp, normalize } from '@utils';
+} from './canvas.helpers';
+import useMousePosition from './use-mouse-position.hook';
+import useBoundingBox from './useBoundingBox.hook';
+import usePrefersReducedMotion from './use-prefers-reduced-motion.hook';
 
-import { ConfigContext } from '../ConfigContext';
+import { ScheduleContext } from '../../util/contexts';
 
-const GAP = 12;
+const normalize = (
+  number,
+  currentScaleMin,
+  currentScaleMax,
+  newScaleMin = 0,
+  newScaleMax = 1
+) => {
+  const standardNormalization =
+    (number - currentScaleMin) / (currentScaleMax - currentScaleMin);
+  return (
+    (newScaleMax - newScaleMin) * standardNormalization + newScaleMin
+  );
+};
+const clamp = (val, min = 0, max = 1) =>
+  Math.max(min, Math.min(max, val));
+
+
+const GAP = 8;
 
 function draw(
   x,
@@ -22,21 +39,20 @@ function draw(
   numCols,
   lineLength,
   lineWidth,
-  lineColor,
   timeSince,
+  prefersReducedMotion,
   ctx
 ) {
-  // To avoid motion for those who have preferred not to see it,
-  // I'll force a constant mouse position of the top-left corner
-  // of the canvas.
-
-  const relativeMousePos = {
-        x: x - canvasBox.left,
-        y: y - canvasBox.top,
+  const relativeMousePos = prefersReducedMotion
+    ? {
+        x: canvasBox.left - canvasBox.width,
+        y: canvasBox.top - canvasBox.height,
+      }
+    : {
+        x: parseFloat(JSON.stringify(x)) - (window.innerWidth * 0.25),
+        y: parseFloat(JSON.stringify(y)),
       };
-
   ctx.clearRect(0, 0, canvasBox.width, canvasBox.height);
-
   const radius = lineLength * 0.5;
   const horizontalGap = lineLength + GAP;
   const verticalGap = lineLength + GAP;
@@ -45,7 +61,7 @@ function draw(
     for (let colIndex = 0; colIndex < numCols; colIndex++) {
       const distanceFromOriginPoint = Math.sqrt(rowIndex ** 2 + colIndex ** 2);
       const t = distanceFromOriginPoint * 0.05 + 0.5;
-      if (t > timeSince) {
+      if (t > timeSince && !prefersReducedMotion) {
         continue;
       }
 
@@ -57,14 +73,12 @@ function draw(
 
       const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
 
-      // const xOffset =
       const hypRatio = radius / distance;
 
       const xRatio = deltaX * hypRatio;
       const yRatio = deltaY * hypRatio;
 
       const dampenBy = clamp(normalize(distance, 0, 300, 1, 0), 0, 1);
-
       const p1 = {
         x: centerX - xRatio * dampenBy,
         y: centerY - yRatio * dampenBy,
@@ -79,7 +93,7 @@ function draw(
       ctx.lineTo(p2.x, p2.y);
       ctx.lineWidth = lineWidth;
       ctx.lineCap = 'round';
-      ctx.strokeStyle = lineColor;
+      ctx.strokeStyle = "rgba(125, 125, 125, 0.175)";
       ctx.stroke();
       ctx.closePath();
     }
@@ -87,16 +101,17 @@ function draw(
 }
 
 const GenerativeArt = ({
-  numRows = 8,
-  numCols = 16,
-  lineLength = 12,
+  lineLength = 24,
   lineWidth = 3,
+  numRows = Math.round(window.innerHeight / (lineLength + GAP)),
+  numCols = Math.round(window.innerWidth * 0.75 / (lineLength + GAP)),
 }) => {
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const startAt = React.useRef(Date.now());
   const [timeSince, setTimeSince] = React.useState(0);
 
-  const { colorMode } = React.useContext(ConfigContext);
+  const { schedule } = React.useContext(ScheduleContext);
 
   const horizontalGap = lineLength + GAP;
   const verticalGap = lineLength + GAP;
@@ -110,7 +125,6 @@ const GenerativeArt = ({
   const [canvasRef, canvasBox] = useBoundingBox();
   const contextRef = React.useRef(null);
 
-  // TODO: Should I use an offscreen canvas?
   React.useEffect(() => {
     if (!canvasRef.current) {
       return;
@@ -119,7 +133,10 @@ const GenerativeArt = ({
 
     const devicePixelRatio = getDevicePixelRatio();
 
-    contextRef.current.scale(devicePixelRatio, devicePixelRatio);
+    const s = getScaledCanvasProps(width, height);
+    console.log(s);
+    var scale = Math.min(window.innerHeight, window.innerWidth * 0.75);
+    // setTimeout(() => contextRef.current.scale(devicePixelRatio, devicePixelRatio), 2000);
   }, [canvasRef]);
 
   const strokeColor = React.useRef(null);
@@ -142,13 +159,13 @@ const GenerativeArt = ({
       numCols,
       lineLength,
       lineWidth,
-      strokeColor.current,
       timeSince,
+      prefersReducedMotion,
       contextRef.current
     );
     // Whatever
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [colorMode]);
+  }, [schedule]);
 
   React.useEffect(() => {
     if (timeSince < 3) {
@@ -179,8 +196,8 @@ const GenerativeArt = ({
             numCols,
             lineLength,
             lineWidth,
-            strokeColor.current,
             timeSince,
+            prefersReducedMotion,
             contextRef.current
           );
           return null;
@@ -193,6 +210,11 @@ const GenerativeArt = ({
 
 const Canvas = styled.canvas`
   display: block;
+  position: absolute;
+  top: 0;
+  left: 25vw;
+  width: 75vw;
+  height: 100vh;
 `;
 
 export default GenerativeArt;

@@ -5,7 +5,6 @@ var CONFIG = {
 
 const DEFAULT_PAGE_STYLES = {
     left: window.innerWidth < 750 ? 0 : CONFIG.NAVBAR_WIDTH,
-    backgroundColor: "var(--bg)",
     top: 0,
     width: window.innerWidth < 750 ? window.innerWidth : window.innerWidth - CONFIG.NAVBAR_WIDTH + 1,
     height: window.innerHeight,

@@ -11,6 +11,7 @@ import BarcodePage from "./pages/BarcodePage";
 import LightDarkMode from "./components/LightDarkMode";
 import CalendarPage from "./pages/CalendarPage";
 import DownloadPage from "./pages/DownloadPage";
+import GenerativeArt from "./components/codethaticopied/GenerativeArt";
 
 function App() {
   const [schedule, setSchedule] = useState(null);
@@ -78,6 +79,7 @@ function App() {
       "--text": isLightMode ? "black" : "white",
       "--calendar-width": isSmallScreen ? "100vw" : "75vw",
       "--calendar-left": isSmallScreen ? "0" : "25vw",
+      "--today-button-display": isSmallScreen ? "none" : "none",
       overflow: isSmallScreen ? "hidden" : undefined,
       width: isSmallScreen ? "100vw" : undefined,
       height: isSmallScreen ? "100vh" : undefined
