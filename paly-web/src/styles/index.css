@@ -16,7 +16,6 @@ body{
 
   --calendar-width: 75vw;
   --calendar-left: 25vw;
-  --calendar-day-width: calc(10.714vw - 9.1428px);
   --fc-button-bg-color: var(--green);
   --fc-button-border-color: #146000;
   --fc-button-hover-bg-color: #146000;
@@ -33,9 +32,6 @@ body{
   color: var(--green)
 }
 
-.fc-event-main{
-  padding: 4px;
-}
 
 .link{
   color: var(--green);
@@ -114,10 +110,9 @@ body{
 .fc{
   width: var(--calendar-width);
   left: var(--calendar-left);
-  padding: 32px;
   height: 100vh;
 }
 
-.fc-daygrid-day{
-  width: var(--calendar-day-width);
+.fc-event-main{
+  padding: 4px;
 }

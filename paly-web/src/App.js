@@ -78,7 +78,6 @@ function App() {
       "--text": isLightMode ? "black" : "white",
       "--calendar-width": isSmallScreen ? "100vw" : "75vw",
       "--calendar-left": isSmallScreen ? "0" : "25vw",
-      "--calendar-day-width": isSmallScreen ? "calc(14.2857vw - 9.1428px)" : "calc(10.714vw - 9.1428px)", // yeah
       overflow: isSmallScreen ? "hidden" : undefined,
       width: isSmallScreen ? "100vw" : undefined,
       height: isSmallScreen ? "100vh" : undefined
