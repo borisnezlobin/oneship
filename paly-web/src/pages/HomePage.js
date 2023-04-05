@@ -7,7 +7,7 @@ import GenerativeArt from '../components/codethaticopied/GenerativeArt'
 const HomePage = () => {
   return (
     <>
-      <GenerativeArt />
+      {window.innerWidth >= 750 ? <GenerativeArt /> : <></>}
       <div className='flex' style={DEFAULT_PAGE_STYLES}>
           <Anchor color="var(--green)" size={128} />
           <p className='bigText'>

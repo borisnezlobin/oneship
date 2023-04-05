@@ -26,6 +26,7 @@ body{
   --fc-event-border-color: #cccccc00;
   --fc-event-text-color: var(--text);
   --today-button-display: none;
+  --fc-border-color: rgba(125, 125, 125, 0.125);
 
   background-color: var(--bg);
 }
