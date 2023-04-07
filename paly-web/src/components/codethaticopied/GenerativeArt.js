@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Spring } from 'react-spring';
 
+// copied from joshwcomeau.com
 import {
   getScaledCanvasProps,
 } from './canvas.helpers';
@@ -28,7 +29,7 @@ const clamp = (val, min = 0, max = 1) =>
   Math.max(min, Math.min(max, val));
 
 
-const GAP = 8;
+const GAP = 12;
 
 function draw(
   x,
@@ -42,16 +43,11 @@ function draw(
   prefersReducedMotion,
   ctx
 ) {
-  const relativeMousePos = prefersReducedMotion
-    ? {
-        x: canvasBox.left - canvasBox.width,
-        y: canvasBox.top - canvasBox.height,
-      }
-    : {
-        x: parseFloat(JSON.stringify(x)) - (window.innerWidth * 0.25),
-        y: parseFloat(JSON.stringify(y)),
-      };
-  ctx.clearRect(0, 0, canvasBox.width, canvasBox.height);
+  const relativeMousePos = {
+    x: parseFloat(JSON.stringify(x)) - (window.innerWidth * 0.25),
+    y: parseFloat(JSON.stringify(y)),
+  };
+  ctx.clearRect(0, 0, window.innerWidth * 0.75, window.innerHeight);
   const radius = lineLength * 0.5;
   const horizontalGap = lineLength + GAP;
   const verticalGap = lineLength + GAP;
@@ -77,7 +73,7 @@ function draw(
       const xRatio = deltaX * hypRatio;
       const yRatio = deltaY * hypRatio;
 
-      const dampenBy = clamp(normalize(distance, 0, 300, 1, 0), 0, 1);
+      const dampenBy = clamp(normalize(distance, 0, 300, 1, 0), -0, 1);
       const p1 = {
         x: centerX - xRatio * dampenBy,
         y: centerY - yRatio * dampenBy,
@@ -92,7 +88,7 @@ function draw(
       ctx.lineTo(p2.x, p2.y);
       ctx.lineWidth = lineWidth;
       ctx.lineCap = 'round';
-      ctx.strokeStyle = "rgba(125, 125, 125, 0.175)";
+      ctx.strokeStyle = "rgba(125, 125, 125, 0.25)";
       ctx.stroke();
       ctx.closePath();
     }
@@ -100,10 +96,10 @@ function draw(
 }
 
 const GenerativeArt = ({
-  lineLength = 24,
-  lineWidth = 3,
-  numRows = Math.round(window.innerHeight / (lineLength + GAP)),
-  numCols = Math.round(window.innerWidth * 0.75 / (lineLength + GAP)),
+  lineLength = 36,
+  lineWidth = 4,
+  numRows = (window.innerHeight) / (lineLength + GAP) - 1,
+  numCols = (window.innerWidth * 0.75) / (lineLength + GAP) - 1,
 }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -112,13 +108,12 @@ const GenerativeArt = ({
 
   const { schedule } = React.useContext(ScheduleContext);
 
-  const horizontalGap = lineLength + GAP;
-  const verticalGap = lineLength + GAP;
-
   // We want a "gap" on either side, so that lines at the edge
   // that swivel aren't truncated by the canvas limits.
-  const width = horizontalGap * (numCols + 1);
-  const height = verticalGap * (numRows + 1);
+  // const width = horizontalGap * (numCols + 1);
+  // const height = verticalGap * (numRows + 1);
+  const width = window.innerWidth * 0.75;
+  const height = window.innerHeight;
 
   const mousePos = useMousePosition();
   const [canvasRef, canvasBox] = useBoundingBox();
@@ -195,7 +190,12 @@ const GenerativeArt = ({
           return null;
         }}
       </Spring>
-      <Canvas ref={canvasRef} {...scaledCanvasProps} />
+      <Canvas
+        ref={canvasRef}
+        {...scaledCanvasProps}
+        width={window.innerWidth * 0.75}
+        height={window.innerHeight}
+      />
     </>
   );
 };
