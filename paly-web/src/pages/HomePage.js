@@ -1,5 +1,5 @@
 import React from 'react'
-import CONFIG, { DEFAULT_PAGE_STYLES, SUCCESS_TOAST_STYLES } from '../util/config'
+import CONFIG, { SUCCESS_TOAST_STYLES } from '../util/config'
 import { Anchor } from 'phosphor-react'
 import { toast } from 'react-hot-toast'
 import GenerativeArt from '../components/codethaticopied/GenerativeArt'
@@ -8,7 +8,7 @@ const HomePage = () => {
   return (
     <>
       {window.innerWidth >= 750 ? <GenerativeArt /> : <></>}
-      <div className='flex' style={DEFAULT_PAGE_STYLES}>
+      <div className='flex default-page'>
           <Anchor color="var(--green)" size={128} />
           <p className='bigText'>
               OneShip

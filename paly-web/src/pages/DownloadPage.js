@@ -1,10 +1,9 @@
 import { AppStoreLogo, GooglePlayLogo } from 'phosphor-react'
 import React from 'react'
-import { DEFAULT_PAGE_STYLES } from '../util/config'
 
 const DownloadPage = () => {
     return (
-        <div className='flex' style={DEFAULT_PAGE_STYLES}>
+        <div className='flex default-page'>
             <div className='flex' style={{
                 flexDirection: "row",
                 gap: 16,

@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { DEFAULT_PAGE_STYLES } from '../util/config'
 import { CalendarContext } from '../util/contexts';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -12,7 +11,7 @@ const CalendarPage = () => {
 
     if(calendar == null){
         return (
-            <div className='flex' style={DEFAULT_PAGE_STYLES}>
+            <div className='flex default-page'>
                 <Calendar size={128} color="var(--green)" weight='thin' />
                 <p className='mediumText'>
                     Loading calendar data...
@@ -41,7 +40,7 @@ const CalendarPage = () => {
     }
 
     return (
-        <div style={DEFAULT_PAGE_STYLES}>
+        <div className='default-page'>
             <FullCalendar
                 plugins={[ dayGridPlugin ]}
                 initialView="dayGridMonth"
