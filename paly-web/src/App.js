@@ -11,8 +11,10 @@ import BarcodePage from "./pages/BarcodePage";
 import LightDarkMode from "./components/LightDarkMode";
 import CalendarPage from "./pages/CalendarPage";
 import DownloadPage from "./pages/DownloadPage";
+import useDimensions from "./util/rerenderOnResize.hook";
 
 function App() {
+  const dimensions = useDimensions();
   const [schedule, setSchedule] = useState(null);
   const [calendar, setCalendar] = useState(null);
   const [isLightMode, setIsLightMode] = useState(
@@ -70,7 +72,7 @@ function App() {
   console.log("calendar:");
   console.log(calendar);
 
-  const isSmallScreen = window.innerWidth < 750;
+  const isSmallScreen = dimensions.width < 750;
 
   return (
     <div id="app-root" style={{

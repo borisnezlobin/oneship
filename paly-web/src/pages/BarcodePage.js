@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import CONFIG, { DEFAULT_PAGE_STYLES } from '../util/config';
+import CONFIG from '../util/config';
 import Barcode from "react-barcode"
 
 const BarcodePage = () => {
@@ -17,9 +17,8 @@ const BarcodePage = () => {
 
     return (
         <div
-            className="flex"
+            className="flex default-page"
             style={{
-                ...DEFAULT_PAGE_STYLES,
                 textAlign: "center",
                 justifyContent: "space-around"
             }}
@@ -52,17 +51,16 @@ const BarcodePage = () => {
                 <input
                     style={{
                         outline: "none",
-                        border: "1px solid var(--green)",
-                        color: "var(--green)",
-                        height: 48,
+                        border: "none",
+                        borderBottom: "2px solid var(--green)",
+                        color: "var(--text)",
                         padding: "4px 16px",
-                        width: "300px",
+                        width: "400px",
                         backgroundColor: "var(--bg)",
-                        fontFamily: "Roboto, system-ui",
-                        fontWeight: "bolder",
-                        fontSize: "large",
+                        fontFamily: "monospace",
+                        fontWeight: "bold",
+                        fontSize: "xx-large",
                         textAlign: "center",
-                        borderRadius: 8
                     }}
                     placeholder='Enter your student ID'
                     value={studentId}

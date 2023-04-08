@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ScheduleContext } from '../util/contexts'
 import ScheduleItem from '../components/ScheduleItem';
-import CONFIG, { DEFAULT_PAGE_STYLES } from '../util/config';
+import CONFIG from '../util/config';
 import { Confetti } from 'phosphor-react';
 
 const SchedulePage = () => {
@@ -24,7 +24,31 @@ const SchedulePage = () => {
 
     if(schedule.data[0].name === "No school"){
         return (
-            <div className='flex' style={DEFAULT_PAGE_STYLES}>
+            <div className='flex default-page' style={{ gap: 0 }}>
+                <p style={{
+                    fontFamily: "monospace",
+                    fontSize: "5rem",
+                    color: "var(--text)",
+                    margin: 0
+                }}>
+                    {currentTime.getHours() < 10 ? "0" : ""}{currentTime.getHours()}:
+                    {currentTime.getMinutes() < 10 ? "0" : ""}{currentTime.getMinutes()}:
+                    {currentTime.getSeconds() < 10 ? "0" : ""}{currentTime.getSeconds()}
+                </p>
+                <p style={{
+                    fontFamily: "monospace",
+                    fontSize: "1.5rem",
+                    color: "var(--green)",
+                    margin: 0,
+                }}>
+                    {currentTime.toLocaleDateString("en-us", {
+                        day: "numeric",
+                        month: "long",
+                        weekday: "long",
+                        year: "numeric"
+                    })}
+                </p>
+                <div style={{margin: 64}} />
                 <Confetti weight='light' color='var(--green)' size={128} />
                 <p className='mediumText'>
                     No school today!

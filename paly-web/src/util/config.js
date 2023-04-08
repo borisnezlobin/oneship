@@ -3,15 +3,6 @@ var CONFIG = {
     NAVBAR_WIDTH: window.innerWidth * 0.25,
 }
 
-const DEFAULT_PAGE_STYLES = {
-    left: window.innerWidth < 750 ? 0 : CONFIG.NAVBAR_WIDTH,
-    top: 0,
-    width: window.innerWidth < 750 ? window.innerWidth : window.innerWidth - CONFIG.NAVBAR_WIDTH + 1,
-    height: window.innerHeight,
-    position: "absolute",
-    color: "var(--text)"
-};
-
 const SUCCESS_TOAST_STYLES = {
     style: {
         backgroundColor: "#1c8000",
@@ -24,6 +15,5 @@ const SUCCESS_TOAST_STYLES = {
 
 export default CONFIG;
 export {
-    DEFAULT_PAGE_STYLES,
     SUCCESS_TOAST_STYLES
 }

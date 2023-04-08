@@ -5,15 +5,23 @@ import classes from "../styles/Navbar.module.css";
 import CONFIG from '../util/config';
 import logo from "./logo-transparent.png"
 import NavBarItem from './NavBarItem';
+import useDimensions from '../util/rerenderOnResize.hook';
 
 
 const NavBar = () => {
+    const dimensions = useDimensions();
     const location = useLocation().pathname.replace("/", "");
     const path = location.charAt(0).toUpperCase() + location.slice(1);
     const [currentPage, setCurrentPage] = useState(path.length === 0 ? "About" : path);
     const [shown, setShown] = useState(false);
-    const isSidebar = window.innerWidth > 750;
-    if(!isSidebar) CONFIG.NAVBAR_WIDTH = 0;
+    const isSidebar = dimensions.width > 750;
+
+    if(!isSidebar){
+        CONFIG.NAVBAR_WIDTH = 0;
+    }else{
+        if(shown) setShown(false);
+        CONFIG.NAVBAR_WIDTH = dimensions.width * 0.25;
+    }
 
     const itemCallback = (newPage) => {
         setCurrentPage(newPage);
