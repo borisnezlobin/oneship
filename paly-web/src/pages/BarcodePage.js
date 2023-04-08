@@ -55,12 +55,13 @@ const BarcodePage = () => {
                         borderBottom: "2px solid var(--green)",
                         color: "var(--text)",
                         padding: "4px 16px",
-                        width: "400px",
+                        width: 300,
                         backgroundColor: "var(--bg)",
                         fontFamily: "monospace",
                         fontWeight: "bold",
-                        fontSize: "xx-large",
+                        fontSize: "x-large",
                         textAlign: "center",
+                        borderRadius: 0
                     }}
                     placeholder='Enter your student ID'
                     value={studentId}
