@@ -12,19 +12,6 @@ import usePrefersReducedMotion from './use-prefers-reduced-motion.hook';
 
 import { ScheduleContext } from '../../util/contexts';
 
-const normalize = (
-  number,
-  currentScaleMin,
-  currentScaleMax,
-  newScaleMin = 0,
-  newScaleMax = 1
-) => {
-  const standardNormalization =
-    (number - currentScaleMin) / (currentScaleMax - currentScaleMin);
-  return (
-    (newScaleMax - newScaleMin) * standardNormalization + newScaleMin
-  );
-};
 const clamp = (val, min = 0, max = 1) =>
   Math.max(min, Math.min(max, val));
 
