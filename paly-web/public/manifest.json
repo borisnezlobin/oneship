@@ -36,6 +36,6 @@
   "orientation": "portrait",
   "id": "OneShipPWA",
   "related_applications": ["OneShip"],
-  "theme_color": "#ffffff",
+  "theme_color": "#000000",
   "background_color": "#ffffff"
 }

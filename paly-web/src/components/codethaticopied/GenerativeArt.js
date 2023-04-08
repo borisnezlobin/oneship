@@ -73,7 +73,8 @@ function draw(
       const xRatio = deltaX * hypRatio;
       const yRatio = deltaY * hypRatio;
 
-      const dampenBy = clamp(normalize(distance, 0, 300, 1, 0), -0, 1);
+      // const dampenBy = clamp(normalize((distance * distance), 0, 300, 1, 0), 0, 1);
+      const dampenBy = clamp((1 / clamp(distance * distance, 0.001, 10000000000000)) * 5000, 0, 1);
       const p1 = {
         x: centerX - xRatio * dampenBy,
         y: centerY - yRatio * dampenBy,
@@ -108,10 +109,6 @@ const GenerativeArt = ({
 
   const { schedule } = React.useContext(ScheduleContext);
 
-  // We want a "gap" on either side, so that lines at the edge
-  // that swivel aren't truncated by the canvas limits.
-  // const width = horizontalGap * (numCols + 1);
-  // const height = verticalGap * (numRows + 1);
   const width = window.innerWidth * 0.75;
   const height = window.innerHeight;
 
@@ -128,7 +125,6 @@ const GenerativeArt = ({
 
   const strokeColor = React.useRef(null);
 
-  // Handle re-drawing when the colorMode is changed.
   React.useEffect(() => {
     strokeColor.current = getComputedStyle(
       document.documentElement
