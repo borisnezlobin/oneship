@@ -87,7 +87,7 @@ function App() {
     }}>
       <ScheduleContext.Provider value={{ schedule, setSchedule }}>
         <CalendarContext.Provider value={{ calendar }}>
-          <Toaster position="bottom-right" />
+          <Toaster position={dimensions.width < 750 ? "top-center" : "bottom-right"} />
           <NavBar />
           <LightDarkMode isLightMode={isLightMode} setLightMode={setIsLightMode} />
           <Routes>

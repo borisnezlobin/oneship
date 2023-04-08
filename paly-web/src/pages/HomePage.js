@@ -13,7 +13,7 @@ const HomePage = () => {
           <p className='bigText'>
               OneShip
           </p>
-          <p>
+          <p style={{ padding: 4, paddingBottom: 0 }}>
             The official unofficial web app of the Palo Alto High School Vikings
           </p>
           <br />
@@ -40,6 +40,14 @@ const HomePage = () => {
             Copy the invite link
           </p>
       </div>
+      <p style={{
+        position: "absolute",
+        color: "var(--green)",
+        top: 0,
+        left: 12 + (window.innerWidth < 750 ? 0 : window.innerWidth * 0.25 + 12)
+      }}>
+        Made by Boris Nezlobin
+      </p>
     </>
   )
 }

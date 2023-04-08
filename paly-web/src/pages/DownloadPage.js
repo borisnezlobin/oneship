@@ -8,10 +8,10 @@ const DownloadPage = () => {
                 flexDirection: "row",
                 gap: 16,
             }}>
-                <AppStoreLogo color='var(--green)' size={128} weight="thin" />
-                <GooglePlayLogo color='var(--green)' size={128} weight="thin" />
+                <AppStoreLogo color='var(--green)' size={64} weight="thin" />
+                <GooglePlayLogo color='var(--green)' size={64} weight="thin" />
             </div>
-            <p className='bigText' style={{ fontWeight: "lighter" }}>
+            <p className='bigText' style={{ fontWeight: "lighter", fontSize: "xx-large" }}>
                 There's going to be a mobile app!?
             </p>
         </div>
