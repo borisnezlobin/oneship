@@ -22,13 +22,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/logo192.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.randomletters.paly"
-    },
-    "web": {
-      "favicon": "./assets/logo.png"
     },
     "extra": {
       "eas": {

@@ -34,7 +34,7 @@ function DrawerComponent({ navigation, navRef }) {
                 alignItems: "center"
             }}>
                 <Image
-                    source={require("../assets/logo-transparent.png")}
+                    source={require("../assets/logosvg.svg")}
                     style={{width: 128, height: 128}}
                 />
             </View>

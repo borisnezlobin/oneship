@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Image, SafeAreaView, View, Text, Dimensions, StatusBar } from 'react-native'
+import { Image, View, Text, Dimensions } from 'react-native'
 import getColors from './COLORS'
 
 // well at least it looks cool so actually just don't worry about any of this code
@@ -74,7 +74,7 @@ const Loading = ({ loading = true, insets = { top: 0 }, text="LOADING", animate 
           width: 128 * (scale - 0.25) * 1.3,
           height: 128 * (scale - 0.25) * 1.3,
           borderRadius: 1024,
-        }} source={require("../assets/logo-transparent.png")} />
+        }} source={require("../assets/logosvg.svg")} />
         <Text style={{
           fontWeight: "bold",
           fontSize: scale >= 0.25 ? 12 * (scale - 0.25) * 1.3 : 0.001,
