@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { Route, Routes } from "react-router";
 import HomePage from "./pages/HomePage";
 import SchedulePage from "./pages/SchedulePage";
-import CONFIG from "./util/config";
+import CONFIG, { SUCCESS_TOAST_STYLES } from "./util/config";
 import { formatDate } from "./util/util";
 import { CalendarContext, ScheduleContext } from "./util/contexts"
 import NavBar from "./components/NavBar";
@@ -12,9 +12,11 @@ import LightDarkMode from "./components/LightDarkMode";
 import CalendarPage from "./pages/CalendarPage";
 import DownloadPage from "./pages/DownloadPage";
 import useDimensions from "./util/rerenderOnResize.hook";
+import { WifiX } from "phosphor-react";
 
 function App() {
   const dimensions = useDimensions();
+  const [online, setOnline] = useState(window.navigator.onLine);
   const [schedule, setSchedule] = useState(null);
   const [calendar, setCalendar] = useState(null);
   const [isLightMode, setIsLightMode] = useState(
@@ -66,11 +68,37 @@ function App() {
       setCalendar(json.items);
     }
     if(calendar == null) getCalendar();
-  }, [schedule, calendar])
-  
-  console.log("rerendered and schedule is " + JSON.stringify(schedule));
-  console.log("calendar:");
-  console.log(calendar);
+
+    
+    const updateOnlineleness = () => {
+      setOnline(window.navigator.onLine);
+      if(window.navigator.onLine){
+        setTimeout(() => 
+          toast("Internet connection established!", SUCCESS_TOAST_STYLES)
+        , 1000);
+      }
+    }
+
+    return () => {
+      window.removeEventListener('online', updateOnlineleness);
+      window.removeEventListener('offline', updateOnlineleness)
+    }
+  }, [schedule, calendar]);
+
+  if(!online){
+    return (
+      <div className="flex" style={{
+        height: "100vh",
+        width: "100vw",
+        fontFamily: "'Trebuchet MS', sans, sans-serif, Arial, monospace"
+      }}>
+        <WifiX size={128} color="#60010a" weight="light" />
+        <p className="bigText" style={{ color: "#60010a", fontSize: "xx-large" }}>
+          No internet connection!
+        </p>
+      </div>
+    )
+  }
 
   const isSmallScreen = dimensions.width < 750;
 
