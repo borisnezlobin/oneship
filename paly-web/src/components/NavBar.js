@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useLocation } from 'react-router';
 import classes from "../styles/Navbar.module.css";
 import CONFIG from '../util/config';
-import logo from "./logo-transparent.png"
+import logo from "./logosvg.svg"
 import NavBarItem from './NavBarItem';
 import useDimensions from '../util/rerenderOnResize.hook';
 

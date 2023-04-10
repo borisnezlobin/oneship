@@ -12,7 +12,7 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime }) => {
         marginLeft: 128 + 16,
         justifyContent: "flex-start",
         textAlign: "left",
-        backgroundColor: "white"
+        backgroundColor: "rgba(125, 125, 125, 0.1)"
     }}>
         <p className='mediumText'>
             {scheduleItem.name}
