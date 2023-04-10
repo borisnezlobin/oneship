@@ -52,6 +52,7 @@ const Schedule = ({ navigation }) => {
             <>
                 <SafeAreaView style={{
                     width: "100%",
+                    height: "100%",
                     backgroundColor: COLORS.FOREGROUND_COLOR,
                     height: Dimensions.get("window").height,
                     display: "flex",
@@ -59,7 +60,7 @@ const Schedule = ({ navigation }) => {
                     alignItems: "center"
                 }}>
                     <RocketLaunchIcon size={72} color={COLORS.GREEN} />
-                    <Text style={{textAlign: "center", color: COLORS.GREEN, fontWeight: "bold"}}>
+                    <Text style={{ textAlign: "center", color: COLORS.GREEN, fontWeight: "bold" }}>
                         No school today!
                     </Text>
                 </SafeAreaView>
