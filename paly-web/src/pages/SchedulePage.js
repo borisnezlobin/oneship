@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ScheduleContext } from '../util/contexts'
 import ScheduleItem from '../components/ScheduleItem';
 import CONFIG from '../util/config';
-import { Confetti } from 'phosphor-react';
+import { Clock, Confetti } from 'phosphor-react';
 
 const SchedulePage = () => {
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
@@ -16,8 +16,9 @@ const SchedulePage = () => {
 
     if(schedule == null) {
         return (
-            <div>
-                Loading..
+            <div className="default-page flex">
+                <Clock color='var(--green)' size={128} weight="light" />
+                <p className='mediumText'>Loading your schedule for today...</p>
             </div>
         )
     }
@@ -60,7 +61,7 @@ const SchedulePage = () => {
     const startTime = schedule.data[0].start;
     const endTime = schedule.data[schedule.data.length - 1].end;
 
-    const now = 10 * 60;
+    const now = currentTime.getHours() * 60 + currentTime.getMinutes();
 
     return (
         <div style={{
@@ -98,7 +99,7 @@ const SchedulePage = () => {
                     zIndex: 1,
                     top: 23.5,
                 }} />
-                <p style={{ zIndex: 4, margin: 0, position: "relative" }}>
+                <p style={{ zIndex: 2, margin: 0, position: "relative", color: "white" }}>
                     {currentTime.getHours()}:
                     {currentTime.getMinutes() < 10 ? "0" + currentTime.getMinutes() : currentTime.getMinutes()}:
                     {currentTime.getSeconds() < 10 ? "0" + currentTime.getSeconds() : currentTime.getSeconds()}
