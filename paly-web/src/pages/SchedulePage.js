@@ -62,6 +62,7 @@ const SchedulePage = () => {
     const endTime = schedule.data[schedule.data.length - 1].end;
 
     const now = currentTime.getHours() * 60 + currentTime.getMinutes();
+    console.log(now);
 
     return (
         <div style={{
@@ -78,7 +79,7 @@ const SchedulePage = () => {
             <div style={{
                 position: "absolute",
                 left: 8 + CONFIG.NAVBAR_WIDTH,
-                top: window.innerHeight * ((now - startTime) / (endTime - startTime)),
+                top: window.innerHeight * ((now - startTime) / (endTime - startTime)) - 24,
                 backgroundColor: "var(--red)",
                 color: "var(--text)",
                 fontWeight: "bold",

@@ -14,11 +14,11 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime }) => {
         textAlign: "left",
         backgroundColor: "rgba(125, 125, 125, 0.1)"
     }}>
-        <p className='mediumText'>
+        <p className='mediumText' style={{ fontSize: "1rem" }}>
             {scheduleItem.name}
             <span style={{
                 color: "grey",
-                fontSize: 16,
+                fontSize: "1rem",
                 marginLeft: 8
             }}>
                 {scheduleItem.startString} - {scheduleItem.endString}, {scheduleItem.end - scheduleItem.start} minutes long
