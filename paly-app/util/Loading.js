@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Image, View, Text, Dimensions } from 'react-native'
 import getColors from './COLORS'
+import LogoSvg from './LogoSvg';
 
 // well at least it looks cool so actually just don't worry about any of this code
 const Loading = ({ loading = true, insets = { top: 0 }, text="LOADING", animate = false }) => {
@@ -70,11 +71,13 @@ const Loading = ({ loading = true, insets = { top: 0 }, text="LOADING", animate 
         justifyContent: "center",
         alignItems: "center"
       }}>
-        <Image style={{
-          width: 128 * (scale - 0.25) * 1.3,
-          height: 128 * (scale - 0.25) * 1.3,
-          borderRadius: 1024,
-        }} source={require("../assets/logosvg.svg")} />
+        <View style={{
+            width: 128 * (scale - 0.25) * 1.3,
+            height: 128 * (scale - 0.25) * 1.3,
+            borderRadius: 1024,
+        }}>
+          <LogoSvg/>
+        </View>
         <Text style={{
           fontWeight: "bold",
           fontSize: scale >= 0.25 ? 12 * (scale - 0.25) * 1.3 : 0.001,

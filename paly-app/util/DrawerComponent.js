@@ -1,8 +1,9 @@
-import { View, Image, SafeAreaView, StatusBar } from "react-native";
+import { View, Image, SafeAreaView, StatusBar, Text } from "react-native";
 import DrawerListItem from "../components/DrawerListItem";
 import getColors from "./COLORS";
 import { CalendarDaysIcon, ClockIcon, CogIcon, HomeIcon, NewspaperIcon, TrophyIcon } from "react-native-heroicons/outline";
 import CONFIG from "./config";
+import LogoSvg from "./LogoSvg";
 
 const screensWithoutStatusBar = ["Publications_Publication_Article"]
 
@@ -31,12 +32,11 @@ function DrawerComponent({ navigation, navRef }) {
                 width: "100%",
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
+                height: 196,
+                width: 196,
             }}>
-                <Image
-                    source={require("../assets/logosvg.svg")}
-                    style={{width: 128, height: 128}}
-                />
+                <LogoSvg />
             </View>
             <View style={{height: 24}} />
             <DrawerListItem

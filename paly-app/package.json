@@ -36,7 +36,8 @@
     "react-native-shared-element": "0.8.4",
     "react-native-web": "~0.18.9",
     "expo-notifications": "~0.17.0",
-    "expo-device": "~5.0.0"
+    "expo-device": "~5.0.0",
+    "react-native-svg": "13.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3"
