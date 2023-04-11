@@ -50,10 +50,16 @@ function App() {
         }
       }
     }
-    const now = formatDate(new Date(Date.now()), true, false);
-    if(schedule == null || schedule.lastUpdate !== now){
-      getScheduleFromStorage(now);
+
+    const checkForScheduleUpdates = () => {
+      const now = formatDate(new Date(Date.now()), true, false);
+      if(schedule == null || schedule.lastUpdate !== now){
+        getScheduleFromStorage(now);
+      }
     }
+
+    window.addEventListener('focus', checkForScheduleUpdates);
+    checkForScheduleUpdates();
 
 
 
@@ -81,7 +87,8 @@ function App() {
 
     return () => {
       window.removeEventListener('online', updateOnlineleness);
-      window.removeEventListener('offline', updateOnlineleness)
+      window.removeEventListener('offline', updateOnlineleness);
+      window.removeEventListener('focus', checkForScheduleUpdates);
     }
   }, [schedule, calendar]);
 
