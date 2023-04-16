@@ -81,6 +81,7 @@ body{
 
 .btn{
   background-color: var(--green);
+  text-decoration: none;
   color: white;
   font-weight: normal;
   padding: 8px 32px;

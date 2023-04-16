@@ -23,6 +23,7 @@ import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import { formatDate, setExpoPushToken } from './util/util';
 import CONFIG from './util/config';
+import Update from './pages/Update';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -31,6 +32,7 @@ export default function App() {
   const [userSettingsContext, setUserSettingsContext] = React.useState(null);
   const [schedule, setSchedule] = React.useState(null);
   const [token, setToken] = React.useState(null);
+  const [isNewVersionAvailable, setIsNewVersionAvailable] = React.useState(false);
   const notificationListener = React.useRef();
   const responseListener = React.useRef();
   setExpoPushToken(token);
@@ -40,7 +42,10 @@ export default function App() {
 
   React.useEffect(() => {
     // NOTIFICATIONS
-    if(token == null) registerForPushNotificationsAsync().then(t => setToken(t));
+    if(token == null) registerForPushNotificationsAsync().then(t => {
+      setToken(t);
+      // register token on backend
+    });
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log("received notification: " + JSON.stringify(notification))
@@ -117,12 +122,25 @@ export default function App() {
       }
     }
 
-    var appStateSubscription = AppState.addEventListener("change", (_) => {
+    const checkForUpdates = async () => {
+      const localVersion = CONFIG.VERSION;
+      const remoteVersion = await fetch(CONFIG.SERVER_URL + "/app-version");
+      if(localVersion !== remoteVersion){
+        alert("A new version of OneShip is available!");
+        if(!isNewVersionAvailable) setIsNewVersionAvailable(true);
+      }
+    }
+
+    var appStateSubscription = AppState.addEventListener("change", async (newVal) => {
       console.log("calling getScheduleFromStorage");
+      if(newVal == "active"){
+        checkForUpdates();
+      }
       if(schedule !== null) getScheduleFromStorage();
     });
 
     if(schedule == null) getScheduleFromStorage();
+    checkForUpdates();
 
     return () => {
       Notifications.removeNotificationSubscription(
@@ -141,6 +159,10 @@ export default function App() {
     </>
   }
 
+  const CopeScreen = () => {
+    console.log("copescreen: " + isNewVersionAvailable);
+    return StackContainer(isNewVersionAvailable);
+}
   return (
     <SafeAreaProvider>
       <UserSettingsContext.Provider value={{ userSettingsContext, setUserSettingsContext }}>
@@ -155,7 +177,7 @@ export default function App() {
                   swipeEdgeWidth: 200,
                 }}
               >
-                <Drawer.Screen component={StackContainer} name="Stack" />
+                <Drawer.Screen component={CopeScreen} name="Stack" />
               </Drawer.Navigator>
             </NavigationContainer>
           </ScheduleContext.Provider>
@@ -166,7 +188,8 @@ export default function App() {
 }
 
 
-const StackContainer = () => {
+const StackContainer = (isNewVersionAvailable) => {
+  console.log("isNewVersionAvailable: " + isNewVersionAvailable)
   return (
     <Stack.Navigator
       screenOptions={{
@@ -174,7 +197,9 @@ const StackContainer = () => {
         cardStyleInterpolator: forFade,
         gestureEnabled: false
       }}
+      initialRouteName={"Update"}
     >
+      <Stack.Screen name="Update" component={Update} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="Schedule"

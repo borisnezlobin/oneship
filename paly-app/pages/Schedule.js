@@ -16,7 +16,6 @@ const Schedule = ({ navigation }) => {
     const insets = useSafeAreaInsets()
     const COLORS = getColors();
     const { schedule, setSchedule } = useContext(ScheduleContext);
-    console.log("Schedule.js says that schedule is: " + JSON.stringify(schedule))
     const [currentTime, setCurrentTime] = useState(new Date(Date.now()));
     const [modalStatus, setModalStatus] = useState({shown: false, data: null});
     const { userSettingsContext } = useContext(UserSettingsContext);
