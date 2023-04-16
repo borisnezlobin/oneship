@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Paly",
-    "slug": "paly",
+    "name": "OneShip",
+    "slug": "palyoneship",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "https://d2rzw8waxoxhv2.cloudfront.net/logos/pahs94301/1574814748400-197-49.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,9 +22,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo192.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "icon": "./assets/adaptive-icon.png",
       "package": "com.randomletters.paly"
     },
     "extra": {
@@ -32,6 +33,5 @@
         "projectId": "41ed84da-178b-42b9-92ce-f53bf17d4dca"
       }
     }
-  },
-  "developmentClient": true
+  }
 }

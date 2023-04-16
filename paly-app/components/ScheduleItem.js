@@ -85,11 +85,21 @@ const ScheduleItem = ({ scheduleItem, startTime, endTime, screenHeight, openModa
                     color: COLORS.GREEN,
                 }}>
                     {thisItem ? thisItem.customName : scheduleItem.name}
+                    <Text style={{
+                        color: COLORS.TEXT,
+                        fontWeight: "normal",
+                    }}>
+                        {" "} {" "}{scheduleItem.startString} - {scheduleItem.endString}
+                    </Text>
                 </Text>
-                <Text style={{color: COLORS.TEXT}}>{scheduleItem.startString} - {scheduleItem.endString}</Text>
                 {classStatus == CLASS_STATUS.CURRENT ?
-                <Text style={{color: COLORS.TEXT}}>Ending in {scheduleItem.end * 60 - now} seconds</Text>
-                : <></>
+                    <Text style={{color: COLORS.TEXT}}>
+                        Ending in {scheduleItem.end * 60 - now} seconds
+                    </Text>
+                :
+                    <Text style={{color: COLORS.TEXT}}>
+                        {scheduleItem.end - scheduleItem.start} minutes long
+                    </Text>
                 }
             </View>
             {showThis ? <TouchableOpacity

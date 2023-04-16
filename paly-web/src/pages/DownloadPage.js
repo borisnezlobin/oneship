@@ -1,18 +1,33 @@
-import { AppStoreLogo, GooglePlayLogo } from 'phosphor-react'
 import React from 'react'
+import CONFIG from '../util/config'
+import qrCode from "./AndroidOneShip.svg";
+import { DownloadSimple } from 'phosphor-react';
 
 const DownloadPage = () => {
     return (
         <div className='flex default-page'>
-            <div className='flex' style={{
-                flexDirection: "row",
-                gap: 16,
-            }}>
-                <AppStoreLogo color='var(--green)' size={64} weight="thin" />
-                <GooglePlayLogo color='var(--green)' size={64} weight="thin" />
-            </div>
-            <p className='bigText' style={{ fontWeight: "lighter", fontSize: "xx-large" }}>
-                There's going to be a mobile app!?
+            <img
+                alt="QR Code"
+                src={qrCode}
+                width={256}
+                height={256}
+            />
+            <div style={{margin: 16}} />
+            <a
+                className='btn flex'
+                href={CONFIG.SERVER_URL + "/assets/internal/PalyOneShip.apk"}
+                download="OneShip.apk"
+                style={{ flexDirection: "row", gap: 16 }}
+            >
+                <DownloadSimple color='white' size={32} style={{ flexShrink: 0 }} />
+                <p>
+                    Download a preview
+                </p>
+            </a>
+            <p className='mediumText' style={{ padding: 32 }}>
+                Currently only available for Android, the OneShip app is constantly evolving.
+                <br />
+                Try it out!
             </p>
         </div>
     )
