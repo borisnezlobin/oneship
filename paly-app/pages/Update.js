@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { SafeAreaView, Text, View, Platform } from 'react-native'
 import LogoSvg from '../util/LogoSvg'
 import * as FileSystem from 'expo-file-system'
 import getColors from '../util/COLORS'
@@ -8,6 +8,8 @@ import PrimaryButton from '../components/PrimaryButton'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import CONFIG from '../util/config'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { CheckIcon } from 'react-native-heroicons/outline'
+import { startActivityAsync } from 'expo-intent-launcher'
 
 const Update = ({ navigation }) => {
     const { userSettingsContext } = useContext(UserSettingsContext); // force rerender
@@ -35,7 +37,9 @@ const Update = ({ navigation }) => {
                     backgroundWidth={2}
                     tintColor={COLORS.GREEN}
                     backgroundColor={COLORS.BACKGROUND_COLOR}
-                />
+                >
+                    {(fill) => fill == 100 ? <CheckIcon color={COLORS.GREEN} size={128} /> : <></>}
+                </AnimatedCircularProgress>
                 }
                 <Text style={{color: COLORS.GREEN, fontWeight: 'bold', fontSize: 32, marginTop: 16, textAlign: "center"}}>
                     A new version of OneShip is available!
@@ -51,8 +55,31 @@ const Update = ({ navigation }) => {
                         }
                     );
                     try{
-                        const { uri } = await download.downloadAsync();
-                        console.log("Finished downloading to ", uri);
+                        if(Platform.OS == "android"){
+                            try{
+                                const localApkUri = `${FileSystem.cacheDirectory}OneShipUpdate.apk`;
+                                const { uri } = await download.downloadAsync();
+                                console.log("Finished downloading to", uri);
+                                await FileSystem.copyAsync({ from: uri, to: localApkUri });
+                                console.log("copied to", localApkUri);
+                                const data = await FileSystem.getContentUriAsync(localApkUri);
+                                console.log("got content uri", data);
+                                const intent = await startActivityAsync(
+                                    "android.intent.action.VIEW",
+                                    {
+                                        data,
+                                        flags: 1,
+                                        type: "application/vnd.android.package-archive", // security risk
+                                    }
+                                );
+                                if(!intent){
+                                    alert("Failed to install update");
+                                }
+                            }catch(e){ console.error(e); }
+                        }else{
+                            navigation.navigate("Home");
+                            alert("How did you even cop this app on ios my bruv");
+                        }
                     }catch(e){  console.error(e); }
                     // fetch(CONFIG.SERVER_URL  + "/assets/internal/PalyOneShip.apk");
                 }} />

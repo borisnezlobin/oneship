@@ -59,9 +59,7 @@ export default function App() {
     // SETTINGS
     const getData = async () => {
       try{
-        console.log("getting user settings");
         var gottenSettings = JSON.parse(await AsyncStorage.getItem("settings"));
-        console.log("got settings: " + JSON.stringify(gottenSettings));
       }catch(e){
         console.log("FAILED TO GET USER SETTINGS: " + e);
         return;
@@ -90,34 +88,28 @@ export default function App() {
 
     // SCHEDULE
     const getScheduleFromServer = async (d) => {
-      console.log("getting server schedule");
       var gottenSchedule = await fetch(CONFIG.SERVER_URL + "/schedule/" + d);
       if(gottenSchedule.status !== 200){
         alert("A server error occured: " + gottenSchedule.statusText);
         return;
       }else{
         const resData = (await gottenSchedule.json());
-        console.log("response data: " + JSON.stringify(resData));
         const s = {
           lastUpdate: d,
           schedule: resData.data,
         };
-        console.log("setting schedule to: " + JSON.stringify(s));
         AsyncStorage.setItem("schedule", JSON.stringify(s));
         setSchedule(s);
       }
     }
 
     var getScheduleFromStorage = async () => {
-      console.log("getting schedule")
       const gottenSchedule = JSON.parse(await AsyncStorage.getItem("schedule"));
-      console.log("gotten schedule: " + gottenSchedule)
       var todayDate = formatDate(Date.now(), true, false);
       if(gottenSchedule == null || gottenSchedule.lastUpdate !== todayDate){
         getScheduleFromServer(todayDate);
         return;
       }else{
-        console.log("got schedule from local storage")
         setSchedule(gottenSchedule);
       }
     }
@@ -126,13 +118,11 @@ export default function App() {
       const localVersion = CONFIG.VERSION;
       const remoteVersion = await fetch(CONFIG.SERVER_URL + "/app-version");
       if(localVersion !== remoteVersion){
-        alert("A new version of OneShip is available!");
         if(!isNewVersionAvailable) setIsNewVersionAvailable(true);
       }
     }
 
     var appStateSubscription = AppState.addEventListener("change", async (newVal) => {
-      console.log("calling getScheduleFromStorage");
       if(newVal == "active"){
         checkForUpdates();
       }
@@ -151,8 +141,6 @@ export default function App() {
     };
   }, [userSettingsContext, schedule])
 
-  console.log("schedule: " + schedule)
-
   if(userSettingsContext == null){
     return <>
       <Loading />
@@ -160,7 +148,6 @@ export default function App() {
   }
 
   const CopeScreen = () => {
-    console.log("copescreen: " + isNewVersionAvailable);
     return StackContainer(isNewVersionAvailable);
 }
   return (
@@ -189,7 +176,6 @@ export default function App() {
 
 
 const StackContainer = (isNewVersionAvailable) => {
-  console.log("isNewVersionAvailable: " + isNewVersionAvailable)
   return (
     <Stack.Navigator
       screenOptions={{
