@@ -6,7 +6,7 @@ import Home from './pages/Home';
 import DrawerComponent from './util/DrawerComponent';
 import Settings from './pages/Settings';
 import Schedule from './pages/Schedule';
-import { defaultSettings, PublicationsContext, ScheduleContext, UserSettingsContext } from './util/contexts';
+import { defaultSettings, PublicationsContext, ScheduleContext, UserSettingsContext, VersionContext } from './util/contexts';
 import CalendarPage from './pages/Calendar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,6 +33,7 @@ export default function App() {
   const [schedule, setSchedule] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const [isNewVersionAvailable, setIsNewVersionAvailable] = React.useState(false);
+  const [remoteVersion, setRemoteVersion] = React.useState(null);
   const notificationListener = React.useRef();
   const responseListener = React.useRef();
   setExpoPushToken(token);
@@ -53,7 +54,7 @@ export default function App() {
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
+        console.log("notification response: " + response);
       });
 
     // SETTINGS
@@ -116,10 +117,9 @@ export default function App() {
 
     const checkForUpdates = async () => {
       const localVersion = CONFIG.VERSION;
-      const remoteVersion = await fetch(CONFIG.SERVER_URL + "/app-version");
-      if(localVersion !== remoteVersion){
-        if(!isNewVersionAvailable) setIsNewVersionAvailable(true);
-      }
+      const serverVersion = await (await fetch(CONFIG.SERVER_URL + "/app-version")).text();
+      console.log("local version: " + localVersion + ", remote version: " + serverVersion);
+      if(remoteVersion == null) setRemoteVersion(serverVersion);
     }
 
     var appStateSubscription = AppState.addEventListener("change", async (newVal) => {
@@ -147,35 +147,34 @@ export default function App() {
     </>
   }
 
-  const CopeScreen = () => {
-    return StackContainer(isNewVersionAvailable);
-}
   return (
     <SafeAreaProvider>
-      <UserSettingsContext.Provider value={{ userSettingsContext, setUserSettingsContext }}>
-        <PublicationsContext.Provider value={{ publications, setPublications }}>
-          <ScheduleContext.Provider value={{ schedule, setSchedule }}>
-            <NavigationContainer ref={navRef}>
-              <Drawer.Navigator
-                drawerContent={(props) => <DrawerComponent navRef={navRef} {...props} />}
-                screenOptions={{
-                  drawerType: "slide",
-                  headerShown: false,
-                  swipeEdgeWidth: 200,
-                }}
-              >
-                <Drawer.Screen component={CopeScreen} name="Stack" />
-              </Drawer.Navigator>
-            </NavigationContainer>
-          </ScheduleContext.Provider>
-        </PublicationsContext.Provider>
-      </UserSettingsContext.Provider>
+      <VersionContext.Provider value={{ remoteVersion }}>
+        <UserSettingsContext.Provider value={{ userSettingsContext, setUserSettingsContext }}>
+          <PublicationsContext.Provider value={{ publications, setPublications }}>
+            <ScheduleContext.Provider value={{ schedule, setSchedule }}>
+              <NavigationContainer ref={navRef}>
+                <Drawer.Navigator
+                  drawerContent={(props) => <DrawerComponent navRef={navRef} {...props} />}
+                  screenOptions={{
+                    drawerType: "slide",
+                    headerShown: false,
+                    swipeEdgeWidth: 200,
+                  }}
+                >
+                  <Drawer.Screen component={StackContainer} name="Stack" />
+                </Drawer.Navigator>
+              </NavigationContainer>
+            </ScheduleContext.Provider>
+          </PublicationsContext.Provider>
+        </UserSettingsContext.Provider>
+      </VersionContext.Provider>
     </SafeAreaProvider>
   );
 }
 
 
-const StackContainer = (isNewVersionAvailable) => {
+const StackContainer = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -183,9 +182,7 @@ const StackContainer = (isNewVersionAvailable) => {
         cardStyleInterpolator: forFade,
         gestureEnabled: false
       }}
-      initialRouteName={"Update"}
     >
-      <Stack.Screen name="Update" component={Update} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="Schedule"
@@ -241,7 +238,7 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
+    console.log("notification token" + token);
   } else {
     alert('Must use physical device for Push Notifications');
   }

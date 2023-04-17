@@ -1,20 +1,32 @@
 import * as React from 'react';
-import { Button, Text, View, TouchableOpacity } from 'react-native';
+import { Button, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import getColors from '../util/COLORS';
-import { UserSettingsContext } from '../util/contexts';
+import { UserSettingsContext, VersionContext } from '../util/contexts';
 import Bar from "../components/Bar"
 import { EyeIcon, EyeSlashIcon, MoonIcon, SunIcon } from 'react-native-heroicons/outline';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Picker } from "@react-native-picker/picker";
+import CONFIG from '../util/config';
+import Update from './Update';
+import PrimaryButton from '../components/PrimaryButton';
 
 
 function Settings({ navigation }) {
+  const [updateOpen, setUpdateOpen] = React.useState(false);
   const { userSettingsContext, setUserSettingsContext } = React.useContext(UserSettingsContext);
-  const COLORS = getColors()
+  const { remoteVersion } = React.useContext(VersionContext);
+  console.log("\'" + remoteVersion + "\' vs \'" + CONFIG.VERSION + "\'");
+  const COLORS = getColors();
+
   const changeBoolValueInSettings = (keyName) => {
     var newObj = {...userSettingsContext}
     newObj[keyName] = !userSettingsContext[keyName];
     setUserSettingsContext(newObj);
+  }
+
+
+  if(updateOpen){
+    return <Update closeCB={() => setUpdateOpen(false)} />
   }
 
   return (
@@ -34,18 +46,25 @@ function Settings({ navigation }) {
         }}>
             Settings
         </Text>
+        {remoteVersion == CONFIG.VERSION ?
+        <PrimaryButton title="Download Update" cb={() => setUpdateOpen(true)} style={{
+          width: "50%",
+          margin: 12,
+          marginTop: 0,
+          left: (Dimensions.get("window").width / 4) - 12
+        }} />
+        : <></>}
+        <View style={{ width: "100%", height: 1, backgroundColor: COLORS.GREEN }} />
         <Text style={{
             fontWeight: "bold",
-            color: COLORS.FOREGROUND_COLOR,
+            color: COLORS.GREEN,
             width: "100%",
-            backgroundColor: COLORS.GREEN,
             padding: 16,
             textAlign: "center",
-            fontSize: 20
+            fontSize: 36
         }}>
-          PREFERENCES
+          Appearance
         </Text>
-        { /* PREFERENCES */ }
         <View style={{padding: 16}}>
           <TouchableOpacity onPress={() => changeBoolValueInSettings("show0Period")}>
           <View style={{
@@ -91,39 +110,38 @@ function Settings({ navigation }) {
           </View>
         </TouchableOpacity>
       </View>
+      <View style={{ width: "100%", height: 1, backgroundColor: COLORS.GREEN }} />
       <Text style={{
             fontWeight: "bold",
-            color: COLORS.FOREGROUND_COLOR,
+            color: COLORS.GREEN,
             width: "100%",
-            backgroundColor: COLORS.GREEN,
             padding: 16,
             textAlign: "center",
-            fontSize: 20
+            fontSize: 36
         }}>
-          NOTIFICATIONS
-        </Text>
-        { /* NOTIFICATIONS */ }
-        <View style={{padding: 16}}>
-        <Picker
-          selectedValue={userSettingsContext.remind}
-          onValueChange={(newVal) => {
-            var newObj = {...userSettingsContext};
-            newObj.remind = newVal;
-            setUserSettingsContext(newObj);
-          }}
-          itemStyle={{
-            color: COLORS.TEXT
-          }}
-        >
-          <Picker.Item value={-1} label="Don't remind me" />
-          <Picker.Item value={0.001} label="0 minutes" />
-          <Picker.Item value={1} label="1 minute" />
-          <Picker.Item value={2} label="2 minutes" />
-          <Picker.Item value={3} label="3 minutes" />
-          <Picker.Item value={5} label="5 minutes" />
-          <Picker.Item value={10} label="10 minutes" />
-          <Picker.Item value={15} label="15 minutes" />
-        </Picker>
+          Notifications
+      </Text>
+      <View style={{padding: 16}}>
+      <Picker
+        selectedValue={userSettingsContext.remind}
+        onValueChange={(newVal) => {
+          var newObj = {...userSettingsContext};
+          newObj.remind = newVal;
+          setUserSettingsContext(newObj);
+        }}
+        itemStyle={{
+          color: COLORS.TEXT
+        }}
+      >
+        <Picker.Item value={-1} label="Don't remind me" />
+        <Picker.Item value={0.001} label="0 minutes" />
+        <Picker.Item value={1} label="1 minute" />
+        <Picker.Item value={2} label="2 minutes" />
+        <Picker.Item value={3} label="3 minutes" />
+        <Picker.Item value={5} label="5 minutes" />
+        <Picker.Item value={10} label="10 minutes" />
+        <Picker.Item value={15} label="15 minutes" />
+      </Picker>
       </View>
       <Bar navigation={navigation} />
     </SafeAreaView>

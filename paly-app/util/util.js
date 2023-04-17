@@ -10,7 +10,7 @@ var expoPushToken = null;
 
 const setExpoPushToken = (s) => {
     expoPushToken = s;
-    console.log(expoPushToken);
+    console.log("notificaiton token: " + expoPushToken);
 }
 
 // scary diy weee

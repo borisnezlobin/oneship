@@ -151,6 +151,8 @@ function CalendarPage({ navigation }) {
             shadowRadius: "2",
             shadowColor: COLORS.BACKGROUND_COLOR,
             shadowOpacity: 0.5,
+            borderTopWidth: Platform.OS == "android" ? 1 : 0,
+            borderColor: COLORS.GREY,
           }}
           handleStyle={{
             backgroundColor: COLORS.FOREGROUND_COLOR,
