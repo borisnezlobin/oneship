@@ -115,7 +115,7 @@ const ScheduleBottomSheet = ({ bottomSheetRef, modalStatus, setModal }) => {
         />
         <BottomSheetTextInput
             placeholder="Who teaches this class?"
-            value={teacher} // no max length :(
+            value={teacher} // no max length
             onChangeText={setTeacher}
             style={textInputStyle}
         />

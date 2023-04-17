@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "OneShip",
-    "slug": "palyoneship",
-    "version": "1.0.0",
+    "slug": "paly",
+    "version": "0.0.2",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",

@@ -62,7 +62,7 @@ const SchedulePage = () => {
     const endTime = schedule.data[schedule.data.length - 1].end;
 
     const now = currentTime.getHours() * 60 + currentTime.getMinutes();
-    console.log(now);
+    console.log("now: " + now);
 
     return (
         <div style={{

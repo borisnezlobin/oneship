@@ -26,7 +26,6 @@ const CircularProgress = ({ percent, size = 64 }) => {
   }else {
     firstProgressLayerStyle = propStyle(percent, -135);
   }
-  console.log(firstProgressLayerStyle);
 
   return(
     <View style={{

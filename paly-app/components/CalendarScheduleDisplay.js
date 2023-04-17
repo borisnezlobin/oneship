@@ -1,6 +1,5 @@
-import BottomSheet, { BottomSheetView, useBottomSheetDynamicSnapPoints } from '@gorhom/bottom-sheet'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { View, TouchableOpacity, Text } from 'react-native'
+import React from 'react'
+import { View, TouchableOpacity } from 'react-native'
 import { CalendarDaysIcon, ClockIcon } from 'react-native-heroicons/outline'
 import getColors from '../util/COLORS'
 

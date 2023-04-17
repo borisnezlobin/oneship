@@ -5,9 +5,6 @@ import getColors from '../util/COLORS';
 const PublicationListItem = ({ data, navigation }) => {
     const COLORS = getColors()
 
-    if(data.title.includes("Los Gatos")){
-        console.log(data);
-    }
     var teaser = data.teaser.trim().split("\n").join(" ");
 
     return (

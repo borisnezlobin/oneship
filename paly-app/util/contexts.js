@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import CONFIG from "./config";
 
 class Assignment{
     constructor(assignmentName, description, dueDate, importance){
@@ -50,12 +51,14 @@ const RouteContext = createContext("");
 const PublicationsContext = createContext(null);
 const UserSettingsContext = createContext(defaultSettings)
 const ScheduleContext = createContext(null);
+const VersionContext = createContext(null);
 
 export {
     UserSettingsContext,
     RouteContext,
     PublicationsContext,
     ScheduleContext,
+    VersionContext,
     defaultSettings,
     CustomScheduleItem,
     Assignment
