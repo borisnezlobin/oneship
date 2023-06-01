@@ -35,6 +35,7 @@ app.get('/api/news', async (_, res) => {
 
 app.get('/api/schedule/:day', async (req, res) => {
     var schedule = await getScheduleForDay(req.params.day);
+    if(schedule == null) return res.status(404).send({ error: "Schedule not found" });
     res.status(200).send(schedule);
 });
 

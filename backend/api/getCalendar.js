@@ -107,7 +107,7 @@ const getScheduleForDay = async (day) => {
             return schedule;
         }
     }
-    return { error: "No schedule found for day " + day };
+    return null;
 }
 
 const calculateMinutesFromTime = (timeString) => {
