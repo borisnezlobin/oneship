@@ -54,7 +54,7 @@ const getCalendar = async () => {
 
 const getScheduleForDay = async (day) => {
     var events = await getCalendar();
-    console.log("got " + events.length + " events");
+    console.log(day);
     for(var i = 0; i < alternates.length; i++){
         var alternate = alternates[i];
         if(alternate.date == day){
@@ -74,7 +74,6 @@ const getScheduleForDay = async (day) => {
     }
     for(var i = 0; i < events.length; i++){
         var event = events[i];
-        console.log(event.summary)
         if(
             !event.summary.includes("Schedule") &&
             !event.summary.includes("Minimum Day") &&
@@ -83,10 +82,7 @@ const getScheduleForDay = async (day) => {
             /* ^ because pausd can't spell */
             /* it happened more than once */
         ) continue;
-        console.log("found schedule event");
-        console.log("'" + event.start.trim() + "' vs '" + day.trim() + "'");
         if(event.start.trim() == day.trim()){
-            console.log("found schedule for day");
             var periods = event.description.split("\n");
             var schedule = [];
             for(var k in periods){
