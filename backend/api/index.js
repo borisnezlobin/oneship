@@ -18,19 +18,24 @@ app.get("/version", (_, res) => {
     });
 });
 
-app.get('/api/news', async (_, res) => {
+const getNews = async () => {
     const palyVoice = await getPublication("https://palyvoice.com/?s=");
     const cMag = await getPublication("https://cmagazine.org/?s=");
     const vikingMag = await getPublication("https://vikingsportsmag.com/?s=");
     const verde = await getPublication("https://verdemagazine.com/?s=", "C Magazine");
     const infocus = await getInfocusNews();
-    res.status(200).send([
+    return [
         { title: "Verde", articles: verde },
         { title: "Viking Magazine", articles: vikingMag },
         { title: "C Magazine", articles: cMag },
         { title: "Paly Voice", articles: palyVoice },
         { title: "InFocus", articles: infocus }
-    ]);
+    ];
+}
+
+app.get('/api/news', async (_, res) => {
+    const news = await getNews();
+    res.status(200).send(news);
 });
 
 app.get('/api/schedule/:day', async (req, res) => {
@@ -43,6 +48,21 @@ app.get('/api/calendar', async (_, res) => {
     var calendar = await getCalendar();
     res.status(200).send(calendar);
 });
+
+app.get('/api/startup', async (_, res) => {
+    // get all data needed for app startup
+    var calendar = await getCalendar();
+    var today = new Date();
+    // in format "yyyymmdd"
+    today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + "" + today.getDate();
+    var schedule = await getScheduleForDay(today);
+    var news = await getNews();
+    res.status(200).send({
+        calendar: calendar,
+        schedule: { date: today, value: schedule },
+        news: news
+    });
+})
 
 app.get('/', (_, res) => {
     res.status(200).send("Server status: runnning");
