@@ -3,6 +3,8 @@ const app = express();
 import cors from 'cors';
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
+import { readData, writeData } from './db.js';
+import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 
 app.use(cors());
 
@@ -34,35 +36,53 @@ const getNews = async () => {
 }
 
 app.get('/api/news', async (_, res) => {
-    const news = await getNews();
-    res.status(200).send(news);
+    const data = await readData("app", "daily");
+    var invalid = checkForBadData(data);
+    if(invalid) return res.status(409).send({
+        error: "Data not in expected state",
+        message: invalid
+    });
+    res.status(200).send(data.data().news);
 });
 
 app.get('/api/schedule/:day', async (req, res) => {
-    var schedule = await getScheduleForDay(req.params.day);
-    if(schedule == null) return res.status(404).send({ error: "Schedule not found" });
-    res.status(200).send(schedule);
+    var data = await readData("app", "daily");
+    var invalid = checkForBadData(data);
+    if(invalid) return res.status(409).send({
+        error: "Data not in expected state",
+        message: invalid
+    });
+    res.status(200).send(data.data().schedule);
 });
 
 app.get('/api/calendar', async (_, res) => {
-    var calendar = await getCalendar();
-    res.status(200).send(calendar);
+    var data = await readData("app", "daily");
+    var invalid = checkForBadData(data);
+    if(invalid) return res.status(409).send({
+        error: "Data not in expected state",
+        message: invalid
+    });
+    res.status(200).send(data.data().calendar);
 });
 
+// called by frontend on startup
+// just throw all the data at the app
 app.get('/api/startup', async (_, res) => {
-    // get all data needed for app startup
-    var calendar = await getCalendar();
-    var today = new Date();
-    // in format "yyyymmdd"
-    today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + "" + today.getDate();
-    var schedule = await getScheduleForDay(today);
-    var news = await getNews();
-    res.status(200).send({
-        calendar: calendar,
-        schedule: { date: today, value: schedule },
-        news: news
+    const data = await readData("app", "daily");
+    var invalid = checkForBadData(data);
+    if(invalid) return res.status(409).send({
+        error: "Data not in expected state",
+        message: invalid
     });
-})
+    res.status(200).send(data.data());
+});
+
+// called by https://uptimerobot.com every 12h at 6am + 6pm
+// I didn't want to wake up at 5am and set the interval to 24h
+app.use('/api/poll', async (_, res) => {
+    await startServerToday();
+    res.status(200).send({ status: "ok" });
+});
 
 app.get('/', (_, res) => {
     res.status(200).send("Server status: runnning");
@@ -71,5 +91,22 @@ app.get('/', (_, res) => {
 app.listen(8080, () => {
     console.log("Listening on port 3000");
 });
+
+const startServerToday = async () => {
+    // get all data needed for app startup
+    var calendar = await getCalendar();
+    var today = getTodayInFunnyFormat();
+    var schedule = await getScheduleForDay("20230411");
+    var news = await getNews();
+    var data = {
+        lastUpdate: getTodayInFunnyFormat(),
+        calendar: calendar,
+        schedule: { date: today, value: schedule },
+        news: news
+    };
+
+    // write data to firestore
+    await writeData("app", "daily", data);
+}
 
 export default app;
