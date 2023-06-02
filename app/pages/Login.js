@@ -43,15 +43,9 @@ const LoginPage = () => {
 
         if(!isFormValid) return;
         setLoading(true);
-        const response = await fetch(CONFIG.serverURL + "api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email,
-                password
-            })
+        const response = await fetch(
+            CONFIG.serverURL + "api/login?email=" + email + "&password=" + password, {
+            method: "POST"
         }).catch(err => {
             console.log(err);
             setLoading(false);
