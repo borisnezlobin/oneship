@@ -70,6 +70,7 @@ const LoginPage = () => {
             }
         } catch (e) {
             console.log("couldn't parse json from " + text);
+            setLoading(false);
         }
     }
 

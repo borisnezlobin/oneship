@@ -108,7 +108,10 @@ app.post("/api/register", express.json(), async (request, response) => {
 });
 
 app.post("/api/login", express.json(), async (request, response) => {
-    const { email, password } = request.body;
+    const body = request.body;
+    const email = body.email;
+    const password = body.password;
+    if(email == null || password == null) return response.status(400).send({ error: "Missing required fields" });
     console.log("logging in user " + email + " with password " + password);
     const result = await loginUser(email, password);
     if(result.status == 200){
