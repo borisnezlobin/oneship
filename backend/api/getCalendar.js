@@ -61,13 +61,15 @@ const getScheduleForDay = async (day) => {
             var schedule = [];
             for(var k in alternate.schedule){
                 var period = alternate.schedule[k];
-                schedule.push({
+                var obj = {
                     startString: period.start,
                     start: calculateMinutesFromTime(period.start),
                     endString: period.end,
                     end: calculateMinutesFromTime(period.end),
                     name: period.name
-                });
+                };
+                if(obj.endString == "" || obj.startString == "" || obj.start == null || obj.end == null || obj.name == "") continue;
+                schedule.push(obj);
             }
             return schedule;
         }
@@ -92,13 +94,15 @@ const getScheduleForDay = async (day) => {
                 goofy = goofy.replaceAll("-", "");
                 goofy = goofy.trim();
                 var endTime = goofy.split(" ")[0];
-                schedule.push({
+                var obj = {
                     startString: startTime.trim(),
                     start: calculateMinutesFromTime(startTime),
                     endString: endTime.trim(),
                     end: calculateMinutesFromTime(endTime),
                     name: goofy.replaceAll(endTime, "").trim()
-                });
+                };
+                if(obj.endString == "" || obj.startString == "" || obj.start == null || obj.end == null || obj.name == "") continue;
+                schedule.push(obj);
             }
             return schedule;
         }

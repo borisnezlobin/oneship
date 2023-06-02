@@ -1,0 +1,7 @@
+{
+    "name": "OneShip",
+    "slug": "oneship",
+    "backgroundColor": "#000000",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png"
+}
