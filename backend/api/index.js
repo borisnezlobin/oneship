@@ -7,6 +7,7 @@ import { DEFAULT_SETTINGS, readData, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser } from './auth.js';
 
+app.use(express.json());
 app.use(cors());
 
 app.get("/version", (_, response) => {
