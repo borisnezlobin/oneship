@@ -107,10 +107,11 @@ app.post("/api/register", express.json(), async (request, response) => {
     response.status(200).send(obj);
 });
 
-app.post("/api/login", express.json(), async (request, response) => {
-    const body = request.body;
-    const email = body.email;
-    const password = body.password;
+// I tried to use request.body
+// but vercel just *has* to be special
+app.post("/api/login", async (request, response) => {
+    const email = request.query.email;
+    const password = request.query.password;
     if(email == null || password == null) return response.status(400).send({ error: "Missing required fields" });
     console.log("logging in user " + email + " with password " + password);
     const result = await loginUser(email, password);
