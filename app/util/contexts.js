@@ -5,11 +5,13 @@ const CalendarContext = createContext();
 const NewsContext = createContext();
 const SportsContext = createContext();
 const SettingsContext = createContext();
+const UserDataContext = createContext();
 
 export {
     ScheduleContext,
     CalendarContext,
     NewsContext,
     SportsContext,
-    SettingsContext
+    SettingsContext,
+    UserDataContext
 };
