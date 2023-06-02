@@ -88,6 +88,7 @@ app.use('/api/poll', async (_, res) => {
 app.post("/api/register", async (req, res) => {
     // TODO: require token
     const body = req.body;
+    console.log(body);
     const email = body.email;
     const displayName = body.displayName;
     const uid = body.uid;
