@@ -7,7 +7,6 @@ import { DEFAULT_SETTINGS, readData, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser } from './auth.js';
 
-app.use(express.json());
 app.use(cors());
 
 app.get("/version", (_, response) => {
@@ -86,7 +85,7 @@ app.use('/api/poll', async (_, response) => {
     response.status(200).send({ status: "ok" });
 });
 
-app.post("/api/register", async (request, response) => {
+app.post("/api/register", express.json(), async (request, response) => {
     // TODO: require token
     const body = request.body;
     console.log(body);
@@ -108,7 +107,7 @@ app.post("/api/register", async (request, response) => {
     response.status(200).send(obj);
 });
 
-app.post("/api/login", async (request, response) => {
+app.post("/api/login", express.json(), async (request, response) => {
     const { email, password } = request.body;
     console.log("logging in user " + email + " with password " + password);
     const result = await loginUser(email, password);

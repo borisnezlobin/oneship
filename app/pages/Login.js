@@ -56,15 +56,20 @@ const LoginPage = () => {
             console.log(err);
             setLoading(false);
         });
-        const json = await response.json();
-        console.log(json);
-        setLoading(false);
-        if(response.status == 200 && json.error == null){
+        const text = await response.text();
+        try {
+            const json = JSON.parse(text);
             console.log(json);
-            setUserData(json);
-            return;
-        }else{
-            // show error toast
+            setLoading(false);
+            if(response.status == 200 && json.error == null){
+                console.log(json);
+                setUserData(json);
+                return;
+            }else{
+                // show error toast
+            }
+        } catch (e) {
+            console.log("couldn't parse json from " + text);
         }
     }
 
