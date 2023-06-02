@@ -9,7 +9,7 @@ import { loginUser } from './auth.js';
 
 app.use(cors());
 
-app.get("/version", (_, res) => {
+app.get("/version", (_, response) => {
     // look at me using semver
     // correctly
     res.status(200).send({
@@ -36,7 +36,7 @@ const getNews = async () => {
     ];
 }
 
-app.get('/api/news', async (_, res) => {
+app.get('/api/news', async (_, response) => {
     const data = await readData("app", "daily");
     var invalid = checkForBadData(data);
     if(invalid) return res.status(409).send({
@@ -46,7 +46,7 @@ app.get('/api/news', async (_, res) => {
     res.status(200).send(data.data().news);
 });
 
-app.get('/api/schedule/:day', async (req, res) => {
+app.get('/api/schedule/:day', async (request, response) => {
     var data = await readData("app", "daily");
     var invalid = checkForBadData(data);
     if(invalid) return res.status(409).send({
@@ -56,7 +56,7 @@ app.get('/api/schedule/:day', async (req, res) => {
     res.status(200).send(data.data().schedule);
 });
 
-app.get('/api/calendar', async (_, res) => {
+app.get('/api/calendar', async (_, response) => {
     var data = await readData("app", "daily");
     var invalid = checkForBadData(data);
     if(invalid) return res.status(409).send({
@@ -68,7 +68,7 @@ app.get('/api/calendar', async (_, res) => {
 
 // called by frontend on startup
 // just throw all the data at the app
-app.get('/api/startup', async (_, res) => {
+app.get('/api/startup', async (_, response) => {
     const data = await readData("app", "daily");
     var invalid = checkForBadData(data);
     if(invalid) return res.status(409).send({
@@ -80,14 +80,14 @@ app.get('/api/startup', async (_, res) => {
 
 // called by https://uptimerobot.com every 12h at 6am + 6pm
 // I didn't want to wake up at 5am and set the interval to 24h
-app.use('/api/poll', async (_, res) => {
+app.use('/api/poll', async (_, response) => {
     await startServerToday();
     res.status(200).send({ status: "ok" });
 });
 
-app.post("/api/register", async (req, res) => {
+app.post("/api/register", async (request, response) => {
     // TODO: require token
-    const body = req.body;
+    const body = request.body;
     console.log(body);
     const email = body.email;
     const displayName = body.displayName;
@@ -107,8 +107,8 @@ app.post("/api/register", async (req, res) => {
     res.status(200).send(obj);
 });
 
-app.post("/api/login", async (req, res) => {
-    const { email, password } = req.body;
+app.post("/api/login", async (request, response) => {
+    const { email, password } = request.body;
     console.log("logging in user " + email + " with password " + password);
     const result = await loginUser(email, password);
     if(result.status == 200){
@@ -131,7 +131,7 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-app.get('/', (_, res) => {
+app.get('/', (_, response) => {
     res.status(200).send("Server status: runnning");
 });
 
