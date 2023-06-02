@@ -59,7 +59,7 @@ const LoginPage = () => {
         const json = await response.json();
         console.log(json);
         setLoading(false);
-        if(response.status == 200){
+        if(response.status == 200 && json.error == null){
             console.log(json);
             setUserData(json);
             return;

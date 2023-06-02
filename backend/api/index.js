@@ -87,7 +87,11 @@ app.use('/api/poll', async (_, res) => {
 
 app.post("/api/register", async (req, res) => {
     // TODO: require token
-    const { email, displayName, uid } = req.body;
+    const body = req.body;
+    const email = body.email;
+    const displayName = body.displayName;
+    const uid = body.uid;
+    const pfp = body.pfp;
     if(email == null || displayName == null || uid == null) return res.status(400).send({ error: "Missing required fields" });
     if(email.split("@")[1] != "pausd.us") return res.status(403).send({ error: "Email must be a PAUSD email" });
     console.log("received request to register user " + uid + " with email " + email + " and display name " + displayName + "");

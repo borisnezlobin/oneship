@@ -9,7 +9,7 @@ import { HashtagIcon } from "react-native-heroicons/solid";
 import LoginPage from "./Login";
 
 const SettingsPage = () => {
-    const {userData, setUserData } = useContext(UserDataContext);
+    const { userData, setUserData } = useContext(UserDataContext);
 
     if(userData == null){
         return <LoginPage />
