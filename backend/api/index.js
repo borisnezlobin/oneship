@@ -12,7 +12,7 @@ app.use(cors());
 app.get("/version", (_, response) => {
     // look at me using semver
     // correctly
-    res.status(200).send({
+    response.status(200).send({
         current: "0.0.0",
         min: "0.0.0",
         alpha: "0.0.1-alpha",
@@ -39,21 +39,21 @@ const getNews = async () => {
 app.get('/api/news', async (_, response) => {
     const data = await readData("app", "daily");
     var invalid = checkForBadData(data);
-    if(invalid) return res.status(409).send({
+    if(invalid) return response.status(409).send({
         error: "Data not in expected state",
         message: invalid
     });
-    res.status(200).send(data.data().news);
+    response.status(200).send(data.data().news);
 });
 
 app.get('/api/schedule/:day', async (request, response) => {
     var data = await readData("app", "daily");
     var invalid = checkForBadData(data);
-    if(invalid) return res.status(409).send({
+    if(invalid) return response.status(409).send({
         error: "Data not in expected state",
         message: invalid
     });
-    res.status(200).send(data.data().schedule);
+    response.status(200).send(data.data().schedule);
 });
 
 app.get('/api/calendar', async (_, response) => {
@@ -63,7 +63,7 @@ app.get('/api/calendar', async (_, response) => {
         error: "Data not in expected state",
         message: invalid
     });
-    res.status(200).send(data.data().calendar);
+    response.status(200).send(data.data().calendar);
 });
 
 // called by frontend on startup
@@ -71,18 +71,18 @@ app.get('/api/calendar', async (_, response) => {
 app.get('/api/startup', async (_, response) => {
     const data = await readData("app", "daily");
     var invalid = checkForBadData(data);
-    if(invalid) return res.status(409).send({
+    if(invalid) return response.status(409).send({
         error: "Data not in expected state",
         message: invalid
     });
-    res.status(200).send(data.data());
+    response.status(200).send(data.data());
 });
 
 // called by https://uptimerobot.com every 12h at 6am + 6pm
 // I didn't want to wake up at 5am and set the interval to 24h
 app.use('/api/poll', async (_, response) => {
     await startServerToday();
-    res.status(200).send({ status: "ok" });
+    response.status(200).send({ status: "ok" });
 });
 
 app.post("/api/register", async (request, response) => {
@@ -93,8 +93,8 @@ app.post("/api/register", async (request, response) => {
     const displayName = body.displayName;
     const uid = body.uid;
     const pfp = body.pfp;
-    if(email == null || displayName == null || uid == null) return res.status(400).send({ error: "Missing required fields" });
-    if(email.split("@")[1] != "pausd.us") return res.status(403).send({ error: "Email must be a PAUSD email" });
+    if(email == null || displayName == null || uid == null) return response.status(400).send({ error: "Missing required fields" });
+    if(email.split("@")[1] != "pausd.us") return response.status(403).send({ error: "Email must be a PAUSD email" });
     console.log("received request to register user " + uid + " with email " + email + " and display name " + displayName + "");
     var obj = {
         email,
@@ -104,7 +104,7 @@ app.post("/api/register", async (request, response) => {
         ...DEFAULT_SETTINGS
     };
     await writeData("users", uid, obj);
-    res.status(200).send(obj);
+    response.status(200).send(obj);
 });
 
 app.post("/api/login", async (request, response) => {
@@ -114,25 +114,25 @@ app.post("/api/login", async (request, response) => {
     if(result.status == 200){
         const userData = await readData("users", result.message.localId);
         if(userData.exists){
-            res.status(200).send({
+            response.status(200).send({
                 data: userData.data(),
                 token: result.idToken,
                 refreshToken: result.refreshToken
             });
         }else{
-            res.status(500).send({
+            response.status(500).send({
                 error: "User with id " + result.message.localId + " does not exist in the database",
             });
         }
     }else{
-        res.status(result.status).send({
+        response.status(result.status).send({
             error: result.message,
         });
     }
 });
 
 app.get('/', (_, response) => {
-    res.status(200).send("Server status: runnning");
+    response.status(200).send("Server status: runnning");
 });
 
 app.listen(8080, () => {
