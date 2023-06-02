@@ -3,8 +3,9 @@ const app = express();
 import cors from 'cors';
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
-import { readData, writeData } from './db.js';
+import { DEFAULT_SETTINGS, readData, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
+import { loginUser } from './auth.js';
 
 app.use(cors());
 
@@ -82,6 +83,47 @@ app.get('/api/startup', async (_, res) => {
 app.use('/api/poll', async (_, res) => {
     await startServerToday();
     res.status(200).send({ status: "ok" });
+});
+
+app.post("/api/register", async (req, res) => {
+    // TODO: require token
+    const { email, displayName, uid } = req.body;
+    if(email == null || displayName == null || uid == null) return res.status(400).send({ error: "Missing required fields" });
+    if(email.split("@")[1] != "pausd.us") return res.status(403).send({ error: "Email must be a PAUSD email" });
+    console.log("received request to register user " + uid + " with email " + email + " and display name " + displayName + "");
+    var obj = {
+        email,
+        displayName,
+        uid,
+        pfp,
+        ...DEFAULT_SETTINGS
+    };
+    await writeData("users", uid, obj);
+    res.status(200).send(obj);
+});
+
+app.post("/api/login", async (req, res) => {
+    const { email, password } = req.body;
+    console.log("logging in user " + email + " with password " + password);
+    const result = await loginUser(email, password);
+    if(result.status == 200){
+        const userData = await readData("users", result.message.localId);
+        if(userData.exists){
+            res.status(200).send({
+                data: userData.data(),
+                token: result.idToken,
+                refreshToken: result.refreshToken
+            });
+        }else{
+            res.status(500).send({
+                error: "User with id " + result.message.localId + " does not exist in the database",
+            });
+        }
+    }else{
+        res.status(result.status).send({
+            error: result.message,
+        });
+    }
 });
 
 app.get('/', (_, res) => {

@@ -13,7 +13,16 @@ const SUCCESS_TOAST_STYLES = {
     }
 }
 
+const ERROR_TOAST_STYLES = {
+    style: {
+        backgroundColor: "#990000",
+        fontWeight: "normal",
+        color: "white",
+        padding: "8px 32px"
+    }
+}
+
 export default CONFIG;
 export {
-    SUCCESS_TOAST_STYLES
+    SUCCESS_TOAST_STYLES, ERROR_TOAST_STYLES
 }

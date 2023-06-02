@@ -34,10 +34,16 @@ const SchedulePage = () => {
         );
     }
 
+    var start = schedule.value[0].start;
+    var prevStart = start;
+    var end = schedule.value[schedule.value.length - 1].end;
+
     return (
-        <SafeAreaView style={tailwind("bg-white w-full h-full flex flex-col justify-center items-center")}>
+        <SafeAreaView style={tailwind("bg-white w-full h-full")}>
             {schedule.value.map((period, index) => {
-                return (<ScheduleItem key={index} period={period} />)
+                var temp = prevStart;
+                prevStart = period.end;
+                return (<ScheduleItem key={index} period={period} prevStart={temp} start={start} end={end} />)
             })}
         </SafeAreaView>
     );

@@ -13,6 +13,7 @@ import CalendarPage from "./pages/CalendarPage";
 import DownloadPage from "./pages/DownloadPage";
 import useDimensions from "./util/rerenderOnResize.hook";
 import { WifiX } from "phosphor-react";
+import Register from "./pages/Register";
 
 function App() {
   const dimensions = useDimensions();
@@ -132,6 +133,8 @@ function App() {
             <Route path="/download" element={<DownloadPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/barcode" element={<BarcodePage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/signup" element={<Register />} />
           </Routes>
         </CalendarContext.Provider>
       </ScheduleContext.Provider>

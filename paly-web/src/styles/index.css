@@ -156,3 +156,14 @@ body{
 .fc-today-button.fc-button-primary:disabled{
   display: none;
 }
+
+input{
+  border: none;
+  border-bottom: 1px solid var(--green);
+  background-color: transparent;
+  color: var(--green);
+  font-size: 24px;
+  padding: 4px;
+  margin: 4px;
+  width: 100%;
+}

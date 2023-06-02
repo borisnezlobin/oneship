@@ -1,7 +1,51 @@
-// require firestore
 import admin from 'firebase-admin';
 
-// initialize firestore
+const DEFAULT_SETTINGS = {
+    "grade": null,
+    "show0": false,
+    '0 Period': {
+        "customName": "0 Period",
+        "teacher": null,
+        "room": null,
+    },
+    '1st Period': {
+        "customName": "1 Period",
+        "teacher": null,
+        "room": null,
+    },
+    '2nd Period': {
+        "customName": "2 Period",
+        "teacher": null,
+        "room": null,
+    },
+    '3rd Period': {
+        "customName": "3 Period",
+        "teacher": null,
+        "room": null,
+
+    },
+    '4th Period': {
+        "customName": "4 Period",
+        "teacher": null,
+        "room": null,
+    },
+    '5th Period': {
+        "customName": "5 Period",
+        "teacher": null,
+        "room": null,
+    },
+    '6th Period': {
+        "customName": "6 Period",
+        "teacher": null,
+        "room": null,
+    },
+    '7th Period': {
+        "customName": "7 Period",
+        "teacher": null,
+        "room": null,
+    },
+}
+
 admin.initializeApp({
     credential: admin.credential.cert(
         JSON.parse(process.env.ADMIN_SDK)
@@ -21,4 +65,4 @@ const readData = async (collection, document) => {
     return await db.collection(collection).doc(document).get();
 }
 
-export { writeData, readData };
+export { writeData, readData, DEFAULT_SETTINGS };

@@ -8,7 +8,7 @@ function TabBar({ state, descriptors, navigation }) {
     <View style={[
         tailwind("w-full bg-white flex flex-row justify-around items-center"),
         {
-            paddingBottom: useSafeAreaInsets().bottom,
+            // paddingBottom: useSafeAreaInsets().bottom,
             height: 64 + useSafeAreaInsets().bottom,
         }
     ]}>
