@@ -69,13 +69,17 @@ app.get('/api/calendar', async (_, response) => {
 // called by frontend on startup
 // just throw all the data at the app
 app.get('/api/startup', async (_, response) => {
-    const data = await readData("app", "daily");
+    var data = await readData("app", "daily");
     var invalid = checkForBadData(data);
     if(invalid) return response.status(409).send({
         error: "Data not in expected state",
         message: invalid
     });
-    response.status(200).send(data.data());
+    data = data.data();
+    console.log("sending startup data");
+    console.log("calendar: " + data.calendar.length + " events" + " | schedule: " + data.schedule.value.length + " periods" + " | news: " + data.news.length + " publications");
+    console.log("data lastUpdate: " + data.lastUpdate + " | today: " + getTodayInFunnyFormat());
+    response.status(200).send(data);
 });
 
 // called by https://uptimerobot.com every 12h at 6am + 6pm

@@ -17,8 +17,11 @@ const SettingsPage = () => {
 
     return (
         <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
-            <Text style={[tailwind("font-bold"), { color: CONFIG.green}]}>
+            <Text style={[tailwind("font-bold text-lg"), { color: CONFIG.green}]}>
                 Settings Page
+            </Text>
+            <Text>
+                {JSON.stringify(userData)}
             </Text>
         </SafeAreaView>
     );

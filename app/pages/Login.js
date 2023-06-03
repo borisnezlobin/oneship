@@ -8,6 +8,7 @@ import NiceButton from "../components/NiceButton";
 import { HashtagIcon } from "react-native-heroicons/solid";
 import NiceInput from "../components/NiceInput";
 import { openBrowserAsync } from "expo-web-browser";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginPage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
@@ -47,23 +48,28 @@ const LoginPage = () => {
             CONFIG.serverURL + "api/login?email=" + email + "&password=" + password, {
             method: "POST"
         }).catch(err => {
-            console.log(err);
+            console.log("Error logging in user: " + err);
             setLoading(false);
         });
         const text = await response.text();
         try {
+            console.log("server response: " + text);
             const json = JSON.parse(text);
-            console.log(json);
             setLoading(false);
             if(response.status == 200 && json.error == null){
-                console.log(json);
                 setUserData(json);
+                console.log("saving user data + login to async storage");
+                AsyncStorage.setItem("not_sketchy", JSON.stringify({
+                    email: email,
+                    password: password
+                }));
+                AsyncStorage.setItem("user_data", JSON.stringify(json));
                 return;
             }else{
                 // show error toast
             }
         } catch (e) {
-            console.log("couldn't parse json from " + text);
+            console.log("Error: " + e);
             setLoading(false);
         }
     }
