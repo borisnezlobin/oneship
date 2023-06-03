@@ -42,23 +42,67 @@ export default function App() {
     const getStartupData = async () => {
       console.log(CONFIG.serverURL + "api/startup");
       const response = await fetch(CONFIG.serverURL + "api/startup");
-      const data = await response.json();
-      setCalendar(data.calendar);
+      var data = await response.text();
+      try{
+        data = JSON.parse(data);
+        setCalendar(data.calendar);
 
-      var today = new Date();
-      today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + (today.getDate() < 9 ? "0" : "") + today.getDate();
-      if(schedule == null || schedule.date != today){
-        setSchedule(data.schedule);
-        await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
+        var today = new Date();
+        today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + (today.getDate() < 9 ? "0" : "") + today.getDate();
+        if(schedule == null || schedule.date != today){
+          setSchedule(data.schedule);
+          await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
+        }
+        
+        setNews(data.news);
+      }catch(e){
+        console.log("error: " + e);
+        console.log("couldn't parse startup data json from " + data);
       }
-      
-      setNews(data.news);
     }
     const getScheduleFromStorage = async () => {
       const schedule = await AsyncStorage.getItem("schedule");
       if(schedule != null) setSchedule(JSON.parse(schedule));
     }
 
+    const getUserData = async () => {
+      // last saved user data
+      const user_data = await AsyncStorage.getItem("user_data");
+      console.log("user_data: " + user_data);
+      if(user_data != null && userData == null) try{
+        setUserData(JSON.parse(user_data));
+      }catch(e){
+        console.log("couldn't parse user_data json from " + user_data);
+      }
+
+      // get most up-to-date user data
+      const not_sketchy = await AsyncStorage.getItem("not_sketchy");
+      console.log("not_sketchy: " + not_sketchy);
+      if(not_sketchy == null) return;
+      try{
+        not_sketchy = JSON.parse(not_sketchy);
+      }catch(e){
+        console.log("couldn't parse not_sketchy json from " + not_sketchy);
+        return;
+      }
+      
+      // enencrypted passwords in the url
+      // whatever
+      const response = await fetch(CONFIG.serverURL + "api/login?email=" + not_sketchy.email + "&password=" + not_sketchy.password, {
+        method: "POST",
+      });
+      const text = await response.text();
+      console.log("got newest user data: " + text);
+      try{
+        AsyncStorage.setItem("user_data", text);
+        const data = JSON.parse(text);
+        setUserData(data);
+      }catch(e){
+        console.log("couldn't parse server response json from " + text);
+      }
+    }
+    AsyncStorage.clear();
+    getUserData();
     getScheduleFromStorage();
     getStartupData();
   }, []);

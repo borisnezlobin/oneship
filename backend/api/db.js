@@ -9,38 +9,38 @@ const DEFAULT_SETTINGS = {
         "room": null,
     },
     '1st Period': {
-        "customName": "1 Period",
+        "customName": "1st Period",
         "teacher": null,
         "room": null,
     },
     '2nd Period': {
-        "customName": "2 Period",
+        "customName": "2nd Period",
         "teacher": null,
         "room": null,
     },
     '3rd Period': {
-        "customName": "3 Period",
+        "customName": "3rd Period",
         "teacher": null,
         "room": null,
 
     },
     '4th Period': {
-        "customName": "4 Period",
+        "customName": "4th Period",
         "teacher": null,
         "room": null,
     },
     '5th Period': {
-        "customName": "5 Period",
+        "customName": "5th Period",
         "teacher": null,
         "room": null,
     },
     '6th Period': {
-        "customName": "6 Period",
+        "customName": "6th Period",
         "teacher": null,
         "room": null,
     },
     '7th Period': {
-        "customName": "7 Period",
+        "customName": "7th Period",
         "teacher": null,
         "room": null,
     },
