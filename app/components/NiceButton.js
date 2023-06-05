@@ -2,7 +2,7 @@ import { TouchableOpacity, View } from "react-native"
 import tailwind from "tailwind-rn"
 import { CONFIG } from "../util/config"
 
-const NiceButton = ({ cb, children }) => {
+const NiceButton = ({ cb, children, style }) => {
     return (
         <TouchableOpacity onPress={cb}>
             <View style={[
@@ -19,6 +19,7 @@ const NiceButton = ({ cb, children }) => {
                     shadowRadius: 3.84,
                     elevation: 5,
                     gap: 12,
+                    ...style
                 }
             ]}>
                 {children}

@@ -1,15 +1,21 @@
-import { SafeAreaView, Text } from "react-native";
+import { Dimensions, SafeAreaView, ScrollView, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
-import { useContext } from "react";
-import { ScheduleContext } from "../util/contexts";
-import { AcademicCapIcon } from "react-native-heroicons/outline";
+import { useContext, useState } from "react";
+import { CalendarContext, ScheduleContext, UserDataContext } from "../util/contexts";
+import { AcademicCapIcon, BellSnoozeIcon } from "react-native-heroicons/outline";
 import ScheduleItem from "../components/ScheduleItem";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Tabs from "../components/Tabs";
+import CalendarPage from "./Calendar";
 
 const SchedulePage = () => {
+    const [page, setPage] = useState(0);
+    const { userData } = useContext(UserDataContext);
     const { schedule } = useContext(ScheduleContext);
+    const { calendar } = useContext(CalendarContext);
 
-    if(schedule == null){
+    if(schedule == null || calendar == null){
         return (
             <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
                 <Text style={[tailwind("font-bold"), { color: CONFIG.green}]}>
@@ -34,19 +40,129 @@ const SchedulePage = () => {
         );
     }
 
-    var start = schedule.value[0].start;
+    var show0Period = schedule.value[0].name == "0 Period" && userData.data.show0;
+    var start = show0Period ? schedule.value[0].start : schedule.value[1].start;
     var prevStart = start;
     var end = schedule.value[schedule.value.length - 1].end;
 
-    return (
-        <SafeAreaView style={tailwind("bg-white w-full h-full")}>
-            {schedule.value.map((period, index) => {
-                var temp = prevStart;
-                prevStart = period.end;
-                return (<ScheduleItem key={index} period={period} prevStart={temp} start={start} end={end} />)
-            })}
-        </SafeAreaView>
-    );
+    var eventsToday = [];
+    var niceCalendar = [];
+    var now = new Date();
+    for(var i = 0; i < calendar.length; i++){
+        var event = calendar[i];
+        var eventStart = dateFromString(event.start);
+        var eventEnd = dateFromString(event.end);
+        // r/badcode but idgaf
+        if(eventEnd.getHours() == 0) eventEnd.setHours(23, 59, 59, 999);
+        // some events are recurring, so we need to check if the event is today
+        const obj = {
+            event: event,
+            start: eventStart,
+            end: eventEnd
+        };
+        if(eventStart <= now && eventEnd >= now) eventsToday.push(obj);
+        niceCalendar.push(obj);
+    }
+
+    const tabs = <Tabs
+        tabs={["Schedule", "Events", "Calendar"]}
+        cb={setPage}
+        current={page}
+        style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+        }}
+    />;
+
+    if(page == 0){
+        return (
+            <SafeAreaView style={[
+                tailwind("bg-white w-full"),
+                {
+                    height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                }
+            ]}>
+                <View style={tailwind("")}>
+                    {schedule.value.map((period, index) => {
+                        if(!userData.data.show0 && period.name == "0 Period") return null;
+                        var temp = prevStart;
+                        prevStart = period.end;
+                        return (<ScheduleItem key={index} period={period} prevStart={temp} start={start} end={end} />)
+                    })}
+                </View>
+                {tabs}
+            </SafeAreaView>
+        );
+    }else if(page == 1){
+        return (
+            <SafeAreaView style={[
+                tailwind("bg-white w-full"),
+                {
+                    height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                }
+            ]}>
+            {eventsToday.length != 0 ? (
+                <ScrollView style={tailwind("w-full h-full")}>
+                    {eventsToday.map((event, index) => {
+                        if(event.event.summary == undefined) return;
+                        if(event.event.summary.includes("Schedule")) return null;
+                        if(event.event.summary.includes("Schdule")) return null;
+                        if(event.event.summary.includes("Minimum Day")) return null;
+                        var isAllDay = event.start.getHours() == 0 && event.start.getMinutes() == 0 && event.start.getSeconds() == 0;
+                        return (
+                            <View key={index} style={tailwind("w-full px-4 py-2")}>
+                                <Text style={[tailwind("font-bold text-2xl"), { color: CONFIG.green }]}>
+                                    {event.event.summary}
+                                </Text>
+                                <Text style={[tailwind("text-lg"), { color: CONFIG.text }]}>
+                                    {isAllDay ? "All Day" : event.start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + " - " + event.end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                </Text>
+                                <Text style={[tailwind("text-lg"), { color: CONFIG.text }]}>
+                                    {event.event.description}
+                                </Text>
+                            </View>
+                        );
+                    })}
+                </ScrollView>
+            ) : (
+                <View style={tailwind("w-full h-full flex justify-center items-center")}>
+                    <BellSnoozeIcon color={CONFIG.green} size={100} style={tailwind("mb-4")} />
+                    <Text style={[tailwind("text-2xl font-bold"), { color: CONFIG.green}]}>
+                        No Events Today
+                    </Text>
+                </View>
+            )}
+                {tabs}
+            </SafeAreaView>
+        );
+    }else if(page == 2){
+        return (
+            <SafeAreaView style={[
+                tailwind("bg-white w-full"),
+                {
+                    height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                }
+            ]}>
+                <CalendarPage calendar={niceCalendar} />
+                {tabs}
+            </SafeAreaView>
+        );
+    }
+}
+
+const dateFromString = (dateString) => {
+    // format: yyyymmddThhmmss
+
+    var year = dateString.substring(0, 4);
+    var month = dateString.substring(4, 6);
+    var day = dateString.substring(6, 8);
+    if(dateString.length == 8) return new Date(year, month, day, 0, 0, 0);
+
+    var hour = dateString.substring(9, 11);
+    var minute = dateString.substring(11, 13);
+    var second = dateString.substring(13, 15);
+    return new Date(year, month, day, hour, minute, second);
 }
 
 export default SchedulePage;
