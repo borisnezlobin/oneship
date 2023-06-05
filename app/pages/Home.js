@@ -1,12 +1,15 @@
 import { SafeAreaView, Text } from "react-native";
 import tailwind from "tailwind-rn";
-import { CONFIG } from "../util/config";
-import { useContext } from "react";
+import { CONFIG, ERROR_TOAST, SUCCESS_TOAST } from "../util/config";
+import { useContext, useEffect } from "react";
 import { UserDataContext } from "../util/contexts";
 import LoginPage from "./Login";
+import Toast from 'react-native-root-toast';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const HomePage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
+    const insets = useSafeAreaInsets();
 
     if(userData == null){
         return <LoginPage />

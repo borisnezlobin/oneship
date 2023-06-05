@@ -3,7 +3,7 @@ const app = express();
 import cors from 'cors';
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
-import { DEFAULT_SETTINGS, readData, writeData } from './db.js';
+import { DEFAULT_SETTINGS, createMessage, getMessagesForUser, readData, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser } from './auth.js';
 
@@ -59,7 +59,7 @@ app.get('/api/schedule/:day', async (request, response) => {
 app.get('/api/calendar', async (_, response) => {
     var data = await readData("app", "daily");
     var invalid = checkForBadData(data);
-    if(invalid) return res.status(409).send({
+    if(invalid) return response.status(409).send({
         error: "Data not in expected state",
         message: invalid
     });
@@ -69,17 +69,23 @@ app.get('/api/calendar', async (_, response) => {
 // called by frontend on startup
 // just throw all the data at the app
 app.get('/api/startup', async (_, response) => {
-    var data = await readData("app", "daily");
-    var invalid = checkForBadData(data);
-    if(invalid) return response.status(409).send({
-        error: "Data not in expected state",
-        message: invalid
-    });
-    data = data.data();
-    console.log("sending startup data");
-    console.log("calendar: " + data.calendar.length + " events" + " | schedule: " + data.schedule.value.length + " periods" + " | news: " + data.news.length + " publications");
-    console.log("data lastUpdate: " + data.lastUpdate + " | today: " + getTodayInFunnyFormat());
-    response.status(200).send(data);
+    try{
+        var data = await readData("app", "daily");
+        var invalid = checkForBadData(data);
+        if(invalid) return response.status(409).send({
+            error: "Data not in expected state",
+            message: invalid
+        });
+        data = data.data();
+        console.log("sending startup data");
+        console.log("calendar: " + data.calendar.length + " events" + " | schedule: " + data.schedule.value.length + " periods" + " | news: " + data.news.length + " publications");
+        console.log("data lastUpdate: " + data.lastUpdate + " | today: " + getTodayInFunnyFormat());
+        response.status(200).send(data);
+    }catch(e){
+        console.log(e);
+        console.log("error sending startup data");
+        response.status(500).send({ error: e });
+    }
 });
 
 // called by https://uptimerobot.com every 12h at 6am + 6pm
@@ -111,8 +117,6 @@ app.post("/api/register", express.json(), async (request, response) => {
     response.status(200).send(obj);
 });
 
-// I tried to use request.body
-// but vercel just *has* to be special
 app.post("/api/login", async (request, response) => {
     const email = request.query.email;
     const password = request.query.password;
@@ -121,9 +125,11 @@ app.post("/api/login", async (request, response) => {
     const result = await loginUser(email, password);
     if(result.status == 200){
         const userData = await readData("users", result.message.localId);
+        const messages = await getMessagesForUser(result.message.localId);
         if(userData.exists){
             response.status(200).send({
                 data: userData.data(),
+                messages,
                 token: result.idToken,
                 refreshToken: result.refreshToken
             });
@@ -139,12 +145,18 @@ app.post("/api/login", async (request, response) => {
     }
 });
 
+app.post("/api/create-message", async (request, response) => {
+    const body = request.body;
+    const result = await createMessage(body);
+    response.status(result.status).send(result.message);
+});
+
 app.get('/', (_, response) => {
     response.status(200).send("Server status: runnning");
 });
 
-app.listen(8080, () => {
-    console.log("Listening on port 3000");
+app.listen(8000, () => {
+    console.log("Listening on port 8000");
 });
 
 const startServerToday = async () => {

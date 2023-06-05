@@ -2,13 +2,14 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import tailwind from 'tailwind-rn';
 import { CONFIG } from './config';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { PressableScale } from 'react-native-pressable-scale';
 
 function TabBar({ state, descriptors, navigation }) {
   return (
     <View style={[
         tailwind("w-full bg-white flex flex-row justify-around items-center"),
         {
-            // paddingBottom: useSafeAreaInsets().bottom,
+            // marginBottom: useSafeAreaInsets().bottom,
             height: 64 + useSafeAreaInsets().bottom,
         }
     ]}>
@@ -44,7 +45,8 @@ function TabBar({ state, descriptors, navigation }) {
         };
 
         return (
-          <TouchableOpacity
+          <PressableScale
+            activeScale={0.75}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -61,7 +63,7 @@ function TabBar({ state, descriptors, navigation }) {
             key={index}
           >
             {options.tabBarIcon({focused: isFocused})}
-          </TouchableOpacity>
+          </PressableScale>
         );
       })}
     </View>

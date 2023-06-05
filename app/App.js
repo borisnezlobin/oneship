@@ -1,7 +1,7 @@
 import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "./util/config";
-import { CalendarContext, ScheduleContext, UserDataContext } from "./util/contexts";
+import { CalendarContext, NewsContext, ScheduleContext, UserDataContext } from "./util/contexts";
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -27,6 +27,7 @@ import {
   HomeIcon as HomeOutline,
   NewspaperIcon as NewspaperOuline
 } from "react-native-heroicons/outline";
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const Tabs = createBottomTabNavigator();
 
@@ -45,15 +46,28 @@ export default function App() {
       var data = await response.text();
       try{
         data = JSON.parse(data);
+        if(data.error){
+          console.log("error: " + data.error);
+          // TODO: redirect to error screen
+          return;
+        }
         setCalendar(data.calendar);
 
         var today = new Date();
-        today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + (today.getDate() < 9 ? "0" : "") + today.getDate();
+        today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + today.getMonth() + (today.getDate() < 9 ? "0" : "") + today.getDate();
         if(schedule == null || schedule.date != today){
-          setSchedule(data.schedule);
-          await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
+          if(data.schedule != null){
+            setSchedule(data.schedule);
+            await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
+          }
+        }
+
+        if(data.calendar != null && calendar == null){
+          console.log("setting calendar: " + data.calendar);
+          setCalendar(data.calendar);
         }
         
+        console.log("setting news: " + data.news);
         setNews(data.news);
       }catch(e){
         console.log("error: " + e);
@@ -68,20 +82,21 @@ export default function App() {
     const getUserData = async () => {
       // last saved user data
       const user_data = await AsyncStorage.getItem("user_data");
-      console.log("user_data: " + user_data);
       if(user_data != null && userData == null) try{
         setUserData(JSON.parse(user_data));
       }catch(e){
+        console.log("error: " + e);
         console.log("couldn't parse user_data json from " + user_data);
       }
 
       // get most up-to-date user data
-      const not_sketchy = await AsyncStorage.getItem("not_sketchy");
+      var not_sketchy = await AsyncStorage.getItem("not_sketchy");
       console.log("not_sketchy: " + not_sketchy);
       if(not_sketchy == null) return;
       try{
         not_sketchy = JSON.parse(not_sketchy);
       }catch(e){
+        console.log("error: " + e);
         console.log("couldn't parse not_sketchy json from " + not_sketchy);
         return;
       }
@@ -92,81 +107,90 @@ export default function App() {
         method: "POST",
       });
       const text = await response.text();
-      console.log("got newest user data: " + text);
+      console.log("got newest user data");
       try{
         AsyncStorage.setItem("user_data", text);
         const data = JSON.parse(text);
         setUserData(data);
       }catch(e){
+        console.log("error: " + e);
         console.log("couldn't parse server response json from " + text);
       }
     }
-    AsyncStorage.clear();
+
     getUserData();
     getScheduleFromStorage();
     getStartupData();
   }, []);
 
   return (
-    <ScheduleContext.Provider value={{ schedule, setSchedule }}>
-      <UserDataContext.Provider value={{ userData, setUserData }}>
-        <StatusBar barStyle={"dark-content"} />
-        <NavigationContainer>
-          <Tabs.Navigator
-            screenOptions={{
-              headerShown: false
-            }}
-            initialRouteName="Home"
-            tabBar={props => <TabBar {...props} />}
-          >
-            <Tabs.Screen
-              name="Schedule"
-              component={SchedulePage}
-              options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                  focused ? <ClockIcon color={CONFIG.bg} /> : <ClockOutline color={CONFIG.text} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="ASB"
-              component={CalendarPage}
-              options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                  focused ? <ScaleIcon color={CONFIG.bg} /> : <ScaleOutline color={CONFIG.text} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="Home"
-              component={HomePage}
-              options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                  focused ? <HomeIcon color={CONFIG.bg} /> : <HomeOutline color={CONFIG.text} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="News"
-              component={NewsPage}
-              options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                  focused ? <NewspaperIcon color={CONFIG.bg} /> : <NewspaperOuline color={CONFIG.text} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="Settings"
-              component={SettingsPage}
-              options={{
-                tabBarIcon: ({ focused, color, size }) => (
-                  focused ? <Cog6ToothIcon color={CONFIG.bg} /> : <CogOutline color={CONFIG.text} />
-                ),
-              }}
-            />
-          </Tabs.Navigator>
-        </NavigationContainer>
-      </UserDataContext.Provider>
-    </ScheduleContext.Provider>
+    <RootSiblingParent>
+      <View style={tailwind("w-full h-full bg-white")}>
+        <ScheduleContext.Provider value={{ schedule, setSchedule }}>
+          <UserDataContext.Provider value={{ userData, setUserData }}>
+            <CalendarContext.Provider value={{ calendar, setCalendar }}>
+              <NewsContext.Provider value={{ news, setNews }}>
+                <StatusBar barStyle={"dark-content"} />
+                <NavigationContainer>
+                  <Tabs.Navigator
+                    screenOptions={{
+                      headerShown: false
+                    }}
+                    initialRouteName="Home"
+                    tabBar={props => <TabBar {...props} />}
+                  >
+                    <Tabs.Screen
+                      name="Schedule"
+                      component={SchedulePage}
+                      options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                          focused ? <ClockIcon color={CONFIG.bg} /> : <ClockOutline color={CONFIG.text} />
+                        ),
+                      }}
+                    />
+                    <Tabs.Screen
+                      name="ASB"
+                      component={CalendarPage}
+                      options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                          focused ? <ScaleIcon color={CONFIG.bg} /> : <ScaleOutline color={CONFIG.text} />
+                        ),
+                      }}
+                    />
+                    <Tabs.Screen
+                      name="Home"
+                      component={HomePage}
+                      options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                          focused ? <HomeIcon color={CONFIG.bg} /> : <HomeOutline color={CONFIG.text} />
+                        ),
+                      }}
+                    />
+                    <Tabs.Screen
+                      name="News"
+                      component={NewsPage}
+                      options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                          focused ? <NewspaperIcon color={CONFIG.bg} /> : <NewspaperOuline color={CONFIG.text} />
+                        ),
+                      }}
+                    />
+                    <Tabs.Screen
+                      name="Settings"
+                      component={SettingsPage}
+                      options={{
+                        tabBarIcon: ({ focused, color, size }) => (
+                          focused ? <Cog6ToothIcon color={CONFIG.bg} /> : <CogOutline color={CONFIG.text} />
+                        ),
+                      }}
+                    />
+                  </Tabs.Navigator>
+                </NavigationContainer>
+              </NewsContext.Provider>
+          </CalendarContext.Provider>
+          </UserDataContext.Provider>
+        </ScheduleContext.Provider>
+      </View>
+    </RootSiblingParent>
   );
 }
