@@ -1,7 +1,7 @@
 import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "./util/config";
-import { CalendarContext, NewsContext, ScheduleContext, UserDataContext } from "./util/contexts";
+import { CalendarContext, NewsContext, ScheduleContext, SportsContext, UserDataContext } from "./util/contexts";
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,11 +17,12 @@ import {
   ClockIcon,
   Cog6ToothIcon,
   HomeIcon,
-  NewspaperIcon
+  NewspaperIcon,
+  TrophyIcon
 } from "react-native-heroicons/solid";
 import {
   ScaleIcon as ScaleOutline,
-  CalendarDaysIcon as CalendarDaysOutline,
+  TrophyIcon as TrophyOutline,
   ClockIcon as ClockOutline,
   Cog6ToothIcon as CogOutline,
   HomeIcon as HomeOutline,
@@ -31,6 +32,7 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 import { TransitionPresets, createStackNavigator } from "@react-navigation/stack";
 import CustomModal from "./pages/CustomModal";
 import { setNotificationForClasses } from "./util/functions";
+import SportsPage from "./pages/Sports";
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -138,22 +140,24 @@ export default function App() {
           <UserDataContext.Provider value={{ userData, setUserData }}>
             <CalendarContext.Provider value={{ calendar, setCalendar }}>
               <NewsContext.Provider value={{ news, setNews }}>
-                <StatusBar barStyle={"dark-content"} />
-                <NavigationContainer>
-                  <Stack.Navigator
-                    screenOptions={{
-                      cardStyle: { backgroundColor: "transparent" },
-                      headerShown: false,
-                      // make screens slide in from the bottom
-                      gestureEnabled: false,
-                      gestureDirection: "vertical",
-                      ...TransitionPresets.ModalSlideFromBottomIOS,
-                    }}
-                  >
-                    <Stack.Screen name="Main" component={TabNavigator} />
-                    <Stack.Screen name="Modal" component={CustomModal} />
-                  </Stack.Navigator>
-                </NavigationContainer>
+                <SportsContext.Provider value={{ sports, setSports }}>
+                  <StatusBar barStyle={"dark-content"} />
+                  <NavigationContainer>
+                    <Stack.Navigator
+                      screenOptions={{
+                        cardStyle: { backgroundColor: "transparent" },
+                        headerShown: false,
+                        // make screens slide in from the bottom
+                        gestureEnabled: false,
+                        gestureDirection: "vertical",
+                        ...TransitionPresets.ModalSlideFromBottomIOS,
+                      }}
+                    >
+                      <Stack.Screen name="Main" component={TabNavigator} />
+                      <Stack.Screen name="Modal" component={CustomModal} />
+                    </Stack.Navigator>
+                  </NavigationContainer>
+                </SportsContext.Provider>
               </NewsContext.Provider>
           </CalendarContext.Provider>
           </UserDataContext.Provider>
@@ -182,11 +186,11 @@ const TabNavigator = ({ navigation }) => {
         }}
       />
       <Tabs.Screen
-        name="ASB"
-        component={CalendarPage}
+        name="Sports"
+        component={SportsPage}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
-            focused ? <ScaleIcon color={CONFIG.bg} /> : <ScaleOutline color={CONFIG.text} />
+            focused ? <TrophyIcon color={CONFIG.bg} /> : <TrophyOutline color={CONFIG.text} />
           ),
         }}
       />
