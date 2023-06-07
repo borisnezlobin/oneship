@@ -46,6 +46,7 @@ app.get('/api/news', async (_, response) => {
     response.status(200).send(data.data().news);
 });
 
+// bro chi minh oh well
 app.get('/api/schedule/:day', async (request, response) => {
     var data = await readData("app", "daily");
     var invalid = checkForBadData(data);
@@ -125,8 +126,8 @@ app.post("/api/login", async (request, response) => {
     const result = await loginUser(email, password);
     if(result.status == 200){
         const userData = await readData("users", result.message.localId);
-        const messages = await getMessagesForUser(result.message.localId);
         if(userData.exists){
+            const messages = await getMessagesForUser(userData.data());
             response.status(200).send({
                 data: userData.data(),
                 messages,
@@ -153,10 +154,6 @@ app.post("/api/create-message", async (request, response) => {
 
 app.get('/', (_, response) => {
     response.status(200).send("Server status: runnning");
-});
-
-app.listen(8000, () => {
-    console.log("Listening on port 8000");
 });
 
 const startServerToday = async () => {

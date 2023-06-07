@@ -15,7 +15,7 @@ const one = {key: 'one', color: "#949394"};
 const two = {key: 'two', color: '#464646'};
 const three = {key: 'three', color: '#343334'};
 
-const CalendarPage = ({ calendar }) => {
+const CalendarPage = ({ calendar, navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState(null);
     const [modalTitle, setModalTitle] = useState(null);
@@ -83,28 +83,22 @@ const CalendarPage = ({ calendar }) => {
                         });
                         return;
                     }
-                    setModalTitle("Events on " + day.day + "/" + day.month + "/" + day.year)
-                    setModalContent(
-                        <View style={[
-                            tailwind("bg-white flex flex-col justify-start items-start h-full w-full rounded-lg p-4"),
-                            { top: 36 + insets.top}
-                        ]}>
-                            {events.map(event => {
-                                var isAllDay = event.start.getHours() == 0 && event.start.getMinutes() == 0 && event.start.getMilliseconds() == 0;
-                                return (
-                                    <View style={tailwind("w-full mt-2")} key={event.event.uid}>
-                                        <Text style={tailwind("text-lg font-semibold")}>
-                                            {event.event.summary}
-                                        </Text>
-                                        <Text style={tailwind("text-lg")}>
-                                            {isAllDay ? "All day" : event.start.getHours() + ":" + (event.start.getMinutes() < 10 ? "0" : "") + event.start.getMinutes() + " - " + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end.getMinutes()}
-                                        </Text>
-                                    </View>
-                                );
-                            })}
-                        </View>
+                    var body = "";
+                    for(var i = 0; i < events.length; i++){
+                        var event = events[i];
+                        var isAllDay = event.start.getHours() == 0 && event.start.getMinutes() == 0 && event.start.getMilliseconds() == 0;
+                        body += "##" + event.event.summary + "\n" +
+                            (isAllDay ? "All day" : event.start.getHours() + ":" + (event.start.getMinutes() < 10 ? "0" : "") + event.start.getMinutes() + " - " + event.end.getHours() + ":" + (event.end.getMinutes() < 10 ? "0" : "") + event.end.getMinutes())
+                            + "\n" + event.event.description + "\n|\n";
+                    }
+                    navigation.navigate(
+                        "Modal", {
+                            title: "Events on " + day.day + "/" + day.month + "/" + day.year,
+                            isMarkdown: true,
+                            body: body,
+                            image: "event"
+                        }
                     );
-                    setModalVisible(true);
                 }}
                 pastScrollRange={4}
                 futureScrollRange={4}
@@ -125,11 +119,11 @@ const CalendarPage = ({ calendar }) => {
 
 const getEventsOnDay = (timestamp, calendar) => {
     timestamp = timestamp + 1;
-    console.log(new Date(timestamp));
+    timestamp = new Date(timestamp);
     var events = [];
     for(var i = 0; i < calendar.length; i++){
         var event = calendar[i];
-        if(event.start <= timestamp && event.end >= timestamp){
+        if(event.start.getFullYear() <= timestamp.getFullYear() && event.start.getMonth() <= timestamp.getMonth() && event.start.getDate() <= timestamp.getDate() && event.end.getFullYear() >= timestamp.getFullYear() && event.end.getMonth() >= timestamp.getMonth() && event.end.getDate() >= timestamp.getDate()){
             events.push(event);
         }
     }

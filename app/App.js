@@ -28,8 +28,12 @@ import {
   NewspaperIcon as NewspaperOuline
 } from "react-native-heroicons/outline";
 import { RootSiblingParent } from 'react-native-root-siblings';
+import { TransitionPresets, createStackNavigator } from "@react-navigation/stack";
+import CustomModal from "./pages/CustomModal";
+import { setNotificationForClasses } from "./util/functions";
 
 const Tabs = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   const [schedule, setSchedule] = useState(null);
@@ -46,6 +50,10 @@ export default function App() {
       var data = await response.text();
       try{
         data = JSON.parse(data);
+        if(data == null){
+          console.log("error: data is null");
+          return;
+        }
         if(data.error){
           console.log("error: " + data.error);
           // TODO: redirect to error screen
@@ -54,16 +62,16 @@ export default function App() {
         setCalendar(data.calendar);
 
         var today = new Date();
-        today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + today.getMonth() + (today.getDate() < 9 ? "0" : "") + today.getDate();
+        today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + (today.getDate() < 9 ? "0" : "") + today.getDate();
         if(schedule == null || schedule.date != today){
           if(data.schedule != null){
             setSchedule(data.schedule);
+            setNotificationForClasses(data.schedule);
             await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
           }
         }
 
         if(data.calendar != null && calendar == null){
-          console.log("setting calendar: " + data.calendar);
           setCalendar(data.calendar);
         }
         
@@ -132,59 +140,19 @@ export default function App() {
               <NewsContext.Provider value={{ news, setNews }}>
                 <StatusBar barStyle={"dark-content"} />
                 <NavigationContainer>
-                  <Tabs.Navigator
+                  <Stack.Navigator
                     screenOptions={{
-                      headerShown: false
+                      cardStyle: { backgroundColor: "transparent" },
+                      headerShown: false,
+                      // make screens slide in from the bottom
+                      gestureEnabled: false,
+                      gestureDirection: "vertical",
+                      ...TransitionPresets.ModalSlideFromBottomIOS,
                     }}
-                    initialRouteName="Home"
-                    tabBar={props => <TabBar {...props} />}
                   >
-                    <Tabs.Screen
-                      name="Schedule"
-                      component={SchedulePage}
-                      options={{
-                        tabBarIcon: ({ focused, color, size }) => (
-                          focused ? <ClockIcon color={CONFIG.bg} /> : <ClockOutline color={CONFIG.text} />
-                        ),
-                      }}
-                    />
-                    <Tabs.Screen
-                      name="ASB"
-                      component={CalendarPage}
-                      options={{
-                        tabBarIcon: ({ focused, color, size }) => (
-                          focused ? <ScaleIcon color={CONFIG.bg} /> : <ScaleOutline color={CONFIG.text} />
-                        ),
-                      }}
-                    />
-                    <Tabs.Screen
-                      name="Home"
-                      component={HomePage}
-                      options={{
-                        tabBarIcon: ({ focused, color, size }) => (
-                          focused ? <HomeIcon color={CONFIG.bg} /> : <HomeOutline color={CONFIG.text} />
-                        ),
-                      }}
-                    />
-                    <Tabs.Screen
-                      name="News"
-                      component={NewsPage}
-                      options={{
-                        tabBarIcon: ({ focused, color, size }) => (
-                          focused ? <NewspaperIcon color={CONFIG.bg} /> : <NewspaperOuline color={CONFIG.text} />
-                        ),
-                      }}
-                    />
-                    <Tabs.Screen
-                      name="Settings"
-                      component={SettingsPage}
-                      options={{
-                        tabBarIcon: ({ focused, color, size }) => (
-                          focused ? <Cog6ToothIcon color={CONFIG.bg} /> : <CogOutline color={CONFIG.text} />
-                        ),
-                      }}
-                    />
-                  </Tabs.Navigator>
+                    <Stack.Screen name="Main" component={TabNavigator} />
+                    <Stack.Screen name="Modal" component={CustomModal} />
+                  </Stack.Navigator>
                 </NavigationContainer>
               </NewsContext.Provider>
           </CalendarContext.Provider>
@@ -192,5 +160,63 @@ export default function App() {
         </ScheduleContext.Provider>
       </View>
     </RootSiblingParent>
+  );
+}
+
+const TabNavigator = ({ navigation }) => {
+  return (
+    <Tabs.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+      initialRouteName="Home"
+      tabBar={props => <TabBar {...props} />}
+    >
+      <Tabs.Screen
+        name="Schedule"
+        component={SchedulePage}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            focused ? <ClockIcon color={CONFIG.bg} /> : <ClockOutline color={CONFIG.text} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ASB"
+        component={CalendarPage}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            focused ? <ScaleIcon color={CONFIG.bg} /> : <ScaleOutline color={CONFIG.text} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Home"
+        component={HomePage}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            focused ? <HomeIcon color={CONFIG.bg} /> : <HomeOutline color={CONFIG.text} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="News"
+        component={NewsPage}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            focused ? <NewspaperIcon color={CONFIG.bg} /> : <NewspaperOuline color={CONFIG.text} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Settings"
+        component={SettingsPage}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            focused ? <Cog6ToothIcon color={CONFIG.bg} /> : <CogOutline color={CONFIG.text} />
+          ),
+        }}
+      />
+    </Tabs.Navigator>
   );
 }

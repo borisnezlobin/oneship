@@ -79,7 +79,7 @@ const getMessagesForUser = async (userData) => {
     messages = messages.sort((a, b) => {
         return messageScore(b) - messageScore(a);
     });
-    return docs.map(doc => doc.data());
+    return messages;
 }
 
 const createMessage = async (message) => {
@@ -91,20 +91,21 @@ const createMessage = async (message) => {
     //         grades: [grade1, grade2, grade3],
     //         individuals: [uid1, uid2, uid3],
     //     }
-    //     content: "message",
+    //     description: "description",
+    //     content: "message", // in pseudo-markdown
     //     title: "title",
     //     attachments: [url1, url2, url3],
-    //     postType: "announcement"  | "event" | "ad" | "asb",
+    //     postType: "oneship" | "announcement" | "event" | "ad" | "asb",
     //     expires: Date,
     // }
 
     if(message.expires == null) message.expires = Date.now() + 1000 * 60 * 60 * 24 * 7; // default to 1 week from now
     // verify that all required fields are present
-    if(message.sender == null || message.expires == null || message.targets == null || message.content == null || message.title == null || message.postType == null) return { status: 400, message: "Missing required fields" };
+    if(message.sender == null || message.description == null || message.expires == null || message.targets == null || message.content == null || message.title == null || message.postType == null) return { status: 400, message: "Missing required fields" };
     // verify that all required fields are correct type
-    if(typeof message.sender != "string" || typeof message.expires != "number" || typeof message.targets != "object" || typeof message.content != "string" || typeof message.title != "string" || typeof message.postType != "string") return { status: 400, message: "Incorrect field types" };
+    if(typeof message.sender != "string" || typeof message.description != "string" || typeof message.expires != "number" || typeof message.targets != "object" || typeof message.content != "string" || typeof message.title != "string" || typeof message.postType != "string") return { status: 400, message: "Incorrect field types" };
     // verify that all required fields are valid
-    if(message.sender.length == 0 || message.content.length == 0 || message.title.length == 0) return { status: 400, message: "Required fields cannot be empty" };
+    if(message.sender.length == 0 || message.description.trim().length < 10 || message.content.length == 0 || message.title.length == 0) return { status: 400, message: "Required fields cannot be empty" };
     // verify that message.expires is a valid date
     if(message.expires < Date.now()) return { status: 400, message: "Message cannot expire in the past" };
 
@@ -112,6 +113,7 @@ const createMessage = async (message) => {
         await db.collection("messages").add({
             ...message,
             created: admin.firestore.FieldValue.serverTimestamp(),
+            featured: false,
         });
         return { status: 200, message: "Message created successfully" };
     } catch(e) {

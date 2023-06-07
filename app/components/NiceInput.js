@@ -32,7 +32,6 @@ const NiceInput = ({ cb, placeholder, type, error = "", props, style }) => {
                 placeholderTextColor={CONFIG.grey}
                 secureTextEntry={type == "password" ? true : false}
                 textContentType={type}
-                keyboardType="numeric"
                 {...props}
             />
             <Text style={{ color: CONFIG.red }}>
