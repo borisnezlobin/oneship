@@ -4,7 +4,7 @@ import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LogoSvg from "../util/LogoSvg";
 
-const modalTypes = {
+var modalTypes = {
     "announcement": {
         image: <LogoSvg />,
     },
@@ -16,6 +16,26 @@ const modalTypes = {
             }}
             resizeMode="contain"
             source={require("../assets/illustrations/time.png")}
+        />,
+    },
+    "ad": {
+        image: <Image
+            style={{
+                width: "100%",
+                height: 196,
+            }}
+            resizeMode="contain"
+            source={require("../assets/illustrations/speaker.png")}
+        />,
+    },
+    "asb": {
+        image: <Image
+            style={{
+                width: "100%",
+                height: 196,
+            }}
+            resizeMode="contain"
+            source={require("../assets/illustrations/voting.png")}
         />,
     },
     "warning": {
@@ -46,6 +66,8 @@ const modalTypes = {
         />,
     },
 };
+
+modalTypes.oneship = modalTypes.announcement;
 
 const CustomModal = ({ route, navigation }) => {
     var { title, body = "", isMarkdown, image = "announcement" } = route.params;

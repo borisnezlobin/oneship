@@ -7210,6 +7210,11 @@
   "resolved" "https://registry.npmjs.org/react-native-heroicons/-/react-native-heroicons-3.2.0.tgz"
   "version" "3.2.0"
 
+"react-native-linear-gradient@^2.6.2":
+  "integrity" "sha512-Z8Xxvupsex+9BBFoSYS87bilNPWcRfRsGC0cpJk72Nxb5p2nEkGSBv73xZbEHnW2mUFvP+huYxrVvjZkr/gRjQ=="
+  "resolved" "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz"
+  "version" "2.6.2"
+
 "react-native-pressable-scale@^2.1.0":
   "integrity" "sha512-YfdnzxphHi/2eir3MRcdF5xQpBhQkqvwubk9iwnW8EucxBQeYU8XRLJUqIhsKg6JFcp3inqzYw96+WwR/U8+0w=="
   "resolved" "https://registry.npmjs.org/react-native-pressable-scale/-/react-native-pressable-scale-2.1.0.tgz"

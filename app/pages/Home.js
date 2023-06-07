@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text } from "react-native";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { useContext, useEffect, useState } from "react";
 import { ScheduleContext, UserDataContext } from "../util/contexts";
@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MessageItem from "../components/MessageItem";
 import { getCurrentScheduleInfo } from "../util/functions";
 import { CONFIG } from "../util/config";
+import LogoSvg from "../util/LogoSvg";
 
 const HomePage = ({ navigation }) => {
     const { userData, setUserData } = useContext(UserDataContext);
@@ -32,6 +33,14 @@ const HomePage = ({ navigation }) => {
             <ScrollView style={{
                 width: "100%",
             }}>
+                <View
+                    style={{
+                        width: "100%",
+                        height: 196,
+                    }}
+                >
+                    <LogoSvg />
+                </View>
                 <Text style={[
                     tailwind("text-2xl font-bold text-center"),
                     {
@@ -43,6 +52,12 @@ const HomePage = ({ navigation }) => {
                 <Text style={tailwind("text-xl text-center")}>
                     {getCurrentScheduleInfo(schedule, currentTime)}
                 </Text>
+                <View style={{
+                    height: 1,
+                    width: "100%",
+                    backgroundColor: CONFIG.grey,
+                    marginVertical: 24
+                }} />
                 {userData.messages.map((message, index) => {
                     return <MessageItem key={index} message={message} navigation={navigation} />
                 })}

@@ -43,13 +43,17 @@ const MessageItem = ({ message, navigation }) => {
                     title: message.title,
                     body: message.content,
                     isMarkdown: true,
+                    image: message.postType,
                 });
             }}
         >
             <View style={{
-                width: "100%",
                 padding: 16,
                 marginBottom: 16,
+                borderWidth: 2,
+                borderColor: message.featured ? CONFIG.green : CONFIG.bg,
+                margin: 8,
+                borderRadius: 8,
             }}>
                 <Text style={{
                     fontSize: 24,
