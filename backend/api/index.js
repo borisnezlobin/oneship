@@ -6,6 +6,7 @@ import { getCalendar, getScheduleForDay } from './getCalendar.js';
 import { DEFAULT_SETTINGS, createMessage, getMessagesForUser, readData, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser } from './auth.js';
+import { getSports } from './getSports.js';
 
 app.use(cors());
 
@@ -162,11 +163,13 @@ const startServerToday = async () => {
     var today = getTodayInFunnyFormat();
     var schedule = await getScheduleForDay("20230411");
     var news = await getNews();
+    var sports = await getSports();
     var data = {
         lastUpdate: getTodayInFunnyFormat(),
         calendar: calendar,
         schedule: { date: today, value: schedule },
-        news: news
+        news: news,
+        sports: sports
     };
 
     // write data to firestore
