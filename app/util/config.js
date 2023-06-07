@@ -7,8 +7,8 @@ const CONFIG = {
     red: "#990000",
     text: "#000000",
     bg: "#ffffff",
-    serverURL: "https://oneship.vercel.app/",
-    // serverURL: "http://10.0.0.169:3000/",
+    // serverURL: "https://oneship.vercel.app/",
+    serverURL: "http://10.0.0.169:5000/",
 }
 
 const DEFUALT_TOAST = {

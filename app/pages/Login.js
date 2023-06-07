@@ -75,7 +75,6 @@ const LoginPage = () => {
     }
 
     const createAccount = () => {
-        // open browser to https://palyoneship.web.app/signup
         // it's not easy to make google oauth work with react native
         openBrowserAsync("https://palyoneship.web.app/signup");
     }
@@ -102,6 +101,7 @@ const LoginPage = () => {
                     type="emailAddress"
                     cb={setEmail}
                     error={emailError}
+                    keyboardType="email-address"
                 />
                 <NiceInput
                     placeholder="Password"

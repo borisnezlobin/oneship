@@ -6,6 +6,7 @@ import { UserDataContext } from "../util/contexts";
 import LoginPage from "./Login";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NiceInput from "../components/NiceInput";
+import NiceButton from "../components/NiceButton";
 
 const SettingsPage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
@@ -55,6 +56,21 @@ const SettingsPage = () => {
                             }}
                             value={userData.data.show0}
                         />
+                    </View>
+                    <View style={tailwind("flex w-full px-3 flex-row justify-center items-center w-full")}>
+                        <NiceButton
+                            type="danger"
+                            cb={() => {
+                                console.log("signing out")
+                                AsyncStorage.removeItem("user_data");
+                                AsyncStorage.removeItem("not_sketchy");
+                                setUserData(null);
+                            }}
+                        >
+                            <Text style={[tailwind("text-lg font-bold"), { color: CONFIG.bg }]}>
+                                Sign out
+                            </Text>
+                        </NiceButton>
                     </View>
                     {/*}
                     <View style={tailwind("flex px-3 flex-col justify-center items-center w-full")}>

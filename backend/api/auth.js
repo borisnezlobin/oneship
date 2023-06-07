@@ -31,7 +31,7 @@ const loginUser = async (email, password) => {
     if(res.status != 200){
         return {
             status: res.status,
-            message: await json
+            message: json
         }
     }
     return {

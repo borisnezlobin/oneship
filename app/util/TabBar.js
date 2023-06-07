@@ -14,6 +14,7 @@ function TabBar({ state, descriptors, navigation }) {
         }
     ]}>
       {state.routes.map((route, index) => {
+        if(route.name == "Redirect") return null;
         const { options } = descriptors[route.key];
         const label =
           options.tabBarLabel !== undefined

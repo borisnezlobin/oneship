@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Tabs from "../components/Tabs";
 import CalendarPage from "./Calendar";
 
-const SchedulePage = () => {
+const SchedulePage = ({ navigation }) => {
     const [page, setPage] = useState(0);
     const { userData } = useContext(UserDataContext);
     const { schedule } = useContext(ScheduleContext);
@@ -60,7 +60,9 @@ const SchedulePage = () => {
             start: eventStart,
             end: eventEnd
         };
-        if(eventStart <= now && eventEnd >= now) eventsToday.push(obj);
+        if(eventStart.getFullYear() <= now.getFullYear() && eventStart.getMonth() <= now.getMonth() && eventStart.getDate() <= now.getDate() && eventEnd.getFullYear() >= now.getFullYear() && eventEnd.getMonth() >= now.getMonth() && eventEnd.getDate() >= now.getDate()){
+            eventsToday.push(obj);
+        }
         niceCalendar.push(obj);
     }
 
@@ -76,6 +78,20 @@ const SchedulePage = () => {
     />;
 
     if(page == 0){
+        if(schedule.value == null){
+            return (
+                <SafeAreaView style={[
+                    tailwind("bg-white w-full flex justify-center items-center"),
+                    {
+                        height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                    }
+                ]}>
+                    <Text style={[tailwind("font-bold"), { color: CONFIG.green}]}>
+                        No school today!
+                    </Text>
+                </SafeAreaView>
+            );
+        }
         return (
             <SafeAreaView style={[
                 tailwind("bg-white w-full"),
@@ -144,7 +160,7 @@ const SchedulePage = () => {
                     height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
                 }
             ]}>
-                <CalendarPage calendar={niceCalendar} />
+                <CalendarPage navigation={navigation} calendar={niceCalendar} />
                 {tabs}
             </SafeAreaView>
         );
@@ -157,12 +173,12 @@ const dateFromString = (dateString) => {
     var year = dateString.substring(0, 4);
     var month = dateString.substring(4, 6);
     var day = dateString.substring(6, 8);
-    if(dateString.length == 8) return new Date(year, month, day, 0, 0, 0);
+    if(dateString.length == 8) return new Date(year, month - 1, day - 1, 0, 0, 0);
 
     var hour = dateString.substring(9, 11);
     var minute = dateString.substring(11, 13);
     var second = dateString.substring(13, 15);
-    return new Date(year, month, day, hour, minute, second);
+    return new Date(year, month - 1, day - 1, hour, minute, second);
 }
 
 export default SchedulePage;

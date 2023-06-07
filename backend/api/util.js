@@ -22,6 +22,7 @@ const messageScore = (message) => {
     if(message.postType == "event") score += 2;
     if(message.postType == "asb") score += 3;
     if(message.postType == "announcement") score += 4;
+    if(message.postType == "oneship") score += 5;
 
     // score based on reach
     if(message.targets.students) score += 1;
@@ -29,7 +30,9 @@ const messageScore = (message) => {
     if(message.targets.individuals.length > 0) score += 1;
     if(message.targets.grades.length > 0) score += 1;
 
-    // TODO: score based on how much time is left until expiration?
+    // mhm
+    // there's nothing you can do
+    if(message.featured) score += 10000;
 
     return score;
 };
