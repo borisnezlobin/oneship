@@ -2,7 +2,12 @@ import admin from 'firebase-admin';
 import { messageScore } from './util.js';
 
 const DEFAULT_SETTINGS = {
-    "grade": null,
+    "email": "",
+    "displayName": "",
+    "uid": "",
+    "pfp": "",
+    "classNotification": 5,
+    "grade": -1,
     "show0": false,
     '0 Period': {
         "customName": "0 Period",
@@ -121,10 +126,17 @@ const createMessage = async (message) => {
     }
 }
 
+const getErrors = async () => {
+    var errors = await db.collection("errors").get();
+    errors = errors.docs.map(doc => doc.data());
+    return errors;
+};
+
 export {
     writeData,
     readData,
     getMessagesForUser,
     createMessage,
+    getErrors,
     DEFAULT_SETTINGS
 };

@@ -6,6 +6,7 @@ const CONFIG = {
     bg2: "#f2f2f2",
     red: "#990000",
     text: "#000000",
+    blue: "#1076ab",
     bg: "#ffffff",
     // serverURL: "https://oneship.vercel.app/",
     serverURL: "http://10.0.0.169:5000/",
@@ -13,38 +14,45 @@ const CONFIG = {
 
 const DEFUALT_TOAST = {
     position: Toast.positions.TOP,
-    duration: 1000,
+    duration: Toast.durations.LONG,
     animation: true,
     hideOnPress: true,
     delay: 0,
     backgroundColor: CONFIG.bg,
-    textColor: CONFIG.text,
+    textColor: CONFIG.bg,
+    textWeight: "bold",
     shadowColor: CONFIG.grey,
     opacity: 1,
+    textStyle: {
+        fontSize: 18,
+        fontWeight: "normal",
+    },
     containerStyle: {
-        backgroundColor: CONFIG.bg,
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        borderTopRightRadius: 8,
-        borderBottomRightRadius: 8,
-        borderLeftWidth: 4,
+        borderRadius: 8,
     }
 }
 
 const ERROR_TOAST = {
     ...DEFUALT_TOAST,
-    containerStyle: {
-        ...DEFUALT_TOAST.containerStyle,
-        borderColor: CONFIG.red,
-    }
+    backgroundColor: CONFIG.red,
+    textStyle: {
+        fontSize: 18,
+        fontWeight: "bold",
+    },
 }
 
 const SUCCESS_TOAST = {
     ...DEFUALT_TOAST,
-    containerStyle: {
-        ...DEFUALT_TOAST.containerStyle,
-        borderColor: CONFIG.green,
-    }
+    backgroundColor: CONFIG.green,
+    textStyle: {
+        fontSize: 18,
+        fontWeight: "bold",
+    },
 }
 
-export { CONFIG, ERROR_TOAST, SUCCESS_TOAST }
+const INFO_TOAST = {
+    ...DEFUALT_TOAST,
+    backgroundColor: CONFIG.blue,
+}
+
+export { CONFIG, ERROR_TOAST, SUCCESS_TOAST, INFO_TOAST }

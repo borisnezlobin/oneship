@@ -40,7 +40,7 @@ const SchedulePage = ({ navigation }) => {
         );
     }
 
-    var show0Period = schedule.value[0].name == "0 Period" && userData.data.show0;
+    var show0Period = schedule.value[0].name == "0 Period" && userData && userData.data.show0;
     var start = show0Period ? schedule.value[0].start : schedule.value[1].start;
     var prevStart = start;
     var end = schedule.value[schedule.value.length - 1].end;
@@ -101,7 +101,7 @@ const SchedulePage = ({ navigation }) => {
             ]}>
                 <View style={tailwind("")}>
                     {schedule.value.map((period, index) => {
-                        if(!userData.data.show0 && period.name == "0 Period") return null;
+                        if(userData && !userData.data.show0 && period.name == "0 Period") return null;
                         var temp = prevStart;
                         prevStart = period.end;
                         return (<ScheduleItem key={index} period={period} prevStart={temp} start={start} end={end} />)

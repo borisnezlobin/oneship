@@ -2,15 +2,17 @@ import { Keyboard, SafeAreaView, Text, TouchableWithoutFeedback, View } from "re
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
 import { useContext, useEffect, useState } from "react";
-import { UserDataContext } from "../util/contexts";
+import { DebugContext, UserDataContext } from "../util/contexts";
 import { ArrowRightOnRectangleIcon, UserIcon } from "react-native-heroicons/outline";
 import NiceButton from "../components/NiceButton";
 import { HashtagIcon } from "react-native-heroicons/solid";
 import NiceInput from "../components/NiceInput";
 import { openBrowserAsync } from "expo-web-browser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import log, { logError } from "../util/debug";
 
 const LoginPage = () => {
+    const { setError } = useContext(DebugContext);
     const { userData, setUserData } = useContext(UserDataContext);
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
@@ -39,26 +41,31 @@ const LoginPage = () => {
         }
         if(password.length < 6){
             setPasswordError("Password must be at least 6 characters");
+            setError({
+                error: "Password must be at least 6 characters",
+                status: 400
+            })
             isFormValid = false;
         }
 
         if(!isFormValid) return;
+
         setLoading(true);
         const response = await fetch(
             CONFIG.serverURL + "api/login?email=" + email + "&password=" + password, {
             method: "POST"
         }).catch(err => {
-            console.log("Error logging in user: " + err);
+            logError("Error logging in user: " + err);
             setLoading(false);
         });
         const text = await response.text();
         try {
-            console.log("server response: " + text);
+            log("server response: " + text);
             const json = JSON.parse(text);
             setLoading(false);
             if(response.status == 200 && json.error == null){
                 setUserData(json);
-                console.log("saving user data + login to async storage");
+                log("saving user data + login to async storage");
                 AsyncStorage.setItem("not_sketchy", JSON.stringify({
                     email: email,
                     password: password
@@ -69,7 +76,7 @@ const LoginPage = () => {
                 // show error toast
             }
         } catch (e) {
-            console.log("Error: " + e);
+            logError("Error: " + e);
             setLoading(false);
         }
     }
