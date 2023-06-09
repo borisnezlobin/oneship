@@ -6,6 +6,7 @@ import { useState } from "react";
 import Modal from "./Modal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-root-toast";
+import log from "../util/debug";
 
 
 // just...
@@ -71,13 +72,12 @@ const CalendarPage = ({ calendar, navigation }) => {
                     textDayHeaderFontSize: 16
                 }}
                 onDayPress={day => {
-                    console.log('selected day', day);
+                    log('selected day', day);
                     var events = getEventsOnDay(day.timestamp, calendar);
                     if(events.length == 0){
                         Toast.show("No events on " + day.day + "/" + day.month + "/" + day.year, {
                             ...ERROR_TOAST,
                             containerStyle: {
-                                ...ERROR_TOAST.containerStyle,
                                 top: insets.top
                             }
                         });

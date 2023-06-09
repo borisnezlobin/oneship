@@ -7,12 +7,13 @@ import LoginPage from "./Login";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NiceInput from "../components/NiceInput";
 import NiceButton from "../components/NiceButton";
+import log, { logError } from "../util/debug";
 
 const SettingsPage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
 
     const [gradeError, setGradeError] = useState("");
-    console.log(gradeError);
+    if(gradeError) logError("invalid input for grade: " + gradeError);
 
     const updateUserData = (newUserData) => {
         setUserData(newUserData);
@@ -61,7 +62,7 @@ const SettingsPage = () => {
                         <NiceButton
                             type="danger"
                             cb={() => {
-                                console.log("signing out")
+                                log("signing out")
                                 AsyncStorage.removeItem("user_data");
                                 AsyncStorage.removeItem("not_sketchy");
                                 setUserData(null);

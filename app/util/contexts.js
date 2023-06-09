@@ -6,6 +6,7 @@ const NewsContext = createContext();
 const SportsContext = createContext();
 const SettingsContext = createContext();
 const UserDataContext = createContext();
+const DebugContext = createContext();
 
 export {
     ScheduleContext,
@@ -13,5 +14,6 @@ export {
     NewsContext,
     SportsContext,
     SettingsContext,
-    UserDataContext
+    UserDataContext,
+    DebugContext,
 };

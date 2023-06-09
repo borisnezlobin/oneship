@@ -3,85 +3,65 @@ import { CONFIG } from "../util/config";
 import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LogoSvg from "../util/LogoSvg";
+import * as Sentry from 'sentry-expo';
+import log, { getLogs, logError } from "../util/debug";
+import UserAgent from 'react-native-user-agent';
+import { useContext, useState } from "react";
+import { UserDataContext } from "../util/contexts";
 
-var modalTypes = {
-    "announcement": {
-        image: <LogoSvg />,
-    },
-    "event": {
-        image: <Image
-            style={{
-                width: "100%",
-                height: 196,
-            }}
-            resizeMode="contain"
-            source={require("../assets/illustrations/time.png")}
-        />,
-    },
-    "game": {
-        image: <Image
-            style={{
-                width: "100%",
-                height: 196,
-            }}
-            resizeMode="contain"
-            source={require("../assets/illustrations/game.png")}
-        />,
-    },
-    "ad": {
-        image: <Image
-            style={{
-                width: "100%",
-                height: 196,
-            }}
-            resizeMode="contain"
-            source={require("../assets/illustrations/speaker.png")}
-        />,
-    },
-    "asb": {
-        image: <Image
-            style={{
-                width: "100%",
-                height: 196,
-            }}
-            resizeMode="contain"
-            source={require("../assets/illustrations/voting.png")}
-        />,
-    },
-    "warning": {
-        image: <Image
-            style={{
-                width: "100%",
-                height: 196,
-            }}
-            source={require("../assets/illustrations/warning.png")}
-        />,
-    },
-    "error": {
-        image: <Image
-            style={{
-                width: "100%",
-                height: 196,
-            }}
-            source={require("../assets/illustrations/error.png")}
-        />,
-    },
-    "server error": {
-        image: <Image
-            style={{
-                width: "100%",
-                height: 196,
-            }}
-            source={require("../assets/illustrations/server_error.png")}
-        />,
-    },
-};
-
-modalTypes.oneship = modalTypes.announcement;
-
-const CustomModal = ({ route, navigation }) => {
-    var { title, body = "", isMarkdown, image = "announcement" } = route.params;
+const ErrorModal = ({ error }) => {
+    const { userData } = useContext(UserDataContext);
+    const [errorReportStatus, setErrorReportStatus] = useState("unreported"); // unreported, loading, reported
     const insets = useSafeAreaInsets();
+    const body = "#Oops!\nSomething went wrong. While the app was running, the following error occured:\n"
+     + "##Status " + error.status + "\n##Message \"" + error.error + "\""
+     + "\n\nPlease try again later. Close the app and reopen it.\n\n"
+     + "If the error persists, report it to us and we will fix it as soon as possible.\n\n"
+     + "Thank you for your patience,\nThe OneShip Team";
+
+     const registerError = async () => {
+        setErrorReportStatus("loading");
+        // compile error report
+        // logs
+        var logs = getLogs();
+        // user agent
+        var ua = "";
+        try{
+            var ua = UserAgent.getUserAgent();
+            console.log("User agent: " + ua);
+        }catch(e){}
+        var report = {
+            logs,
+            userAgent: userData ? userData.uid + ", " + ua : (ua ? ua : "unknown"),
+            error: error.error,
+            status: error.status,
+        }
+        // send report
+        try{
+            Sentry.Native.captureMessage("Error Report", {
+                level: Sentry.Severity.Error,
+                extra: report,
+            });
+        }catch(e){} // you see this
+        log("Sending error report: " + JSON.stringify(report));
+        try{
+            const response = await fetch(CONFIG.serverURL + "report-error", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(report),
+            });
+            var resJson = await response.json();
+            log("Sent error report, response status: " + response.status + ". Response body: " + JSON.stringify(resJson));
+        }catch(e){
+            logError("Error sending error report: " + e);
+        }
+
+        // yes technically this will happen even if there's an error reporting the error
+        // but I am not making an error reporting system for the error reporting system
+        setErrorReportStatus("reported");
+    }
 
     return (
         <View style={{
@@ -114,7 +94,7 @@ const CustomModal = ({ route, navigation }) => {
                     fontWeight: "bold",
                     color: CONFIG.green,
                 }}>
-                    {title}
+                    An Error Occurred
                 </Text>
             </View>
             <ScrollView style={{
@@ -129,39 +109,49 @@ const CustomModal = ({ route, navigation }) => {
                     height: 196,
                     width: "100%",
                 }}>
-                    {image ? modalTypes[image].image : (
-                        <LogoSvg />
-                    )}
+                    <Image
+                        style={{
+                            width: "100%",
+                            height: 196,
+                        }}
+                        source={require("../assets/illustrations/server_error.png")}
+                    />
                 </View>
                 <View style={{
                     height: 16,
                 }} />
-                {isMarkdown ? parseMarkdown(body) : (
-                    <Text style={{
-                        fontSize: 18,
-                        color: CONFIG.text,
-                    }}>
-                        {body}
-                    </Text>
-                )}
-                <PressableScale style={{
-                    width: "100%",
-                    height: 50,
-                    backgroundColor: CONFIG.green,
-                    borderRadius: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginTop: 36,
-                }}
-                onPress={() => {
-                    navigation.goBack();
-                }}>
+                {parseMarkdown(body)}
+                <PressableScale
+                    style={{
+                        width: "100%",
+                        height: 50,
+                        backgroundColor: errorReportStatus == "reported" ? CONFIG.green : CONFIG.red,
+                        borderRadius: 10,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 36,
+                    }}
+                    disabled={errorReportStatus != "unreported"}
+                    onPress={() => {
+                        switch(errorReportStatus){
+                            case "unreported":
+                                registerError();
+                                break;
+                            case "reported":
+                                // do nothing
+                                break;
+                            case "loading":
+                                // do nothing
+                                break;
+                        }
+                    }}
+                >
                     <Text style={{
                         fontSize: 18,
                         fontWeight: "bold",
                         color: CONFIG.bg,
                     }}>
-                        Close
+                        {errorReportStatus == "unreported" ? "Report Error" : errorReportStatus == "reported" ? "Reported!" : "Just a sec..."}
                     </Text>
                 </PressableScale>
                 <View style={{
@@ -256,4 +246,4 @@ const parseMarkdown = (text) => {
     });
 };
 
-export default CustomModal;
+export default ErrorModal;

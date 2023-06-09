@@ -1,7 +1,7 @@
 import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "./util/config";
-import { CalendarContext, NewsContext, ScheduleContext, SportsContext, UserDataContext } from "./util/contexts";
+import { CalendarContext, DebugContext, NewsContext, ScheduleContext, SportsContext, UserDataContext } from "./util/contexts";
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,34 +33,45 @@ import { TransitionPresets, createStackNavigator } from "@react-navigation/stack
 import CustomModal from "./pages/CustomModal";
 import { setNotificationForClasses } from "./util/functions";
 import SportsPage from "./pages/Sports";
+import ErrorModal from "./pages/ErrorModal";
+import * as Sentry from 'sentry-expo';
+import log, { logError } from "./util/debug";
+
+Sentry.init({ 
+  dsn: 'https://514a2c01c78e42b6a4af98157ac8fcc1@o4505324587712512.ingest.sentry.io/4505324600098816',
+  enableInExpoDevelopment: false,
+  debug: true,
+  enableNative: false,
+});
+
 
 const Tabs = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export default function App() {
+function App() {
   const [schedule, setSchedule] = useState(null);
   const [calendar, setCalendar] = useState(null);
   const [news, setNews] = useState(null);
   const [sports, setSports] = useState(null);
-  const [settings, setSettings] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const getStartupData = async () => {
-      console.log(CONFIG.serverURL + "api/startup");
+      log(CONFIG.serverURL + "api/startup");
       const response = await fetch(CONFIG.serverURL + "api/startup");
       var data = await response.text();
       try{
         data = JSON.parse(data);
-        if(data == null){
-          console.log("error: data is null");
-          return;
-        }
         if(data.error){
-          console.log("error: " + data.error);
-          // TODO: redirect to error screen
+          logError("error: " + data.error);
+          setError({
+            error: data.error,
+            status: response.status
+          });
           return;
         }
+
         setCalendar(data.calendar);
 
         var today = new Date();
@@ -77,11 +88,15 @@ export default function App() {
           setCalendar(data.calendar);
         }
         
-        console.log("setting news: " + data.news);
+        setSports(data.sports);
         setNews(data.news);
       }catch(e){
-        console.log("error: " + e);
-        console.log("couldn't parse startup data json from " + data);
+        logError("error: " + e);
+        logError("couldn't parse startup data json from " + data);
+        setError({
+          error: "JSON parsing of startup data dump failed.",
+          status: 500
+        });
       }
     }
     const getScheduleFromStorage = async () => {
@@ -95,19 +110,27 @@ export default function App() {
       if(user_data != null && userData == null) try{
         setUserData(JSON.parse(user_data));
       }catch(e){
-        console.log("error: " + e);
-        console.log("couldn't parse user_data json from " + user_data);
+        logError("error: " + e);
+        logError("couldn't parse user_data json from " + user_data);
+        setError({
+          error: "JSON parsing of user data failed.",
+          status: 500
+        });
       }
 
       // get most up-to-date user data
       var not_sketchy = await AsyncStorage.getItem("not_sketchy");
-      console.log("not_sketchy: " + not_sketchy);
+      log("not_sketchy: " + not_sketchy);
       if(not_sketchy == null) return;
       try{
         not_sketchy = JSON.parse(not_sketchy);
       }catch(e){
-        console.log("error: " + e);
-        console.log("couldn't parse not_sketchy json from " + not_sketchy);
+        logError("error: " + e);
+        logError("couldn't parse not_sketchy json from " + not_sketchy);
+        setError({
+          error: "JSON parsing of user credentials failed.",
+          status: 500
+        });
         return;
       }
       
@@ -117,17 +140,22 @@ export default function App() {
         method: "POST",
       });
       const text = await response.text();
-      console.log("got newest user data");
+      log("got newest user data");
       try{
         AsyncStorage.setItem("user_data", text);
         const data = JSON.parse(text);
         setUserData(data);
       }catch(e){
-        console.log("error: " + e);
-        console.log("couldn't parse server response json from " + text);
+        logError("error: " + e);
+        logError("couldn't parse server response json from " + text);
+        setError({
+          error: "Error logging in user.",
+          status: 500
+        });
       }
     }
 
+    if(error) return;
     getUserData();
     getScheduleFromStorage();
     getStartupData();
@@ -135,34 +163,38 @@ export default function App() {
 
   return (
     <RootSiblingParent>
-      <View style={tailwind("w-full h-full bg-white")}>
-        <ScheduleContext.Provider value={{ schedule, setSchedule }}>
-          <UserDataContext.Provider value={{ userData, setUserData }}>
-            <CalendarContext.Provider value={{ calendar, setCalendar }}>
-              <NewsContext.Provider value={{ news, setNews }}>
-                <SportsContext.Provider value={{ sports, setSports }}>
-                  <StatusBar barStyle={"dark-content"} />
-                  <NavigationContainer>
-                    <Stack.Navigator
-                      screenOptions={{
-                        cardStyle: { backgroundColor: "transparent" },
-                        headerShown: false,
-                        // make screens slide in from the bottom
-                        gestureEnabled: false,
-                        gestureDirection: "vertical",
-                        ...TransitionPresets.ModalSlideFromBottomIOS,
-                      }}
-                    >
-                      <Stack.Screen name="Main" component={TabNavigator} />
-                      <Stack.Screen name="Modal" component={CustomModal} />
-                    </Stack.Navigator>
-                  </NavigationContainer>
-                </SportsContext.Provider>
-              </NewsContext.Provider>
-          </CalendarContext.Provider>
-          </UserDataContext.Provider>
-        </ScheduleContext.Provider>
-      </View>
+      <DebugContext.Provider value={{ setError }}>
+        <View style={tailwind("w-full h-full bg-white")}>
+          <ScheduleContext.Provider value={{ schedule, setSchedule }}>
+            <UserDataContext.Provider value={{ userData, setUserData }}>
+              <CalendarContext.Provider value={{ calendar, setCalendar }}>
+                <NewsContext.Provider value={{ news, setNews }}>
+                  <SportsContext.Provider value={{ sports, setSports }}>
+                    <StatusBar barStyle={"dark-content"} />
+                    <NavigationContainer>
+                      <Stack.Navigator
+                        screenOptions={{
+                          cardStyle: { backgroundColor: "transparent" },
+                          headerShown: false,
+                          // make screens slide in from the bottom
+                          gestureEnabled: false,
+                          gestureDirection: "vertical",
+                          ...TransitionPresets.ModalSlideFromBottomIOS,
+                        }}
+                      >
+                        <Stack.Screen name="Main" component={error == null ?
+                          TabNavigator : () => <ErrorModal error={error} />
+                        } />
+                        <Stack.Screen name="Modal" component={CustomModal} />
+                      </Stack.Navigator>
+                    </NavigationContainer>
+                  </SportsContext.Provider>
+                </NewsContext.Provider>
+            </CalendarContext.Provider>
+            </UserDataContext.Provider>
+          </ScheduleContext.Provider>
+        </View>
+      </DebugContext.Provider>
     </RootSiblingParent>
   );
 }
@@ -224,3 +256,5 @@ const TabNavigator = ({ navigation }) => {
     </Tabs.Navigator>
   );
 }
+
+export default Sentry.Native.wrap(App);

@@ -3,7 +3,7 @@ const app = express();
 import cors from 'cors';
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
-import { DEFAULT_SETTINGS, createMessage, getMessagesForUser, readData, writeData } from './db.js';
+import { DEFAULT_SETTINGS, createMessage, getErrors, getMessagesForUser, readData, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser } from './auth.js';
 import { getSports } from './getSports.js';
@@ -26,7 +26,7 @@ const getNews = async () => {
     const palyVoice = await getPublication("https://palyvoice.com/?s=");
     const cMag = await getPublication("https://cmagazine.org/?s=");
     const vikingMag = await getPublication("https://vikingsportsmag.com/?s=");
-    const verde = await getPublication("https://verdemagazine.com/?s=", "C Magazine");
+    const verde = await getPublication("https://verdemagazine.com/?s=");
     const infocus = await getInfocusNews();
     return [
         { title: "Verde", articles: verde },
@@ -109,11 +109,11 @@ app.post("/api/register", express.json(), async (request, response) => {
     if(email.split("@")[1] != "pausd.us") return response.status(403).send({ error: "Email must be a PAUSD email" });
     console.log("received request to register user " + uid + " with email " + email + " and display name " + displayName + "");
     var obj = {
+        ...DEFAULT_SETTINGS,
         email,
         displayName,
         uid,
         pfp,
-        ...DEFAULT_SETTINGS
     };
     await writeData("users", uid, obj);
     response.status(200).send(obj);
@@ -126,11 +126,24 @@ app.post("/api/login", async (request, response) => {
     console.log("logging in user " + email + " with password " + password);
     const result = await loginUser(email, password);
     if(result.status == 200){
-        const userData = await readData("users", result.message.localId);
+        var userData = await readData("users", result.message.localId);
         if(userData.exists){
-            const messages = await getMessagesForUser(userData.data());
+            userData = userData.data();
+            
+            // verify that userData contains all keys in DEFAULT_SETTINGS
+            const keys = Object.keys(DEFAULT_SETTINGS);
+            var changed = false;
+            for(var i = 0; i < keys.length; i++){
+                if(userData[keys[i]] == null){
+                    changed = true;
+                    userData[keys[i]] = DEFAULT_SETTINGS[keys[i]];
+                }
+            }
+            if(changed) await writeData("users", result.message.localId, userData);
+
+            const messages = await getMessagesForUser(userData);
             response.status(200).send({
-                data: userData.data(),
+                data: userData,
                 messages,
                 token: result.idToken,
                 refreshToken: result.refreshToken
@@ -149,12 +162,36 @@ app.post("/api/login", async (request, response) => {
 
 app.post("/api/create-message", async (request, response) => {
     const body = request.body;
+    console.log(body);
     const result = await createMessage(body);
     response.status(result.status).send(result.message);
 });
 
-app.get('/', (_, response) => {
-    response.status(200).send("Server status: runnning");
+app.post("/report-error", async (request, response) => {
+    // format: { error: "error message", logs: "stack trace", status: "status code". userAgent: "user agent", userName: "user name" }
+    const body = request.body;
+    console.log("Error reported: " + body);
+    // veryify that body contains all required fields
+    // the frontend always sends all fields, but just in case
+    const keys = Object.keys(body);
+    const requiredKeys = ["error", "logs", "status", "userAgent"];
+    for(var i = 0; i < requiredKeys.length; i++){
+        if(!keys.includes(requiredKeys[i])){
+            return response.status(400).send({ error: "Invalid Error: missing key: " + requiredKeys[i]  });
+        }
+    }
+
+    await writeData("errors", new Date().toString(), body);
+    response.status(200).send({ message: "Error Reported!" });
+});
+
+app.get('/', async (_, response) => {
+    const errors = await getErrors();
+    response.status(
+        errors.length > 0 ? 500 : 200
+    ).send("<center><h1>Server status: " + (errors.length > 0 ? "error" : "ok") + "</h1></center><hr /><b>Errors:</b>" + (
+        errors.map(e => "<p>" + e.error + " | " + e.status + " | " + e.userAgent + "</p>").join("\n")
+    ));
 });
 
 const startServerToday = async () => {

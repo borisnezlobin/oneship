@@ -1,6 +1,7 @@
 import { CONFIG } from "./config";
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
+import log from "./debug";
 
 async function registerForPushNotificationsAsync() {
     var token;
@@ -16,7 +17,7 @@ async function registerForPushNotificationsAsync() {
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
-      console.log(token);
+      log(token);
     } else {
       alert('Why are you running this on a simulator? Are you high?');
     }
@@ -35,16 +36,16 @@ async function registerForPushNotificationsAsync() {
 
 const setLocalNotification = async (title, body, seconds) => {
   // check if a notification with this title already exists
-  console.log("setting notification with title " + title + " and body " + body + " in " + seconds + " seconds");
+  log("setting notification with title " + title + " and body " + body + " in " + seconds + " seconds");
   const notifications = await Notifications.getAllScheduledNotificationsAsync();
   for(var i = 0; i < notifications.length; i++){
     if(notifications[i].content.title == title){
-      console.log("Notification with title " + title + " already exists");
+      log("Notification with title " + title + " already exists");
       return;
     }
   }
 
-  console.log("Notification with title " + title + " does not exist, creating it");
+  log("Notification with title " + title + " does not exist, creating it");
   
   await Notifications.scheduleNotificationAsync({
     content: {
