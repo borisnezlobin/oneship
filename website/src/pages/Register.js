@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import spinner from "../loading.svg";
 import { GoogleAuthProvider, getAdditionalUserInfo, signInWithPopup, deleteUser, EmailAuthProvider, linkWithCredential } from "firebase/auth";
 import auth from "../util/firebaseConfig";
-import CONFIG from "../util/config";
+import CONFIG, { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from "../util/config";
 import { UserDataContext } from "../util/contexts";
+import toast from "react-hot-toast";
 
 const CreateAccountPage = () => {
     const [loading, setLoading] = useState(false);
@@ -33,13 +34,13 @@ const CreateAccountPage = () => {
         });
         const user = res.user;
         if(user.email.split("@")[1] != "pausd.us"){
-            // toast("Please use a PAUSD email", ERROR_TOAST_STYLES);
+            toast.error("Please use a PAUSD email", ERROR_TOAST_STYLES);
             deleteUser(user);
             setLoading(false);
             return;
         }
         if(!user){
-            // toast("Error creating account", ERROR_TOAST_STYLES);
+            toast.error("Error creating account", ERROR_TOAST_STYLES);
             setLoading(false);
             return;
         }
@@ -54,11 +55,11 @@ const CreateAccountPage = () => {
     const signInWithPassword = async () =>{
         const email = auth.currentUser.email;
         if(password.length < 6){
-            // toast("Password must be at least 6 characters", ERROR_TOAST_STYLES);
+            toast.error("Password must be at least 6 characters", ERROR_TOAST_STYLES);
             return;
         }
         if(password != confirmPassword){
-            // toast("Passwords do not match", ERROR_TOAST_STYLES);
+            toast.error("Passwords do not match", ERROR_TOAST_STYLES);
             return;
         }
 
@@ -82,24 +83,24 @@ const CreateAccountPage = () => {
             }).catch((error) => {
                 console.log("Error creating database entry", error);
                 // TODO: sentry
-                // toast("Error creating account", ERROR_TOAST_STYLES);
+                toast.error("Error creating account", ERROR_TOAST_STYLES);
                 setLoading(false);
                 return;
             });
-            // toast("Account created successfully", SUCCESS_TOAST_STYLES);
-            // TODO: get user data and set it
             try{
                 const json = await res.json();
                 setUserData(json);
                 nav("/feed");
+                toast.success("Account created successfully!", SUCCESS_TOAST_STYLES);
             }catch(err){
                 console.log(err);
+                toast.success("Oops! Something went wrong on our side", ERROR_TOAST_STYLES);
                 // TODO: sentry
             }
             setLoading(false);
         }).catch((error) => {
             console.log("Account linking error", error);
-            // toast("Error creating account", ERROR_TOAST_STYLES);
+            toast.error("Error creating account", ERROR_TOAST_STYLES);
             setLoading(false);
         });
     }
@@ -173,6 +174,7 @@ const CreateAccountPage = () => {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                    <div className="h-4" />
                     <button className="btn" onClick={(e) => {
                         e.preventDefault();
                         signInWithPassword();

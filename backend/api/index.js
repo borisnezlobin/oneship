@@ -115,7 +115,7 @@ app.post("/api/register", express.json(), async (request, response) => {
         pfp,
     };
     await writeData("users", uid, obj);
-    const messages = await getMessagesForUser(uid);
+    const messages = await getMessagesForUser(obj);
     response.status(200).send({
         data: obj,
         messages
