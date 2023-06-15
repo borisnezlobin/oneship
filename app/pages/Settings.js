@@ -8,6 +8,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NiceInput from "../components/NiceInput";
 import NiceButton from "../components/NiceButton";
 import log, { logError } from "../util/debug";
+import SettingsGradePicker from "../components/SettingsGradePicker";
+import SettingsClassReminder from "../components/SettingsClassReminder";
 
 const SettingsPage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
@@ -58,7 +60,23 @@ const SettingsPage = () => {
                             value={userData.data.show0}
                         />
                     </View>
-                    <View style={tailwind("flex w-full px-3 flex-row justify-center items-center w-full")}>
+                    <SettingsGradePicker
+                        grade={userData.data.grade}
+                        setGrade={(newGrade) => {
+                            var newUserData = {...userData};
+                            newUserData.data.grade = newGrade;
+                            updateUserData(newUserData);
+                        }}
+                    />
+                    <SettingsClassReminder
+                        reminder={userData.data.classNotification}
+                        setClassReminder={(newReminder) => {
+                            var newUserData = {...userData};
+                            newUserData.data.classNotification = newReminder;
+                            updateUserData(newUserData);
+                        }}
+                    />
+                    <View style={tailwind("flex w-full px-3 flex-row justify-center items-center w-full absolute bottom-0")}>
                         <NiceButton
                             type="danger"
                             cb={() => {

@@ -17,6 +17,7 @@
     "react-dom": "18.2.0",
     "react-native": "^0.71.8",
     "react-native-calendars": "^1.1298.0",
+    "react-native-dropdown-picker": "^5.4.6",
     "react-native-heroicons": "^3.2.0",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-open-maps": "^0.4.2",

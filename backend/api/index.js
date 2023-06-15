@@ -47,7 +47,6 @@ app.get('/api/news', async (_, response) => {
     response.status(200).send(data.data().news);
 });
 
-// bro chi minh oh well
 app.get('/api/schedule/:day', async (request, response) => {
     var data = await readData("app", "daily");
     var invalid = checkForBadData(data);
@@ -90,8 +89,8 @@ app.get('/api/startup', async (_, response) => {
     }
 });
 
-// called by https://uptimerobot.com every 12h at 6am + 6pm
-// I didn't want to wake up at 5am and set the interval to 24h
+// called by https://uptimerobot.com every hour or something
+// TODO: rate limit this
 app.use('/api/poll', async (_, response) => {
     await startServerToday();
     response.status(200).send({ status: "ok" });
@@ -116,7 +115,11 @@ app.post("/api/register", express.json(), async (request, response) => {
         pfp,
     };
     await writeData("users", uid, obj);
-    response.status(200).send(obj);
+    const messages = await getMessagesForUser(uid);
+    response.status(200).send({
+        data: obj,
+        messages
+    });
 });
 
 app.post("/api/login", async (request, response) => {

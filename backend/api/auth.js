@@ -40,6 +40,12 @@ const loginUser = async (email, password) => {
     }
 };
 
+const verifyToken = async (token) => {
+    const res = await auth.verifyIdToken(token);
+    return res;
+};
+
 export {
-    loginUser
+    loginUser,
+    verifyToken
 }
