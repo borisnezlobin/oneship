@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import { Toaster } from 'react-hot-toast';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import HomePage from './pages/Home';
@@ -45,6 +45,7 @@ function App() {
   return (
     <DataContext.Provider value={{ data: startupData }}>
       <UserDataContext.Provider value={{ userData, setUserData }}>
+        <Toaster position='bottom-right' />
         <div className='w-full h-full' style={{
           overflow: "auto",
           overflowX: "hidden",

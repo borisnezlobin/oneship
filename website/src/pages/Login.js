@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import logo from "../logo.svg";
 import { useNavigate } from "react-router-dom";
-import CONFIG from "../util/config";
+import CONFIG, { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from "../util/config";
 import { UserDataContext } from "../util/contexts";
+import { toast } from "react-hot-toast";
 
 const LoginPage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
@@ -13,23 +14,23 @@ const LoginPage = () => {
     const login = async () => {
         // verify email and password
         if(email.length < 1){
-            // toast("Please enter an email", ERROR_TOAST_STYLES);
+            toast.error("Please enter an email", ERROR_TOAST_STYLES);
             return;
         }
         if(email.split("@")[1] != "pausd.us"){
-            // toast("Please use a PAUSD email", ERROR_TOAST_STYLES);
+            toast.error("Please use a PAUSD email", ERROR_TOAST_STYLES);
             return;
         }
         if(!email.includes("@") || !email.includes(".")){
-            // toast("Please enter a valid email", ERROR_TOAST_STYLES);
+            toast.error("Please enter a valid email", ERROR_TOAST_STYLES);
             return;
         }
         if(password.length < 1){
-            // toast("Please enter a password", ERROR_TOAST_STYLES);
+            toast.error("Please enter a password", ERROR_TOAST_STYLES);
             return;
         }
         if(password.length < 6){
-            // toast("Password must be at least 6 characters", ERROR_TOAST_STYLES);
+            toast.error("Password must be at least 6 characters", ERROR_TOAST_STYLES);
             return;
         }
 
@@ -41,17 +42,28 @@ const LoginPage = () => {
         });
         try{
             const json = await res.json();
+            console.log(json);
             if(json.error){
-                // toast(json.error, ERROR_TOAST_STYLES);
+                //eek
+                if(json.error.error.message == "INVALID_PASSWORD"){
+                    toast.error("Incorrect password", ERROR_TOAST_STYLES);
+                    return;
+                }
+                if(json.error.error.message == "EMAIL_NOT_FOUND"){
+                    toast.error("No user exists with this email", ERROR_TOAST_STYLES);
+                    return;
+                }
+                // TODO: sentry
+                toast.error("Error logging in", ERROR_TOAST_STYLES);
                 return;
             }
-            // toast("Logged in!", SUCCESS_TOAST_STYLES);
+            toast.success("Logged in!", SUCCESS_TOAST_STYLES);
             setUserData(json);
             nav("/feed")
         }catch(err){
             console.log(err);
             console.log(res);
-            // toast("Error logging in", ERROR_TOAST_STYLES);
+            toast.error("Error logging in", ERROR_TOAST_STYLES);
             // TODO: sentry
         }
     };
@@ -85,18 +97,17 @@ const LoginPage = () => {
                 />
                 <button className="btn" onClick={(e) => {
                     e.preventDefault();
-                    login(email, password);
+                    login();
                 }}>
                     Login
                 </button>
             </form>
             <hr />
             <div className="h-8" />
-            <div className="flex flex-col items-center justify-center w-256">
-                <button className="btn w-256">
-                    <img src="https://img.icons8.com/ios/50/000000/google-logo.png" alt="Google" className="h-5 w-5" />
-                    <p>Google</p>
-                </button>
+            <div className="flex flex-col items-center gap-2 justify-center w-256">
+                <p className="text-center text-theme font-bold">
+                    Or
+                </p>
                 <button className="btn w-256" onClick={() => {
                     nav("/register");
                 }}>
