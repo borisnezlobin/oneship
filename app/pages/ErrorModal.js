@@ -206,8 +206,8 @@ const parseMarkdown = (text) => {
     return parsed.map((line, index) => {
         if(line.type == "header"){
             return (
-                <>
-                    <Text key={index} style={{
+                <View key={index}>
+                    <Text style={{
                         fontSize: 24 - ((line.level - 1) * 6),
                         fontWeight: line.level == 1 ? "bold" : "bold",
                         letterSpacing: -0.5,
@@ -225,7 +225,7 @@ const parseMarkdown = (text) => {
                             marginTop: 5,
                         }} />
                     ) : null}
-                </>
+                </View>
             );
         }else if(line.type == "text"){
             return (

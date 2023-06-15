@@ -1,4 +1,3 @@
-
 const getTodayInFunnyFormat = () => {
     var today = new Date();
     // in format "yyyymmdd"
@@ -37,8 +36,19 @@ const messageScore = (message) => {
     return score;
 };
 
+// did I just write a function that I don't need?
+// const requireAuthed = async (request, response, next) => {
+//     var body = request.body;
+//     if(body.token == null) return response.status(401).send("No token provided");
+//     const res = await verifyToken(body.token);
+//     if(res == null) return response.status(401).send("Invalid token");
+//     request.uid = res.uid;
+//     delete request.body.token;
+//     next();
+// };
+
 export {
     getTodayInFunnyFormat,
     checkForBadData,
-    messageScore
+    messageScore,
 };
