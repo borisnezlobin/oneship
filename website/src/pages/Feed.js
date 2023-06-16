@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { UserDataContext } from "../util/contexts";
 import { useNavigate } from "react-router-dom";
+import FeedItem from "../components/FeedItem";
 
 const FeedPage = () => {
     const { userData } = useContext(UserDataContext);
@@ -31,8 +32,8 @@ const FeedPage = () => {
         );
     }else{
         return (
-            <div className="m-0 md:ml-64 px-4 h-full">
-                <div className="w-full flex flex-col justify-center items-center">
+            <div className="m-0 md:ml-64 px-4">
+                <div className="w-full mt-4 flex flex-col justify-center items-center">
                     <h1 className="bigText text-center">
                         {getTimelyGreeting()}, {userData.data.displayName}
                     </h1>
@@ -40,18 +41,14 @@ const FeedPage = () => {
                         3rd Period is ending in 00:42:38
                     </p>
                 </div>
-                <p className="bigText m-4 ml-2">
+                <p className="font-bold text-theme text-2xl md:text-3xl m-4 ml-2">
                     Here's what's happening:
                 </p>
-                <div className="flex flex-col gap-4">
-                    {userData.messages.map((message, index) => {
-                        return (
-                            <p key={"message" + index}>
-                                {JSON.stringify(message)}
-                            </p>
-                        )
-                    })}
-                </div>
+                {userData.messages.map((message, index) => {
+                    return (
+                        <FeedItem key={"feed" + index} item={message} />
+                    )
+                })}
             </div>
         );
     }
