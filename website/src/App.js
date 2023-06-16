@@ -45,7 +45,7 @@ function App() {
   return (
     <DataContext.Provider value={{ data: startupData }}>
       <UserDataContext.Provider value={{ userData, setUserData }}>
-        <Toaster position='bottom-right' />
+        <Toaster position={window.innerWidth < 768 ? "top-center" : 'bottom-right'} />
         <div className='w-full h-full' style={{
           overflow: "auto",
           overflowX: "hidden",

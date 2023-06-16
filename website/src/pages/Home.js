@@ -1,6 +1,8 @@
 import React from 'react'
 import GenerativeArt from '../components/codethaticopied/GenerativeArt'
 import logo from '../logo.svg'
+import { toast } from 'react-hot-toast'
+import { SUCCESS_TOAST_STYLES } from '../util/config'
 
 const HomePage = () => {
   return (
@@ -31,6 +33,7 @@ const HomePage = () => {
             </p>
             <a href="#" className='link' onClick={() => {
                 navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
+                toast.success("Copied invite link!", SUCCESS_TOAST_STYLES);
             }}>
                 Copy the invite link
             </a>
