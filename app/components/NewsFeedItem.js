@@ -38,7 +38,7 @@ const NewsFeedItem = ({ item }) => {
                 }} />
                 <View style={tailwind("w-full")}>
                     <Text style={[tailwind("text-base"), { color: CONFIG.text }]}>
-                        {item.description.replaceAll("\n", "").trim().slice(0, 200) + (item.description.length > 200 ? "..." : "")}
+                        {item.description.replaceAll("\n", "").replaceAll("\r", "").trim().slice(0, 200) + (item.description.length > 200 ? "..." : "")}
                     </Text>
                     {item.image == null || item.image == image404 || item.isVideo ? <></> :
                         <View style={{}}>

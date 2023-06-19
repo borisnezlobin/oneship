@@ -2,9 +2,9 @@ const NewsItem = ({ item }) => {
     var description = item.description.replaceAll("\r", "").replaceAll("\n", "");
     if(description.length > 256) description = description.substring(0, 256) + "...";
     return (
-        <div className="border border-grey rounded-lg p-4 m-4" style={{
-            width: "90%",
-            marginLeft: "5%",
+        <a href={item.link} target="_blank" className="rounded-lg p-4 md:p-2 md:p-8" style={{
+            width: "100%",
+            display: "block",
             cursor: "pointer",
         }} onClick={() => {
             window.open(item.link);
@@ -13,15 +13,20 @@ const NewsItem = ({ item }) => {
             <p>
             {item.authors.map((e, i) => {
                 return (
-                    <a className="link" key={"author" + item.title + i} href={e.authorLink}>
-                        {e.authorName}{i === item.authors.length - 1 ? "" : ", "}
-                    </a>
+                    <>
+                        <a className="link" key={"author" + item.title + i} href={e.authorLink}>
+                            {e.authorName}
+                        </a>
+                        <span>
+                            {i === item.authors.length - 1 ? "" : ", "}
+                        </span>
+                    </>
                 )
             })}
             {item.authors.length > 0 ? " with " : ""}{item.publication} on {item.published.trim()}
             </p>
-            <hr />
-            <p className="text-lg">{description}</p>
+            <hr className="m-2" />
+            <p className="text-0 md:text-lg">{description}</p>
             <p className="text-sm">{item.date}</p>
             { /* media */}
             <div className="w-full">
@@ -38,7 +43,7 @@ const NewsItem = ({ item }) => {
             ) : (
                 <img
                     src={item.image}
-                    className="w-full h-128"
+                    className="w-full h-128 rounded-lg"
                     alt={item.title}
                     style={{
                         objectFit: "cover",
@@ -47,7 +52,7 @@ const NewsItem = ({ item }) => {
                 />
             )}
             </div>
-        </div>
+        </a>
     )
 };
 
