@@ -32,7 +32,7 @@ const FeedPage = () => {
         );
     }else{
         return (
-            <div className="m-0 md:ml-64 px-4">
+            <div className="m-0 mb-2 md:ml-64 px-4">
                 <div className="w-full mt-4 flex flex-col justify-center items-center">
                     <h1 className="bigText text-center">
                         {getTimelyGreeting()}, {userData.data.displayName}

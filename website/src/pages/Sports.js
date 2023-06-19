@@ -1,0 +1,57 @@
+import { useContext } from "react"
+import { DataContext } from "../util/contexts";
+import game from "../illustrations/game.svg";
+
+const SportsPage = () => {
+    const { data } = useContext(DataContext);
+
+    if(data == null || data.sports == undefined) return (
+        <div className="m-0 md:ml-64 flex justify-center items-center h-full">
+            <h1 className="bigText">
+                Loading...
+            </h1>
+        </div>
+    );
+
+    return (
+        <div className="m-0 md:ml-64 p-4">
+            <div className="flex justify-center items-center w-full flex-col">
+                <img
+                    src={game}
+                    alt="game"
+                    className="w-48 h-48"
+                />
+                <h1 className="bigText text-center mb-8">
+                    Upcoming Sports Events
+                </h1>
+            </div>
+            {data.sports.map((day, index) => {
+                return <div className="mb-4" key={"sports" + day.date}>
+                    <h1 className="bigText">
+                        {day.date}
+                    </h1>
+                    <hr />
+                    {day.events.map((event, index) => {
+                        return <div key={"sports" + event.date + "" + index}>
+                            <h1 className="mediumText">
+                                {event.eventName} {" "}
+                                <span className="font-bold text-black text-lg">
+                                    {" "} {event.time}
+                                </span>
+                            </h1>
+                            <p>
+                                {
+                                    event.location.includes("TBA") ?
+                                    "Location not announced"
+                                    : event.location.replaceAll("PAlo Alto High School", "").trim()
+                                }
+                            </p>
+                        </div>
+                    })}
+                </div>
+            })}
+        </div>
+    );
+}
+
+export default SportsPage;

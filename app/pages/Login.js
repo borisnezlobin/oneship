@@ -83,7 +83,7 @@ const LoginPage = () => {
 
     const createAccount = () => {
         // it's not easy to make google oauth work with react native
-        openBrowserAsync("https://palyoneship.web.app/signup");
+        openBrowserAsync("https://palo-alto-high-school.web.app/create-account");
     }
 
 
