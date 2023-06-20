@@ -11,6 +11,7 @@ import FeedPage from './pages/Feed';
 import LoginPage from './pages/Login';
 import CreateAccountPage from './pages/Register';
 import SportsPage from './pages/Sports';
+import SchedulePage from './pages/Schedule';
 
 function App() {
   const [startupData, setStartupData] = useState(null);
@@ -57,6 +58,7 @@ function App() {
             <Route path="/news" element={<NewsPage />} />
             <Route path="/feed" element={<FeedPage />} />
             <Route path="/sports" element={<SportsPage />} />
+            <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<CreateAccountPage />} />
             <Route path="/create-account" element={<CreateAccountPage />} />

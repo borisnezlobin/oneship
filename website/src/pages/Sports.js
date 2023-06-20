@@ -1,6 +1,7 @@
 import { useContext } from "react"
 import { DataContext } from "../util/contexts";
 import game from "../illustrations/game.svg";
+import { MapTrifold } from "phosphor-react";
 
 const SportsPage = () => {
     const { data } = useContext(DataContext);
@@ -26,13 +27,13 @@ const SportsPage = () => {
                 </h1>
             </div>
             {data.sports.map((day, index) => {
-                return <div className="mb-4" key={"sports" + day.date}>
+                return <div className="border border-grey rounded p-4 mb-4" key={"sports" + day.date}>
                     <h1 className="bigText">
                         {day.date}
                     </h1>
                     <hr />
                     {day.events.map((event, index) => {
-                        return <div key={"sports" + event.date + "" + index}>
+                        return <div key={"sports" + event.date + "" + index} className="mt-8">
                             <h1 className="mediumText">
                                 {event.eventName} {" "}
                                 <span className="font-bold text-black text-lg">
@@ -46,6 +47,19 @@ const SportsPage = () => {
                                     : event.location.replaceAll("PAlo Alto High School", "").trim()
                                 }
                             </p>
+                            {!event.location.includes("TBA") && 
+                            (
+                                <button onClick={() => {
+                                    window.open(
+                                        "https://www.google.com/maps/search/?api=1&query="
+                                            + event.location.replaceAll(" ", "+"),
+                                        "_blank"
+                                    );
+                                }} className="absolute right-0 top-0 btn w-16">
+                                    <MapTrifold />
+                                    <p>Get Directions</p>
+                                </button>
+                            )}
                         </div>
                     })}
                 </div>
