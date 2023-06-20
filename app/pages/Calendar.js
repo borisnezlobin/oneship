@@ -33,19 +33,20 @@ const CalendarPage = ({ calendar, navigation }) => {
         );
     }
 
+    // all of this doesn't work and I have no clue
     var markedDates = {};
-    for(var i = 0; i < calendar.length; i++){
-        var date = calendar[i].start;
-        date = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
-        if(markedDates[date] == null) markedDates[date] = { dots: [one], marked: true };
-        else{
-            if(markedDates[date].dots.length == 1){
-                markedDates[date].dots.push(two);
-            }else if(markedDates[date].dots.length == 2){
-                markedDates[date].dots.push(three);
-            }
-        }
-    }
+    // for(var i = 0; i < calendar.length; i++){
+    //     var date = calendar[i].start;
+    //     date = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+    //     if(markedDates[date] == null) markedDates[date] = { dots: [one], marked: true };
+    //     else{
+    //         if(markedDates[date].dots.length == 1){
+    //             markedDates[date].dots.push(two);
+    //         }else if(markedDates[date].dots.length == 2){
+    //             markedDates[date].dots.push(three);
+    //         }
+    //     }
+    // }
 
     return (
         <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
