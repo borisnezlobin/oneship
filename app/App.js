@@ -79,7 +79,7 @@ function App() {
         if(schedule == null || schedule.date != today){
           if(data.schedule != null){
             setSchedule(data.schedule);
-            setNotificationForClasses(data.schedule);
+            setNotificationForClasses(data.schedule, userData.data.classNotification ? userData.data.classNotification : 5);
             await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
           }
         }

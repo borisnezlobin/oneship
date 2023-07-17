@@ -38,13 +38,18 @@ const getCurrentScheduleInfo = (schedule, time) => {
     return "School's over!";
 };
 
-const setNotificationForClasses = (schedule) => {
+const setNotificationForClasses = (schedule, timeTrigger) => {
     const time = new Date();
     // return "No school today" if there is no school today
     // return "Period x ending in hh:mm:ss" if there is school today and class is in session
     // return "Period x starting in hh:mm:ss" if there is school today and class is not in session
 
     if(schedule == null || schedule.value == null) return;
+    if(!timeTrigger) return;
+    timeTrigger = parseInt(timeTrigger);
+    if(isNaN(timeTrigger)) return;
+    if(timeTrigger == -1) return;
+
     for(var i = schedule.value.length - 1; i > -1; i--){
         // format:
         // {
@@ -62,8 +67,8 @@ const setNotificationForClasses = (schedule) => {
         if(periodStart > time){
             setLocalNotification(
                 period.name,
-                "Starting in 5 minutes!",
-                (periodStart - new Date()) + 5 * 60 * 1000
+                "Starting in " + timeTrigger + " minute" + (timeTrigger == 1 ? "" : "s") + "!",
+                (periodStart - new Date()) + timeTrigger * 60 * 1000
             );
         }else{
             return;

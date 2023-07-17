@@ -77,7 +77,7 @@ const getMessagesForUser = async (userData) => {
     messages = messages.docs.map(doc => doc.data());
     messages = messages.filter(message => {
         return (message.targets.individuals.includes(userData.uid) ||
-        message.targets.grades.includes(userData.grade) ||
+        message.targets.grades.includes(parseInt(userData.grade)) ||
         (message.targets.students && userData.email.split("@")[1] == "pausd.us") ||
         (message.targets.teachers && userData.email.split("@")[1] == "pausd.org")) &&
         message.expires > Date.now();
