@@ -61,6 +61,8 @@ const SettingsPage = () => {
 
         // verify all settings
         if(!checkValid()) return;
+        forceTypes();
+        console.log(editedSettings);
 
         // save
         setSaving(true);
@@ -89,21 +91,43 @@ const SettingsPage = () => {
         setSaving(false);
     }
 
+    const forceTypes = () => {
+        // the types get forced correctly, but then devolve back?
+        // TODO: fix this
+        var newSettings = {...editedSettings};
+        if((typeof newSettings.grade) != "number") newSettings.grade = parseInt(newSettings.grade);
+        console.log(newSettings.grade);
+        if(typeof(newSettings.classNotification) != "number") newSettings.classNotification = parseInt(newSettings.classNotification);
+
+        setEditedSettings(newSettings);
+    }
+
     const checkValid = () => {
+        // grade
         if(editedSettings.grade != -1){
-            var grade = parseInt(editedSettings.grade);
-            console.log(grade)
-            if(isNaN(grade)){
-                console.log(editedSettings.grade);
+            var g = parseInt(editedSettings.grade);
+            if(isNaN(g)){
                 setErrors({...errors, grade: "Grade must be a valid number."});
                 return false;
             }
-            if(grade < 9 || grade > 12){
+            if(g < 9 || g > 12){
                 setErrors({...errors, grade: "Grade must be between 9 and 12."});
                 return false;
             }
             setErrors({...errors, grade: ""});
         }
+        
+        // class notifications
+        var cn = parseInt(editedSettings.classNotification);
+        if(isNaN(cn)){
+            setErrors({...errors, cn: "Class notification must be a valid number."});
+            return false;
+        }
+        if(cn < -1 || cn > 15){
+            setErrors({...errors, cn: "Class notification must be between 0 and 15."});
+            return false;
+        }
+        setErrors({...errors, cn: ""});
 
         return true;
     }
@@ -120,7 +144,7 @@ const SettingsPage = () => {
                     description="Do you want to see a OneShip mobile app? Help convince the ASB to fund it."
                 />
                 <TextInput
-                    key={"setrtingsgrade" + errors.grade}
+                    key={"settingsGrade" + errors.grade}
                     cb={(e) => updateEdits(e, "grade", e.target.value)}
                     value={editedSettings.grade == -1 ? "" : editedSettings.grade}
                     placeholder="Grade"
@@ -129,6 +153,8 @@ const SettingsPage = () => {
                     description="Used to show you grade-specific announcements and events."
                 />
                 <TextInput
+                    key={"settingsCN" + errors.cn}
+                    error={errors.cn}
                     cb={(e) => updateEdits(e, "classNotification", e.target.value)}
                     value={editedSettings.classNotification}
                     placeholder="Minutes"
