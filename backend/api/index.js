@@ -8,7 +8,7 @@ import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser, verifyToken } from './auth.js';
 import { getSports } from './getSports.js';
 
-app.use(cors());
+app.use(express.json());
 
 app.get("/version", (_, response) => {
     // look at me using semver
@@ -96,7 +96,7 @@ app.use('/api/poll', async (_, response) => {
     response.status(200).send({ status: "ok" });
 });
 
-app.post("/api/register", express.json(), async (request, response) => {
+app.post("/api/register", async (request, response) => {
     // TODO: require token
     const body = request.body;
     console.log(body);

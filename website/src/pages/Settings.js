@@ -75,7 +75,11 @@ const SettingsPage = () => {
                 token: userData.token
             })
         }).then(res => {
-            // TODO: check for errors
+            if(res.status != 200){
+                toast.error("Failed to save settings.", ERROR_TOAST_STYLES);
+                setSaving(false);
+                return;
+            }
             setUserData({...userData, data: editedSettings});
             toast.success("Saved settings!", SUCCESS_TOAST_STYLES);
         }).catch(err => {
