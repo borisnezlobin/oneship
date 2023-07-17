@@ -9,6 +9,7 @@ const DEFAULT_SETTINGS = {
     "classNotification": 5,
     "grade": -1,
     "show0": false,
+    "wantsMobile": false,
     '0 Period': {
         "customName": "0 Period",
         "teacher": null,
@@ -132,11 +133,18 @@ const getErrors = async () => {
     return errors;
 };
 
+const updateSettings = async (uid, settings) => {
+    await db.collection("users").doc(uid).update(settings);
+
+    return { status: 200, message: "Settings updated successfully" };
+}
+
 export {
     writeData,
     readData,
     getMessagesForUser,
     createMessage,
     getErrors,
+    updateSettings,
     DEFAULT_SETTINGS
 };

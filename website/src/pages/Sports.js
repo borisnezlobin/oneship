@@ -2,20 +2,37 @@ import { useContext } from "react"
 import { DataContext } from "../util/contexts";
 import game from "../illustrations/game.svg";
 import { MapTrifold } from "phosphor-react";
+import tickets from "../illustrations/tickets.svg";
+import LoadingSpinner from "../components/LoadingSpinner";
 
+
+// tfw when the formatting
 const SportsPage = () => {
     const { data } = useContext(DataContext);
 
     if(data == null || data.sports == undefined) return (
         <div className="m-0 md:ml-64 flex justify-center items-center h-full">
-            <h1 className="bigText">
-                Loading...
-            </h1>
+            <LoadingSpinner />
         </div>
     );
 
     return (
-        <div className="m-0 md:ml-64 p-4">
+        <div className="m-0 md:ml-64 min-h-screen">
+            {(!data.sports || data.sports.length == 0) ?
+            <div className="flex flex-col justify-center items-center w-full h-screen">
+                <img
+                    src={tickets}
+                    alt="tickets"
+                    className="w-48 h-48"
+                />
+                <h1 className="bigText mb-4">
+                    No Upcoming Events
+                </h1>
+                <hr className="w-4/5" />
+
+            </div>
+            :
+            <>
             <div className="flex justify-center items-center w-full flex-col">
                 <img
                     src={game}
@@ -64,6 +81,8 @@ const SportsPage = () => {
                     })}
                 </div>
             })}
+            </>
+            }
         </div>
     );
 }

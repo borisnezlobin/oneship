@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Barcode, BellSimple, Football, GearSix, HouseSimple, List, Newspaper, User } from "phosphor-react";
+import { Barcode, BellSimple, Football, GearSix, HouseSimple, List, Newspaper, SignIn, UserPlus } from "phosphor-react";
 import logo from "../logo.svg";
 import { useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../util/contexts";
@@ -14,7 +14,7 @@ const containerStyle = "h-12 absolute bottom-0 md:top-0 left-0 w-full bg-white f
 
 const Navbar = () => {
     const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
-    const { userData, setUserData } = useContext(UserDataContext);
+    const { userData } = useContext(UserDataContext);
     const path = useLocation().pathname;
     const isSmallScreen = window.innerWidth < 768;
 
@@ -69,26 +69,37 @@ const Navbar = () => {
                         backgroundColor: "white",
                         boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
                     }}>
-                        <Link to="/settings" className={calculateStyles("/settings", path)}>
-                            <GearSix color="black" size={24} />
-                            <p>
-                                Settings
-                            </p>
-                        </Link>
                         {userData ? (
+                        <>
                             <Link to="/barcode" className={calculateStyles("/barcode", path)}>
                                 <Barcode color="black" size={24} />
                                 <p>
                                     Barcode
                                 </p>
                             </Link>
+                            <Link to="/settings" className={calculateStyles("/settings", path)}>
+                                <GearSix color="black" size={24} />
+                                <p>
+                                    Settings
+                                </p>
+                            </Link>
+                        </>
                         ) : (
+                        <>
+                            <Link to="/register" className={calculateStyles("/register", path)}>
+                                <UserPlus color="black" size={24} />
+                                <p>
+                                    Register
+                                </p>
+                            </Link>
                             <Link to="/login" className={calculateStyles("/login", path)}>
-                                <User color="black" size={24} />
+                                <SignIn color="black" size={24} />
                                 <p>
                                     Login
                                 </p>
                             </Link>
+                        </>
+                            
                         )}
                     </div>
                 :<></>}

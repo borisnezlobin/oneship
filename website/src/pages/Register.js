@@ -7,20 +7,24 @@ import auth from "../util/firebaseConfig";
 import CONFIG, { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from "../util/config";
 import { UserDataContext } from "../util/contexts";
 import toast from "react-hot-toast";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const CreateAccountPage = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const next = decodeURIComponent(urlParams.get("continue"));
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(0);
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const { userData, setUserData } = useContext(UserDataContext);
+    const [isNavigating, setIsNavigating] = useState(false); // prevent double nav
 
     const nav = useNavigate();
 
     useEffect(() => {
-        if(userData){
-            nav("/feed");
+        if(userData && !isNavigating){
+            setIsNavigating(true);
+            nav(next ? next : "/feed");
         }
     }, [userData]);
 
@@ -32,6 +36,10 @@ const CreateAccountPage = () => {
             setLoading(false);
             return;
         });
+        if(res == undefined){
+            setLoading(false);
+            return;
+        }
         const user = res.user;
         if(user.email.split("@")[1] != "pausd.us"){
             toast.error("Please use a PAUSD email", ERROR_TOAST_STYLES);
@@ -88,13 +96,14 @@ const CreateAccountPage = () => {
                 return;
             });
             try{
+                setIsNavigating(true);
                 const json = await res.json();
                 setUserData(json);
-                nav("/feed");
+                nav(next ? next : "/feed");
                 toast.success("Account created successfully!", SUCCESS_TOAST_STYLES);
             }catch(err){
                 console.log(err);
-                toast.success("Oops! Something went wrong on our side", ERROR_TOAST_STYLES);
+                toast.success("Oops! Something went wrong on our side.", ERROR_TOAST_STYLES);
                 // TODO: sentry
             }
             setLoading(false);
@@ -113,13 +122,7 @@ const CreateAccountPage = () => {
                     <h1 className="bigText">Create a OneShip account</h1>
                 </div>
                 <div className="h-8" />
-                <div className="flex flex-col items-center justify-center w-256">
-                    <img
-                        src={spinner}
-                        alt="loading"
-                        className="h-16 w-16"
-                    />
-                </div>
+                <LoadingSpinner />
             </div>
         )
     }
@@ -142,7 +145,8 @@ const CreateAccountPage = () => {
                         Already have an account?
                     </p>
                     <button className="btn w-256" onClick={() => {
-                        nav("/login");
+                        setIsNavigating(true);
+                        nav("/login?continue=" + next);
                     }}>
                         Login
                     </button>

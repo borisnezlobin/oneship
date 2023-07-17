@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { DataContext, UserDataContext } from "../util/contexts";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const SchedulePage = () => {
     const { userData } = useContext(UserDataContext);
@@ -7,9 +8,7 @@ const SchedulePage = () => {
 
     if(data == null || data.schedule == undefined) return (
         <div className="m-0 md:ml-64 flex justify-center items-center h-full">
-            <h1 className="bigText">
-                Loading...
-            </h1>
+            <LoadingSpinner />
         </div>
     );
 
@@ -31,7 +30,7 @@ const SchedulePage = () => {
 
         scheduleComponent = <div className="w-full h-full">
             {schedule.value.map((e, i) => {
-                if(!userData == null && !userData.show0 && e.name.includes("0 Period")) return <></>;
+                if(userData != null && !userData.data.show0 && e.name.includes("0 Period")) return <></>;
                 var top = i == 0 ? 0 : (
                     (e.start - schedule.value[i - 1].end) / (dayEnd - dayStart) * winHeight
                 );

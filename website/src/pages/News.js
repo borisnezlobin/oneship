@@ -1,15 +1,15 @@
 import { useContext } from "react";
 import { DataContext } from "../util/contexts";
 import NewsItem from "../components/NewsItem";
+import spinner from "../loading.svg";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const NewsPage = () => {
     const { data } = useContext(DataContext);
 
-    if(data == null) return (
+    if(data == null || data.news == undefined) return (
         <div className="m-0 md:ml-64 flex justify-center items-center h-full">
-            <h1 className="bigText">
-                Loading...
-            </h1>
+            <LoadingSpinner />
         </div>
     );
 

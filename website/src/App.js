@@ -12,6 +12,8 @@ import LoginPage from './pages/Login';
 import CreateAccountPage from './pages/Register';
 import SportsPage from './pages/Sports';
 import SchedulePage from './pages/Schedule';
+import SettingsPage from './pages/Settings';
+import BarcodePage from './pages/Barcode';
 
 function App() {
   const [startupData, setStartupData] = useState(null);
@@ -35,13 +37,6 @@ function App() {
   const setUserData = (data) => {
     setLocalUserData(data);
     localStorage.setItem("userData", JSON.stringify(data));
-    // fetch(CONFIG.SERVER_URL + "/api/user", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // });
   };
 
   return (
@@ -64,6 +59,8 @@ function App() {
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/createaccount" element={<CreateAccountPage />} />
             <Route path="/signup" element={<CreateAccountPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/barcode" element={<BarcodePage />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </div>
