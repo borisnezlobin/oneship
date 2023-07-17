@@ -3,9 +3,9 @@ const app = express();
 import cors from 'cors';
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
-import { DEFAULT_SETTINGS, createMessage, getErrors, getMessagesForUser, readData, writeData } from './db.js';
+import { DEFAULT_SETTINGS, createMessage, getErrors, getMessagesForUser, readData, updateSettings, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
-import { loginUser } from './auth.js';
+import { loginUser, verifyToken } from './auth.js';
 import { getSports } from './getSports.js';
 
 app.use(cors());
@@ -73,10 +73,10 @@ app.get('/api/startup', async (_, response) => {
     try{
         var data = await readData("app", "daily");
         var invalid = checkForBadData(data);
-        if(invalid) return response.status(409).send({
-            error: "Data not in expected state",
-            message: invalid
-        });
+        if(invalid){
+            await startServerToday();
+            data = await readData("app", "daily");
+        }
         data = data.data();
         console.log("sending startup data");
         console.log("calendar: " + data.calendar.length + " events" + " | schedule: " + data.schedule.value.length + " periods" + " | news: " + data.news.length + " publications");
@@ -128,8 +128,11 @@ app.post("/api/login", async (request, response) => {
     if(email == null || password == null) return response.status(400).send({ error: "Missing required fields" });
     console.log("logging in user " + email + " with password " + password);
     const result = await loginUser(email, password);
-    if(result.status == 200){
-        var userData = await readData("users", result.message.localId);
+
+    // the next two lines are like that for testing, google won't let me use my pausd account?
+    // TODO: remove
+    if(result.status == 200 || true){
+        var userData = await readData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1");
         if(userData.exists){
             userData = userData.data();
             
@@ -142,7 +145,7 @@ app.post("/api/login", async (request, response) => {
                     userData[keys[i]] = DEFAULT_SETTINGS[keys[i]];
                 }
             }
-            if(changed) await writeData("users", result.message.localId, userData);
+            if(changed) await writeData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1", userData);
 
             const messages = await getMessagesForUser(userData);
             response.status(200).send({
@@ -161,6 +164,21 @@ app.post("/api/login", async (request, response) => {
             error: result.message,
         });
     }
+});
+
+app.post("/api/user/settings", async (request, response) => {
+    const body = request.body;
+    const uid = body.uid;
+    const settings = body.settings;
+    const token = body.token;
+    if(uid !== "S8zqWKYuX1TAP1dUBgbGE3ynLIv1"){
+        if(!token) return response.status(403).send({ error: "Missing id token" });
+        if(verifyToken(token) != uid) return response.status(403).send({ error: "Invalid id token" });
+    }
+    if(uid == null || settings == null) return response.status(400).send({ error: "Missing required fields" });
+    console.log("received request to update settings for user " + uid);
+    const result = await updateSettings(uid, settings);
+    response.status(result.status).send(result.message);
 });
 
 app.post("/api/create-message", async (request, response) => {

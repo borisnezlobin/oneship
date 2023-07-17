@@ -6,31 +6,43 @@ import { UserDataContext } from "../util/contexts";
 import { toast } from "react-hot-toast";
 
 const LoginPage = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const next = decodeURIComponent(urlParams.get("continue"));
     const { userData, setUserData } = useContext(UserDataContext);
+    const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isNavigating, setIsNavigating] = useState(false); // prevent double nav
     const nav = useNavigate();
 
     const login = async () => {
+        if(loading) return;
+
+        setLoading(true);
         // verify email and password
         if(email.length < 1){
             toast.error("Please enter an email", ERROR_TOAST_STYLES);
+            setLoading(false);
             return;
         }
         if(email.split("@")[1] != "pausd.us"){
             toast.error("Please use a PAUSD email", ERROR_TOAST_STYLES);
+            setLoading(false);
             return;
         }
         if(!email.includes("@") || !email.includes(".")){
             toast.error("Please enter a valid email", ERROR_TOAST_STYLES);
+            setLoading(false);
             return;
         }
         if(password.length < 1){
             toast.error("Please enter a password", ERROR_TOAST_STYLES);
+            setLoading(false);
             return;
         }
         if(password.length < 6){
             toast.error("Password must be at least 6 characters", ERROR_TOAST_STYLES);
+            setLoading(false);
             return;
         }
 
@@ -46,21 +58,27 @@ const LoginPage = () => {
             if(json.error){
                 //eek
                 if(json.error.error.message == "INVALID_PASSWORD"){
-                    toast.error("Incorrect password", ERROR_TOAST_STYLES);
+                    toast.error("Incorrect password!", ERROR_TOAST_STYLES);
+                    setLoading(false);
                     return;
                 }
                 if(json.error.error.message == "EMAIL_NOT_FOUND"){
-                    toast.error("No user exists with this email", ERROR_TOAST_STYLES);
+                    toast.error("No user exists with this email!", ERROR_TOAST_STYLES);
+                    setLoading(false);
                     return;
                 }
                 // TODO: sentry
                 toast.error("Error logging in", ERROR_TOAST_STYLES);
+                setLoading(false);
                 return;
             }
+            setLoading(false);
             toast.success("Logged in!", SUCCESS_TOAST_STYLES);
+            setIsNavigating(true);
+            nav(next && next != "null" ? next : "/feed");
             setUserData(json);
-            nav("/feed")
         }catch(err){
+            setLoading(false);
             console.log(err);
             console.log(res);
             toast.error("Error logging in", ERROR_TOAST_STYLES);
@@ -69,8 +87,9 @@ const LoginPage = () => {
     };
 
     useEffect(() => {
-        if(userData){
-            nav("/feed");
+        if(userData && !isNavigating){
+            setIsNavigating(true);
+            nav(next && next != "null" ? next : "/feed");
         }
     }, [userData]);
 
@@ -99,7 +118,7 @@ const LoginPage = () => {
                     e.preventDefault();
                     login();
                 }}>
-                    Login
+                    {loading ? "..." : "Log in"}
                 </button>
             </form>
             <hr />
@@ -109,7 +128,8 @@ const LoginPage = () => {
                     Or
                 </p>
                 <button className="btn w-256" onClick={() => {
-                    nav("/register");
+                    setIsNavigating(true);
+                    nav("/register?continue=" + encodeURIComponent(next && next != "null" ? next : "/feed"));
                 }}>
                     Create an account
                 </button>
