@@ -14,6 +14,7 @@ import SportsPage from './pages/Sports';
 import SchedulePage from './pages/Schedule';
 import SettingsPage from './pages/Settings';
 import BarcodePage from './pages/Barcode';
+import PostDetails from './pages/PostDetails';
 
 function App() {
   const [startupData, setStartupData] = useState(null);
@@ -61,6 +62,7 @@ function App() {
             <Route path="/signup" element={<CreateAccountPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/barcode" element={<BarcodePage />} />
+            <Route path="/post/:id" element={<PostDetails />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </div>

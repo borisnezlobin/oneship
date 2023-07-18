@@ -172,7 +172,7 @@ const parseMarkdown = (text) => {
 
     var lines = [];
     if(typeof text != "string"){
-        text == text.toString();
+        text = text.toString();
     }
     lines = text.replaceAll("\\n", "\n").replaceAll("\\,", ",").split("\n");
     var parsed = [];
