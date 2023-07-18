@@ -166,10 +166,10 @@ app.post("/api/login", async (request, response) => {
     }
 });
 
-app.get("/api/message/:msgid", async (request, response) => {
-    const msg = await getMessage(request.params.msgid);
-    if(msg == null) return response.status(404).send({ error: "Message not found" });
-    response.status(200).send(msg);
+app.get("/api/post/:postid", async (request, response) => {
+    const post = await getMessage(request.params.postid);
+    if(post == null) return response.status(404).send({ error: "Post not found." });
+    response.status(200).send(post);
 });
 
 app.post("/api/user/settings", async (request, response) => {
