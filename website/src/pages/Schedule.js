@@ -38,7 +38,7 @@ const SchedulePage = () => {
                 var bottomRadius = e.end == (i == schedule.value.length - 1 ? e.start : schedule.value[i + 1].start) ? 0 : 8;
                 return <div
                     key={"scheduleItem" + i}
-                    className="rounded-lg p-4 bg-gray-50 w-full border border-grey-300 flex justify-start items-center"
+                    className="rounded-lg px-4 py-2 bg-gray-50 w-full border border-grey-300"
                     style={{
                         height: (e.end - e.start) / (dayEnd - dayStart) * winHeight + "px",
                         marginTop: top + "px",

@@ -9,7 +9,8 @@ module.exports = {
         "0": '0rem',
       },
       colors: {
-        "theme": "#1c8000"
+        "theme": "#1c8000",
+        "lightgrey": "#f5f5f5",
       },
     }
   },

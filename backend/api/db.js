@@ -1,5 +1,6 @@
 import admin from 'firebase-admin';
 import { messageScore } from './util.js';
+import { v4 } from 'uuid';
 
 const DEFAULT_SETTINGS = {
     "email": "",
@@ -88,6 +89,12 @@ const getMessagesForUser = async (userData) => {
     return messages;
 }
 
+const getMessage = async (messageId) => {
+    const message = await db.collection("messages").doc(messageId).get();
+    if(!message.exists) return null;
+    return message.data();
+}
+
 const createMessage = async (message) => {
     // message is in the format {
     //     sender: "name",
@@ -116,7 +123,8 @@ const createMessage = async (message) => {
     if(message.expires < Date.now()) return { status: 400, message: "Message cannot expire in the past" };
 
     try{
-        await db.collection("messages").add({
+        message.id = v4();
+        await db.collection("messages").doc(message.id).create({
             ...message,
             created: admin.firestore.FieldValue.serverTimestamp(),
             featured: false,
@@ -143,6 +151,7 @@ export {
     writeData,
     readData,
     getMessagesForUser,
+    getMessage,
     createMessage,
     getErrors,
     updateSettings,

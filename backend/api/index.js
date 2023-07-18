@@ -3,7 +3,7 @@ const app = express();
 import cors from 'cors';
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
-import { DEFAULT_SETTINGS, createMessage, getErrors, getMessagesForUser, readData, updateSettings, writeData } from './db.js';
+import { DEFAULT_SETTINGS, createMessage, getErrors, getMessage, getMessagesForUser, readData, updateSettings, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser, verifyToken } from './auth.js';
 import { getSports } from './getSports.js';
@@ -164,6 +164,12 @@ app.post("/api/login", async (request, response) => {
             error: result.message,
         });
     }
+});
+
+app.get("/api/message/:msgid", async (request, response) => {
+    const msg = await getMessage(request.params.msgid);
+    if(msg == null) return response.status(404).send({ error: "Message not found" });
+    response.status(200).send(msg);
 });
 
 app.post("/api/user/settings", async (request, response) => {
