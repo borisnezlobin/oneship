@@ -25,24 +25,25 @@ const ErrorModal = ({ error }) => {
         // logs
         var logs = getLogs();
         // user agent
-        var ua = "";
+        var ua = "unknown";
         try{
             var ua = UserAgent.getUserAgent();
             console.log("User agent: " + ua);
         }catch(e){}
         var report = {
             logs,
-            userAgent: userData ? userData.uid + ", " + ua : (ua ? ua : "unknown"),
+            userAgent: userData ? userData.uid + ", " + ua : ua,
             error: error.error,
             status: error.status,
         }
         // send report
-        try{
-            Sentry.Native.captureMessage("Error Report", {
-                level: Sentry.Severity.Error,
-                extra: report,
-            });
-        }catch(e){} // you see this
+        // try{
+        //     Sentry.Native.captureMessage("Error Report", {
+        //         level: Sentry.Severity.Error,
+        //         extra: report,
+        //     });
+        // }catch(e){}
+
         log("Sending error report: " + JSON.stringify(report));
         try{
             const response = await fetch(CONFIG.serverURL + "report-error", {

@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG, ERROR_TOAST, INFO_TOAST, SUCCESS_TOAST } from "../util/config";
 import { SportsContext } from "../util/contexts";
@@ -24,6 +24,33 @@ const SportsPage = ({ navigation }) => {
 
     return (
         <SafeAreaView style={tailwind("bg-white w-full h-full")}>
+        {sports.length == 0 ? (
+                    <View style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        width: "100%",
+                    }}>
+                        <Image
+                            style={{
+                                width: "100%",
+                                height: 196,
+                            }}
+                            source={require("../assets/illustrations/tickets.png")}
+                        />
+                        <Text
+                            style={[
+                                tailwind("text-3xl mt-8 font-bold text-center"),
+                                {
+                                    color: CONFIG.green,
+                                }
+                            ]}
+                        >
+                            No upcoming games!
+                        </Text>
+                    </View>
+        ) : (
             <ScrollView style={{
                 width: "100%",
             }}>
@@ -122,6 +149,7 @@ const SportsPage = ({ navigation }) => {
                     );
                 })}
             </ScrollView>
+        )}
         </SafeAreaView>
     );
 }

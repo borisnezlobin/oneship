@@ -64,7 +64,7 @@ function App() {
       try{
         data = JSON.parse(data);
         if(data.error){
-          logError("error: " + data.error);
+          logError("data.error: " + data.error);
           setError({
             error: data.error,
             status: response.status
@@ -79,7 +79,7 @@ function App() {
         if(schedule == null || schedule.date != today){
           if(data.schedule != null){
             setSchedule(data.schedule);
-            setNotificationForClasses(data.schedule, userData.data.classNotification ? userData.data.classNotification : 5);
+            setNotificationForClasses(data.schedule, (userData && userData.data) ? userData.data.classNotification : 5);
             await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
           }
         }
