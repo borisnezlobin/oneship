@@ -41,9 +41,10 @@ const MessageItem = ({ message, navigation }) => {
             onPress={() => {
                 navigation.navigate("Modal", {
                     title: message.title,
-                    body: message.content,
+                    body: getInfoText(message) + message.content,
                     isMarkdown: true,
                     image: message.postType,
+                    id: message.id,
                 });
             }}
         >
@@ -93,6 +94,21 @@ const MessageItem = ({ message, navigation }) => {
             </View>
         </PressableScale>
     );
+};
+
+const getInfoText = (message) => {
+    var infoText = "";
+    if (message.postType === "announcement") {
+        infoText += "An official OneShip announcement.";
+    } else if (message.postType === "oneship") {
+        infoText += "An official OneShip message.";
+    }else if(message.postType === "asb"){
+        infoText += "An official ASB message.";
+    }else if(message.postType === "ad"){
+        infoText += "A OneShip-approved message from " + message.sender + ".";
+    }
+
+    return infoText + "\n\n";
 };
 
 export default MessageItem;

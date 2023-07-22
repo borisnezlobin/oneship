@@ -23,14 +23,14 @@ const SettingsPage = () => {
         if(userData && editedSettings){
             var change = false;
             for(var key in editedSettings){
-                if(editedSettings[key] != userData.data[key]){
+                if(editedSettings[key] !== userData.data[key]){
                     change = true;
                     break;
                 }
             }
-            if(changed != change) setChanged(change);
+            if(changed !== change) setChanged(change);
         }
-    }, [userData, editedSettings]);
+    }, [userData, editedSettings, changed]);
 
     if(!userData || editedSettings == null) return (
         <div className="m-0 md:ml-64 flex flex-col px-4 justify-start pt-4 items-center h-full">
@@ -77,7 +77,7 @@ const SettingsPage = () => {
                 token: userData.token
             })
         }).then(res => {
-            if(res.status != 200){
+            if(res.status !== 200){
                 toast.error("Failed to save settings.", ERROR_TOAST_STYLES);
                 setSaving(false);
                 return;
@@ -104,7 +104,7 @@ const SettingsPage = () => {
 
     const checkValid = () => {
         // grade
-        if(editedSettings.grade != -1){
+        if(editedSettings.grade !== -1){
             var g = parseInt(editedSettings.grade);
             if(isNaN(g)){
                 setErrors({...errors, grade: "Grade must be a valid number."});
@@ -146,7 +146,7 @@ const SettingsPage = () => {
                 <TextInput
                     key={"settingsGrade" + errors.grade}
                     cb={(e) => updateEdits(e, "grade", e.target.value)}
-                    value={editedSettings.grade == -1 ? "" : editedSettings.grade}
+                    value={editedSettings.grade === -1 ? "" : editedSettings.grade}
                     placeholder="Grade"
                     title="Your grade (9-12)"
                     error={errors.grade}
@@ -167,10 +167,10 @@ const SettingsPage = () => {
                     title="Show 0 Period"
                     description="Show 0 Period on the schedule page?"
                 />
-                <div className="h-12 md:h-20 w-24 shrink-0" />
+                <div className="h-16 md:h-20 w-24 shrink-0" />
             </div>
             {changed ?
-                <div className="w-full h-20 absolute left-0 bottom-12 md:bottom-0 md:pl-64">
+                <div className="w-full h-20 fixed left-0 bottom-12 md:bottom-0 md:pl-64">
                     <div className="flex flex-col h-20 md:flex-row justify-around items-center border-t border-grey p-4 bg-white relative bottom-0 w-full">
                     {!saving ? <>
                         <p className="mediumText">

@@ -7,10 +7,9 @@ import { PressableScale } from 'react-native-pressable-scale';
 function TabBar({ state, descriptors, navigation }) {
   return (
     <View style={[
-        tailwind("w-full bg-white flex flex-row justify-around items-center"),
+        tailwind("w-full bg-white flex flex-row justify-around items-start pt-1"),
         {
-            // marginBottom: useSafeAreaInsets().bottom,
-            height: 64 + useSafeAreaInsets().bottom,
+            height: 56 + useSafeAreaInsets().bottom,
         }
     ]}>
       {state.routes.map((route, index) => {

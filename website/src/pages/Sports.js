@@ -10,7 +10,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 const SportsPage = () => {
     const { data } = useContext(DataContext);
 
-    if(data == null || data.sports == undefined) return (
+    if(data === null || data.sports === undefined) return (
         <div className="m-0 md:ml-64 flex justify-center items-center h-full">
             <LoadingSpinner />
         </div>
@@ -18,7 +18,7 @@ const SportsPage = () => {
 
     return (
         <div className="m-0 md:ml-64 min-h-screen">
-            {(!data.sports || data.sports.length == 0) ?
+            {(!data.sports || data.sports.length === 0) ?
             <div className="flex flex-col justify-center items-center w-full h-screen">
                 <img
                     src={tickets}

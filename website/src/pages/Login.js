@@ -25,7 +25,7 @@ const LoginPage = () => {
             setLoading(false);
             return;
         }
-        if(email.split("@")[1] != "pausd.us"){
+        if(email.split("@")[1] !== "pausd.us"){
             toast.error("Please use a PAUSD email", ERROR_TOAST_STYLES);
             setLoading(false);
             return;
@@ -57,12 +57,12 @@ const LoginPage = () => {
             console.log(json);
             if(json.error){
                 //eek
-                if(json.error.error.message == "INVALID_PASSWORD"){
+                if(json.error.error.message === "INVALID_PASSWORD"){
                     toast.error("Incorrect password!", ERROR_TOAST_STYLES);
                     setLoading(false);
                     return;
                 }
-                if(json.error.error.message == "EMAIL_NOT_FOUND"){
+                if(json.error.error.message === "EMAIL_NOT_FOUND"){
                     toast.error("No user exists with this email!", ERROR_TOAST_STYLES);
                     setLoading(false);
                     return;
@@ -75,7 +75,7 @@ const LoginPage = () => {
             setLoading(false);
             toast.success("Logged in!", SUCCESS_TOAST_STYLES);
             setIsNavigating(true);
-            nav(next && next != "null" ? next : "/feed");
+            nav(next && next !== "null" ? next : "/feed");
             setUserData(json);
         }catch(err){
             setLoading(false);
@@ -89,9 +89,9 @@ const LoginPage = () => {
     useEffect(() => {
         if(userData && !isNavigating){
             setIsNavigating(true);
-            nav(next && next != "null" ? next : "/feed");
+            nav(next && next !== "null" ? next : "/feed");
         }
-    }, [userData]);
+    }, [userData, nav, next, isNavigating]);
 
     return (
         <div className="m-0 md:ml-64 h-full flex flex-col justify-center items-center">
@@ -129,7 +129,7 @@ const LoginPage = () => {
                 </p>
                 <button className="btn w-256" onClick={() => {
                     setIsNavigating(true);
-                    nav("/register?continue=" + encodeURIComponent(next && next != "null" ? next : "/feed"));
+                    nav("/register?continue=" + encodeURIComponent(next && next !== "null" ? next : "/feed"));
                 }}>
                     Create an account
                 </button>

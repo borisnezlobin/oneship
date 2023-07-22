@@ -40,12 +40,14 @@ const setLocalNotification = async (title, body, seconds) => {
   const notifications = await Notifications.getAllScheduledNotificationsAsync();
   for(var i = 0; i < notifications.length; i++){
     if(notifications[i].content.title == title){
-      log("Notification with title " + title + " already exists");
-      return;
+      Notifications.cancelScheduledNotificationAsync(notifications[i].identifier);
+      log("Notification with title " + title + " already exists, removing it.");
+      // return;
+      break;
     }
   }
 
-  log("Notification with title " + title + " does not exist, creating it");
+  log("Notification with title " + title + " does not exist, creating it.");
   
   await Notifications.scheduleNotificationAsync({
     content: {
@@ -59,5 +61,5 @@ const setLocalNotification = async (title, body, seconds) => {
 };
 
 export {
-    setLocalNotification
+  setLocalNotification
 }

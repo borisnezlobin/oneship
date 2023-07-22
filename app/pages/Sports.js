@@ -15,7 +15,7 @@ const SportsPage = ({ navigation }) => {
     if(sports == null){
         return (
             <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
-                <Text style={[tailwind("text-2xl font-bold text-center"), { color: CONFIG.green }]}>
+                <Text style={[tailwind("font-bold text-center"), { color: CONFIG.green }]}>
                     Loading sports...
                 </Text>
             </SafeAreaView>

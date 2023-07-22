@@ -3,7 +3,6 @@ import tailwind from "tailwind-rn";
 import { CONFIG, ERROR_TOAST } from "../util/config";
 import { CalendarList } from 'react-native-calendars';
 import { useState } from "react";
-import Modal from "./Modal";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-root-toast";
 import log from "../util/debug";
@@ -17,10 +16,6 @@ const two = {key: 'two', color: '#464646'};
 const three = {key: 'three', color: '#343334'};
 
 const CalendarPage = ({ calendar, navigation }) => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalContent, setModalContent] = useState(null);
-    const [modalTitle, setModalTitle] = useState(null);
-
     const insets = useSafeAreaInsets();
 
     if(calendar == null){
@@ -33,7 +28,7 @@ const CalendarPage = ({ calendar, navigation }) => {
         );
     }
 
-    // all of this doesn't work and I have no clue
+    // all of this doesn't work and I have no glue
     var markedDates = {};
     // for(var i = 0; i < calendar.length; i++){
     //     var date = calendar[i].start;
@@ -107,13 +102,6 @@ const CalendarPage = ({ calendar, navigation }) => {
                 markedDates={markedDates}
                 showScrollIndicator={true}
             />
-            <Modal
-                visible={modalVisible}
-                setVisible={setModalVisible}
-                title={modalTitle}
-            >
-                {modalContent}
-            </Modal>
         </SafeAreaView>
     );
 }

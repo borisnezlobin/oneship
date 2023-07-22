@@ -1,4 +1,4 @@
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { AppState, SafeAreaView, StatusBar, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "./util/config";
 import { CalendarContext, DebugContext, NewsContext, ScheduleContext, SportsContext, UserDataContext } from "./util/contexts";
@@ -8,7 +8,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomePage from "./pages/Home";
 import SchedulePage from "./pages/Schedule";
-import CalendarPage from "./pages/Calendar";
 import NewsPage from "./pages/News";
 import SettingsPage from "./pages/Settings";
 import TabBar from "./util/TabBar";
@@ -34,15 +33,7 @@ import CustomModal from "./pages/CustomModal";
 import { setNotificationForClasses } from "./util/functions";
 import SportsPage from "./pages/Sports";
 import ErrorModal from "./pages/ErrorModal";
-import * as Sentry from 'sentry-expo';
 import log, { logError } from "./util/debug";
-
-Sentry.init({ 
-  dsn: 'https://514a2c01c78e42b6a4af98157ac8fcc1@o4505324587712512.ingest.sentry.io/4505324600098816',
-  enableInExpoDevelopment: false,
-  debug: true,
-  enableNative: false,
-});
 
 
 const Tabs = createBottomTabNavigator();
@@ -156,17 +147,38 @@ function App() {
     }
 
     if(error) return;
-    getUserData();
-    getScheduleFromStorage();
-    getStartupData();
+
+    const start = () => {
+      getUserData();
+      getScheduleFromStorage();
+      getStartupData();
+    }
+
+    const sub = AppState.addEventListener("change", (state) => {
+      console.log("state changed: " + state);
+      if(state == "active"){
+        start();
+      }
+    });
+
+    start();
+
+    return () => {
+      sub.remove()
+    }
   }, []);
+
+  const setUserDataAndNotify = async (data) => {
+    setUserData(data);
+    setNotificationForClasses(schedule, data.data.classNotification);
+  }
 
   return (
     <RootSiblingParent>
       <DebugContext.Provider value={{ setError }}>
         <View style={tailwind("w-full h-full bg-white")}>
           <ScheduleContext.Provider value={{ schedule, setSchedule }}>
-            <UserDataContext.Provider value={{ userData, setUserData }}>
+            <UserDataContext.Provider value={{ userData, setUserData, setUserDataAndNotify }}>
               <CalendarContext.Provider value={{ calendar, setCalendar }}>
                 <NewsContext.Provider value={{ news, setNews }}>
                   <SportsContext.Provider value={{ sports, setSports }}>
@@ -257,4 +269,4 @@ const TabNavigator = ({ navigation }) => {
   );
 }
 
-export default Sentry.Native.wrap(App);
+export default App;

@@ -33,12 +33,15 @@ function App() {
     };
 
     if(startupData == null) getStartupData();
-  }, []);
+  }, [startupData]);
 
+  // TODO: get user data from localstorage and update from server
   const setUserData = (data) => {
     setLocalUserData(data);
     localStorage.setItem("userData", JSON.stringify(data));
   };
+
+  const canDownloadAndroidApp = window.navigator.userAgent.toLowerCase().includes("android");
 
   return (
     <DataContext.Provider value={{ data: startupData }}>
@@ -47,7 +50,9 @@ function App() {
         <div className='w-full h-full' style={{
           overflow: "auto",
           overflowX: "hidden",
-          height: window.innerWidth < 768 ? window.innerHeight - 16 * 4 : "100%",
+          height: "100dvh",
+          paddingTop: canDownloadAndroidApp ? "calc(2rem + 32px)" : "0",
+          marginBottom: window.innerWidth < 768 ? 48 : 0,
         }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -66,6 +71,18 @@ function App() {
             <Route path="*" element={<HomePage />} />
           </Routes>
         </div>
+        {canDownloadAndroidApp &&
+          <div
+            className="fixed top-0 w-full bg-gray-800 text-white text-center py-2"
+            onClick={() => window.open("https://oneship.vercel.app/internal/PalyOneShip.apk")}
+          >
+            <p>
+              Download the OneShip app!
+            </p><p>
+              The file is not dangerous (trust me).
+            </p>
+          </div>
+        }
         <Navbar />
       </UserDataContext.Provider>
     </DataContext.Provider>

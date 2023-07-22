@@ -1,4 +1,4 @@
-import { Dimensions, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Dimensions, Platform, SafeAreaView, ScrollView, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
 import { useContext, useState } from "react";
@@ -14,6 +14,9 @@ const SchedulePage = ({ navigation }) => {
     const { userData } = useContext(UserDataContext);
     const { schedule } = useContext(ScheduleContext);
     const { calendar } = useContext(CalendarContext);
+
+    var height = Dimensions.get("window").height - 56 - useSafeAreaInsets().bottom;
+    if(Platform.OS == "android") height -= 24; // ¯\_(ツ)_/¯ you will just have to cope
 
     if(schedule == null || calendar == null){
         return (
@@ -83,7 +86,7 @@ const SchedulePage = ({ navigation }) => {
                 <SafeAreaView style={[
                     tailwind("bg-white w-full flex justify-center items-center"),
                     {
-                        height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                        height: height
                     }
                 ]}>
                     <Text style={[tailwind("font-bold"), { color: CONFIG.green}]}>
@@ -96,10 +99,10 @@ const SchedulePage = ({ navigation }) => {
             <SafeAreaView style={[
                 tailwind("bg-white w-full"),
                 {
-                    height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                    height: height
                 }
             ]}>
-                <View style={tailwind("")}>
+                <View>
                     {schedule.value.map((period, index) => {
                         if(userData && !userData.data.show0 && period.name == "0 Period") return null;
                         var temp = prevStart;
@@ -115,7 +118,7 @@ const SchedulePage = ({ navigation }) => {
             <SafeAreaView style={[
                 tailwind("bg-white w-full"),
                 {
-                    height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                    height: height
                 }
             ]}>
             {eventsToday.length != 0 ? (
@@ -157,7 +160,7 @@ const SchedulePage = ({ navigation }) => {
             <SafeAreaView style={[
                 tailwind("bg-white w-full"),
                 {
-                    height: Dimensions.get("window").height - 64 - useSafeAreaInsets().bottom
+                    height: height
                 }
             ]}>
                 <CalendarPage navigation={navigation} calendar={niceCalendar} />

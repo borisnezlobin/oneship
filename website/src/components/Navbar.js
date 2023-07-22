@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { Barcode, BellSimple, Football, GearSix, HouseSimple, List, Newspaper, SignIn, UserPlus } from "phosphor-react";
 import logo from "../logo.svg";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { UserDataContext } from "../util/contexts";
 
 const linkStyle = "text-0 rounded-full h-12 w-12 flex flex-row justify-center border border-transparent"
     + " items-center md:bg-white md:justify-start md:h-6 md:px-4 md:text-xl md:justify-start"
     + "md:text-black md:gap-8 md:ml-0 md:rounded-lg md:py-6 md:w-60 hover:border-gray-400";
-const containerStyle = "h-12 absolute bottom-0 md:top-0 left-0 w-full bg-white flex"
+const containerStyle = "h-12 fixed bottom-0 md:top-0 left-0 w-full bg-white flex"
 + " flex-row justify-around items-center md:justify-start "
 + "md:h-full md:w-64 md:top-0 md:left-0 md:bottom-auto md:shadow-xl "
 + "md:px-4 md:py-8 md:flex-col md:justify-center md:align-start md:gap-2";
@@ -109,7 +109,7 @@ const Navbar = () => {
 };
 
 const calculateStyles = (path, currentPath) => {
-    if (path == currentPath) {
+    if (path === currentPath) {
         return linkStyle + "border-theme md:border-black";
     }
     return linkStyle;

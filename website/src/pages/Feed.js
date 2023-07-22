@@ -7,7 +7,7 @@ const FeedPage = () => {
     const { userData } = useContext(UserDataContext);
     const nav = useNavigate();
 
-    if(userData == null || userData.data == undefined){
+    if(userData == null || userData.data === undefined){
         return (
             <div className="m-0 md:ml-64 flex flex-col px-4 justify-center items-center h-full">
                 {/* <img

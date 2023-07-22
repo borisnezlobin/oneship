@@ -2,43 +2,33 @@ import { useState } from "react";
 import { View, Text } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
-import DropDownPicker from "react-native-dropdown-picker";
+import NiceInput from "./NiceInput";
 
 const SettingsGradePicker = ({ grade, setGrade }) => {
-    const [open, setOpen] = useState(false);
-    const [value, setValue] = useState(grade);
-    const [items, setItems] = useState([
-        {label: 'Ninth', value: 9},
-        {label: 'Tenth', value: 10},
-        {label: 'Eleventh', value: 11},
-        {label: 'Twelvth', value: 12},
-    ]);
-
-    const setGradeValue = (value) => {
-        setValue(value);
-        setGrade(value);
-    }
+    const [error, setError] = useState("");
 
     return (
-        <View style={tailwind("flex my-6 px-3 flex-row justify-between items-center w-full")}>
+        <View style={tailwind("flex mt-6 px-3 flex-col justify-center items-start w-full")}>
             <Text style={[tailwind("text-lg"), { color: CONFIG.text }]}>
                 Grade
             </Text>
-            <DropDownPicker
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setGradeValue}
-                setItems={setItems}
-                textStyle={{
-                    color: CONFIG.text,
+            <NiceInput
+                cb={(value) => {
+                    var val = parseInt(value);
+                    if (isNaN(val)) {
+                        setError("Grade must be a number");
+                        return;
+                    } else if (val < 9 || val > 12) {
+                        setError("Grade must be between 9 and 12");
+                        return;
+                    }
+                    setError("");
+                    setGrade(val);
                 }}
-                itemSeparator={true}
-                containerStyle={{
-                    width: 150,
-                    borderColor: CONFIG.bg,
-                }}
+                style={{ width: "95%" }}
+                error={error}
+                placeholder={"Grade (9-12)"}
+                defaultValue={grade.toString()}
             />
         </View>
     )

@@ -2,7 +2,7 @@ import React from 'react'
 import GenerativeArt from '../components/codethaticopied/GenerativeArt'
 import logo from '../logo.svg'
 import { toast } from 'react-hot-toast'
-import { SUCCESS_TOAST_STYLES } from '../util/config'
+import { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from '../util/config'
 
 const HomePage = () => {
   return (
@@ -26,17 +26,21 @@ const HomePage = () => {
                 borderRadius: 1024,
             }} />
             <a href="https://discord.gg/CVHr8mKJeC" target="blank" className='btn'>
-                Like it? Join our Discord!
+                Join our Discord!
             </a>
             <p style={{ marginTop: 24, marginBottom: 0 }}>
                 Or
             </p>
-            <a href="#" className='link' onClick={() => {
-                navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
-                toast.success("Copied invite link!", SUCCESS_TOAST_STYLES);
+            <button className='link' onClick={() => {
+                try{
+                    navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
+                    toast.success("Copied invite link!", SUCCESS_TOAST_STYLES);
+                }catch(e){
+                    toast.error("Your browser doesn't support this.", ERROR_TOAST_STYLES);
+                }
             }}>
                 Copy the invite link
-            </a>
+            </button>
       </div>
     </>
   )

@@ -6,7 +6,7 @@ const SchedulePage = () => {
     const { userData } = useContext(UserDataContext);
     const { data } = useContext(DataContext);
 
-    if(data == null || data.schedule == undefined) return (
+    if(data === null || data.schedule === undefined) return (
         <div className="m-0 md:ml-64 flex justify-center items-center h-full">
             <LoadingSpinner />
         </div>
@@ -31,11 +31,11 @@ const SchedulePage = () => {
         scheduleComponent = <div className="w-full h-full">
             {schedule.value.map((e, i) => {
                 if(userData != null && !userData.data.show0 && e.name.includes("0 Period")) return <></>;
-                var top = i == 0 ? 0 : (
+                var top = i === 0 ? 0 : (
                     (e.start - schedule.value[i - 1].end) / (dayEnd - dayStart) * winHeight
                 );
-                var topRadius = e.start == (i == 0 ? e.end : schedule.value[i - 1].end) ? 0 : 8;
-                var bottomRadius = e.end == (i == schedule.value.length - 1 ? e.start : schedule.value[i + 1].start) ? 0 : 8;
+                var topRadius = e.start === (i === 0 ? e.end : schedule.value[i - 1].end) ? 0 : 8;
+                var bottomRadius = e.end === (i === schedule.value.length - 1 ? e.start : schedule.value[i + 1].start) ? 0 : 8;
                 return <div
                     key={"scheduleItem" + i}
                     className="rounded-lg px-4 py-2 bg-gray-50 w-full border border-grey-300"
@@ -70,7 +70,7 @@ const SchedulePage = () => {
             var eventStart = dateFromString(event.start);
             var eventEnd = dateFromString(event.end);
             // r/badcode but idgaf
-            if(eventEnd.getHours() == 0) eventEnd.setHours(23, 59, 59, 999);
+            if(eventEnd.getHours() === 0) eventEnd.setHours(23, 59, 59, 999);
             // some events are recurring, so we need to check if the event is today
             const obj = {
                 event: event,
@@ -103,7 +103,7 @@ const SchedulePage = () => {
                         </div>
                     );
                 })}
-                {eventsToday.length == 0 ? <h1 className="mediumText text-center mt-2">
+                {eventsToday.length === 0 ? <h1 className="mediumText text-center mt-2">
                     No events today!
                     </h1> : <></>
                 }
@@ -166,7 +166,7 @@ const dateFromString = (dateString) => {
     var year = dateString.substring(0, 4);
     var month = dateString.substring(4, 6);
     var day = dateString.substring(6, 8);
-    if(dateString.length == 8) return new Date(year, month - 1, day - 1, 0, 0, 0);
+    if(dateString.length === 8) return new Date(year, month - 1, day - 1, 0, 0, 0);
 
     var hour = dateString.substring(9, 11);
     var minute = dateString.substring(11, 13);

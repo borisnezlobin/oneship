@@ -31,6 +31,10 @@ const LoginPage = () => {
             setEmailError("Enter a valid email");
             isFormValid = false;
         }
+        if(!email.endsWith("@pausd.us") && !email.endsWith("@pausd.org")){
+            setEmailError("Enter a PAUSD email.");
+            isFormValid = false;
+        }
         if(email.trim().length == 0){
             setEmailError("Fill out this field");
             isFormValid = false;
@@ -41,10 +45,6 @@ const LoginPage = () => {
         }
         if(password.length < 6){
             setPasswordError("Password must be at least 6 characters");
-            setError({
-                error: "Password must be at least 6 characters",
-                status: 400
-            })
             isFormValid = false;
         }
 
@@ -67,8 +67,8 @@ const LoginPage = () => {
                 setUserData(json);
                 log("saving user data + login to async storage");
                 AsyncStorage.setItem("not_sketchy", JSON.stringify({
-                    email: email,
-                    password: password
+                    email: "email@pausd.us",
+                    password: "password"
                 }));
                 AsyncStorage.setItem("user_data", JSON.stringify(json));
                 return;
