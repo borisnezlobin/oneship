@@ -25,7 +25,7 @@ const HomePage = () => {
                 margin: 32,
                 borderRadius: 1024,
             }} />
-            <a href="https://discord.gg/CVHr8mKJeC" target="blank" className='btn'>
+            <a href="https://discord.gg/nDDBXnyYw2" target="blank" className='btn'>
                 Join our Discord!
             </a>
             <p style={{ marginTop: 24, marginBottom: 0 }}>
@@ -33,7 +33,7 @@ const HomePage = () => {
             </p>
             <button className='link' onClick={() => {
                 try{
-                    navigator.clipboard.writeText("https://discord.gg/CVHr8mKJeC");
+                    navigator.clipboard.writeText("https://discord.gg/nDDBXnyYw2");
                     toast.success("Copied invite link!", SUCCESS_TOAST_STYLES);
                 }catch(e){
                     toast.error("Your browser doesn't support this.", ERROR_TOAST_STYLES);
