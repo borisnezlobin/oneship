@@ -1,9 +1,7 @@
-import { View, Text, ScrollView, Image, Dimensions } from "react-native";
+import { View, Text, ScrollView, Image, Platform } from "react-native";
 import { CONFIG } from "../util/config";
 import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import LogoSvg from "../util/LogoSvg";
-import * as Sentry from 'sentry-expo';
 import log, { getLogs, logError } from "../util/debug";
 import UserAgent from 'react-native-user-agent';
 import { useContext, useState } from "react";
@@ -27,22 +25,17 @@ const ErrorModal = ({ error }) => {
         // user agent
         var ua = "unknown";
         try{
-            var ua = UserAgent.getUserAgent();
+            ua = UserAgent.getUserAgent();
             console.log("User agent: " + ua);
-        }catch(e){}
+        }catch(e){
+            ua = Platform.OS + " " + Platform.Version;
+        }
         var report = {
             logs,
             userAgent: userData ? userData.uid + ", " + ua : ua,
             error: error.error,
             status: error.status,
-        }
-        // send report
-        // try{
-        //     Sentry.Native.captureMessage("Error Report", {
-        //         level: Sentry.Severity.Error,
-        //         extra: report,
-        //     });
-        // }catch(e){}
+        };
 
         log("Sending error report: " + JSON.stringify(report));
         try{

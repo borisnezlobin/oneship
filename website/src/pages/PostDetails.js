@@ -2,13 +2,14 @@ import { Sparkle } from "phosphor-react";
 import FeedItemTypeBadge from "../components/FeedItemTypeBadge";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CONFIG, { ERROR_TOAST_STYLES } from "../util/config";
 import { toast } from "react-hot-toast";
 import logo from "../logo.svg";
 
 const PostDetails = () => {
     const location = useLocation();
+    const nav = useNavigate();
     const [item, setItem] = useState(null);
 
     useEffect(() => {
@@ -30,7 +31,7 @@ const PostDetails = () => {
                 setItem(data);
             }
         )
-    }, [item]);
+    }, [item, location.pathname, location.state]);
 
     if(!item) return (
         <div className="m-0 md:ml-64 px-4 flex justify-center items-center h-full">
@@ -66,7 +67,12 @@ const PostDetails = () => {
             <hr className="my-3" />
             <img src={logo} alt="logo" className="w-48 mx-auto" />
             {parseMarkdown(item.content)}
-            <p className="w-full text-center text mt-16 mb-2">
+            <div className="mt-8 w-full flex flex-row justify-center items-center">
+                <button className="btn" onClick={() => nav(-1)}>
+                    <p>Back</p>
+                </button>
+            </div>
+            <p className="w-full text-center text mt-4 mb-2">
                 Want to submit your own message?&nbsp;
                 <a
                     className="link"
@@ -100,7 +106,7 @@ const parseMarkdown = (text) => {
     var parsed = [];
     for(var i = 0; i < lines.length; i++){
         var line = lines[i];
-        if(line == "|"){
+        if(line === "|"){
             parsed.push({
                 type: "newline",
             });
@@ -126,28 +132,29 @@ const parseMarkdown = (text) => {
     }
 
     return parsed.map((line, index) => {
-        if(line.type == "header"){
+        if(line.type === "header"){
             return (
                 <div key={index}>
-                    <p className={"mt-4 text-theme text-" + (line.level == 1 ? "2" : "") + "xl"}>
+                    <p className={"mt-4 text-theme text-" + (line.level === 1 ? "2" : "") + "xl"}>
                         {line.text}
                     </p>
-                    {line.level == 1 ? (
+                    {line.level === 1 ? (
                         <hr />
                     ) : null}
                 </div>
             );
-        }else if(line.type == "text"){
+        }else if(line.type === "text"){
             return (
                 <p key={"text" + index} className="text-lg text-black">
                     {line.text}
                 </p>
             );
-        }else if(line.type == "newline"){
+        }else if(line.type === "newline"){
             return (
                 <div key={"newline" + index} className="h-4"/>
             );
         }
+        return <></>;
     });
 };
 

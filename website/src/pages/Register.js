@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import logo from "../logo.svg";
 import { useNavigate } from "react-router-dom";
-import spinner from "../loading.svg";
 import { GoogleAuthProvider, getAdditionalUserInfo, signInWithPopup, deleteUser, EmailAuthProvider, linkWithCredential } from "firebase/auth";
 import auth from "../util/firebaseConfig";
 import CONFIG, { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from "../util/config";
@@ -26,7 +25,7 @@ const CreateAccountPage = () => {
             setIsNavigating(true);
             nav(next ? next : "/feed");
         }
-    }, [userData]);
+    }, [userData, isNavigating, nav, next]);
 
     const googleSignIn = async () => {
         setLoading(true);
@@ -36,12 +35,12 @@ const CreateAccountPage = () => {
             setLoading(false);
             return;
         });
-        if(res == undefined){
+        if(res === undefined){
             setLoading(false);
             return;
         }
         const user = res.user;
-        if(user.email.split("@")[1] != "pausd.us"){
+        if(user.email.split("@")[1] !== "pausd.us"){
             toast.error("Please use a PAUSD email", ERROR_TOAST_STYLES);
             deleteUser(user);
             setLoading(false);
@@ -66,7 +65,7 @@ const CreateAccountPage = () => {
             toast.error("Password must be at least 6 characters", ERROR_TOAST_STYLES);
             return;
         }
-        if(password != confirmPassword){
+        if(password !== confirmPassword){
             toast.error("Passwords do not match", ERROR_TOAST_STYLES);
             return;
         }
@@ -127,7 +126,7 @@ const CreateAccountPage = () => {
         )
     }
 
-    if(page == 0){
+    if(page === 0){
         return (
             <div className="m-0 md:ml-64 h-full flex flex-col justify-center items-center">
                 <div className="flex flex-col items-center justify-center">
@@ -155,7 +154,7 @@ const CreateAccountPage = () => {
         );
     }
 
-    if(page == 1){
+    if(page === 1){
         return (
             <div className="m-0 md:ml-64 h-full flex flex-col justify-center items-center">
                 <div className="flex flex-col items-center justify-center">

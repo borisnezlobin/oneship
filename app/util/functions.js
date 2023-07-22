@@ -40,9 +40,6 @@ const getCurrentScheduleInfo = (schedule, time) => {
 
 const setNotificationForClasses = (schedule, timeTrigger) => {
     const time = new Date();
-    // return "No school today" if there is no school today
-    // return "Period x ending in hh:mm:ss" if there is school today and class is in session
-    // return "Period x starting in hh:mm:ss" if there is school today and class is not in session
 
     if(schedule == null || schedule.value == null) return;
     if(!timeTrigger) return;
@@ -68,7 +65,7 @@ const setNotificationForClasses = (schedule, timeTrigger) => {
             setLocalNotification(
                 period.name,
                 "Starting in " + timeTrigger + " minute" + (timeTrigger == 1 ? "" : "s") + "!",
-                (periodStart - new Date()) + timeTrigger * 60 * 1000
+                ((periodStart - new Date()) / 1000) - (timeTrigger * 60)
             );
         }else{
             return;

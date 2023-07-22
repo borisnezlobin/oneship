@@ -6,7 +6,7 @@ body{
   --green: #1c8000;
   --text: #000;
   --grey: #888;
-  height: 100vh;
+  height: 100dvh;
 }
 
 #root{

@@ -2,7 +2,7 @@ const NewsItem = ({ item }) => {
     var description = item.description.replaceAll("\r", "").replaceAll("\n", "");
     if(description.length > 256) description = description.substring(0, 256) + "...";
     return (
-        <a href={item.link} target="_blank" className="rounded-lg p-4 md:p-2 md:p-8" style={{
+        <a href={item.link} target="blank" rel="noreferrer" className="rounded-lg p-4 md:p-2 md:p-8" style={{
             width: "100%",
             display: "block",
             cursor: "pointer",
@@ -32,6 +32,7 @@ const NewsItem = ({ item }) => {
             <div className="w-full">
             {item.isVideo ? (
                 <iframe
+                    title={item.title}
                     src={item.embedURL}
                     className="w-full h-128"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

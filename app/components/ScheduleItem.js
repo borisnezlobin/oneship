@@ -4,7 +4,7 @@ import { CONFIG } from "../util/config";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function ScheduleItem({ period, start, end }) {
-    var screenHeight = Dimensions.get("window").height - useSafeAreaInsets().bottom - 24 - 64 - useSafeAreaInsets().top;
+    var screenHeight = Dimensions.get("window").height - useSafeAreaInsets().bottom -40 - 56 - useSafeAreaInsets().top;
     var height = ((period.end - period.start) / (end - start)) * (screenHeight);
 
     return (

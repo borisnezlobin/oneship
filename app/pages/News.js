@@ -1,9 +1,10 @@
-import { SafeAreaView, ScrollView, Text } from "react-native";
+import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
 import { useContext } from "react";
 import { NewsContext } from "../util/contexts";
 import NewsFeedItem from "../components/NewsFeedItem";
+import newsImg from "../assets/illustrations/news.png";
 
 const NewsPage = () => {
     const { news } = useContext(NewsContext);
@@ -36,6 +37,29 @@ const NewsPage = () => {
     return (
         <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
             <ScrollView style={tailwind("w-full h-full")}>
+                <Text style={[
+                    tailwind("text-4xl mt-8 font-bold text-center"),
+                    {
+                        color: CONFIG.green,
+                    }
+                ]}>
+                    What's happening?
+                </Text>
+                <Image
+                    style={{
+                        width: "100%",
+                        height: 196,
+                    }}
+                    resizeMode="contain"
+                    source={newsImg}
+                />
+                <View style={{
+                    height: 1,
+                    width: "95%",
+                    alignSelf: "center",
+                    backgroundColor: CONFIG.grey,
+                    marginVertical: 16,
+                }} />
                 {feed.map((article, index) => {
                     return (
                         <NewsFeedItem key={index} item={article} />

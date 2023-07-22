@@ -198,8 +198,11 @@ app.post("/report-error", async (request, response) => {
     // format: { error: "error message", logs: "stack trace", status: "status code". userAgent: "user agent", userName: "user name" }
     const body = request.body;
     console.log("Error reported: " + body);
-    // veryify that body contains all required fields
-    // the frontend always sends all fields, but just in case
+    // verify that body contains all required fields
+    // the frontend always sends all fields, but just in case some goofy high schoolers decide to try and hack me
+    // I know they will
+    // but I WILL be ready
+    // they will NOT win
     const keys = Object.keys(body);
     const requiredKeys = ["error", "logs", "status", "userAgent"];
     for(var i = 0; i < requiredKeys.length; i++){
@@ -207,7 +210,7 @@ app.post("/report-error", async (request, response) => {
             return response.status(400).send({ error: "Invalid Error: missing key: " + requiredKeys[i]  });
         }
     }
-
+    
     await writeData("errors", new Date().toString(), body);
     response.status(200).send({ message: "Error Reported!" });
 });

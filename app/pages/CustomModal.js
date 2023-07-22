@@ -1,8 +1,9 @@
-import { View, Text, ScrollView, Image, Dimensions } from "react-native";
+import { View, Text, ScrollView, Image, Dimensions, Linking, Share } from "react-native";
 import { CONFIG } from "../util/config";
 import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LogoSvg from "../util/LogoSvg";
+import { ShareIcon } from "react-native-heroicons/outline";
 
 var modalTypes = {
     "announcement": {
@@ -80,7 +81,7 @@ var modalTypes = {
 modalTypes.oneship = modalTypes.announcement;
 
 const CustomModal = ({ route, navigation }) => {
-    var { title, body = "", isMarkdown, image = "announcement" } = route.params;
+    var { title, body = "", isMarkdown, image = "announcement", id } = route.params;
     const insets = useSafeAreaInsets();
 
     return (
@@ -99,10 +100,9 @@ const CustomModal = ({ route, navigation }) => {
                 right: 0,
                 backgroundColor: CONFIG.bg,
                 zIndex: 1,
-                paddingHorizontal: 16,
+                padding: 16,
                 borderBottomWidth: 1,
                 borderBottomColor: CONFIG.grey,
-                paddingBottom: 16,
                 width: "100%",
                 display: "flex",
                 flexDirection: "row",
@@ -116,11 +116,33 @@ const CustomModal = ({ route, navigation }) => {
                 }}>
                     {title}
                 </Text>
+                {(image != "game" && image != "event") &&
+                    <PressableScale
+                        style={{
+                            padding: 8,
+                            backgroundColor: CONFIG.bg,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                        activeScale={0.7}
+                        onPress={() => {
+                            Share.share({
+                                message: "Check out " + title + " on OneShip!",
+                                url: id ? "https://palyoneship.web.app/post/" + id : undefined,
+                            }, {
+                                dialogTitle: "Share \"" + title + "\"",
+                            });
+                        }}
+                    >
+                        <ShareIcon color={CONFIG.green} size={24} />
+                    </PressableScale>
+                }
             </View>
             <ScrollView style={{
                 width: "100%",
                 paddingHorizontal: 16,
-                top: insets.top + 36,
+                top: insets.top + 36 + 16 + 2,
             }}>
                 <View style={{
                     display: "flex",
@@ -165,8 +187,30 @@ const CustomModal = ({ route, navigation }) => {
                     </Text>
                 </PressableScale>
                 <View style={{
-                    // don't ask
-                    height: 128,
+                    height: 16,
+                    backgroundColor: CONFIG.bg,
+                }} />
+
+                {image != "game" && image != "event" ? (
+                    <View style={{
+                        backgroundColor: CONFIG.bg,
+                    }}>
+                        <Text>
+                            Want to post your own message?{" "}
+                            <Text onPress={() => {
+                                Linking.openURL("mailto:boris.nezlobin@gmail.com?subject=OneShip%20Message&body=Title:%20%0ABody:%20%0A");
+                            }} style={{
+                                marginLeft: 4,
+                                color: CONFIG.green,
+                            }}>
+                                Email us
+                            </Text>
+                            .
+                        </Text>
+                    </View>
+                ) : null}
+                <View style={{
+                    height: 64 + 2 * useSafeAreaInsets().bottom,
                     backgroundColor: CONFIG.bg,
                 }} />
             </ScrollView>

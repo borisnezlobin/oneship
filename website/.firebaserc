@@ -1,5 +1,21 @@
 {
   "projects": {
     "default": "palo-alto-high-school"
-  }
+  },
+  "targets": {
+    "palo-alto-high-school": {
+      "hosting": {
+        "oneship": [
+          "palyoneship"
+        ],
+        "vikings": [
+          "palyvikings"
+        ],
+        "skovikes": [
+          "skovikes"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

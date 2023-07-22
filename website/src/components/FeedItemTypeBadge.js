@@ -1,7 +1,7 @@
 import { MegaphoneSimple } from "phosphor-react";
 
 const FeedItemTypeBadge = ({ type, extended = false }) => {
-    if(type == "oneship"){
+    if(type === "oneship"){
         return (
             <>
                 <div className="bg-theme rounded-full px-2 py-1 text-white text-sm">
@@ -13,7 +13,7 @@ const FeedItemTypeBadge = ({ type, extended = false }) => {
         );
     }
 
-    if(type == "announcement"){
+    if(type === "announcement"){
         return (
             <>
                 <div className="bg-red-500 rounded-full px-2 py-1  text-sm">
@@ -25,7 +25,7 @@ const FeedItemTypeBadge = ({ type, extended = false }) => {
         );
     }
 
-    if(type == "asb"){
+    if(type === "asb"){
         return (
             <>
                 <div className="bg-cyan-600 rounded-full px-2 py-1 text-white text-sm">
@@ -37,7 +37,7 @@ const FeedItemTypeBadge = ({ type, extended = false }) => {
         );
     }
 
-    if(type == "event"){
+    if(type === "event"){
         return (
             <>
                 <div className="bg-yellow-500 rounded-full px-2 py-1 text-white text-sm">
@@ -49,7 +49,7 @@ const FeedItemTypeBadge = ({ type, extended = false }) => {
         );
     }
 
-    if(type == "ad"){
+    if(type === "ad"){
         return (
             <>
                 <div className="bg-green-500 rounded-full px-2 py-1 text-white text-sm">
