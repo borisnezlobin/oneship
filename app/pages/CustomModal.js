@@ -261,7 +261,7 @@ const parseMarkdown = (text) => {
         if(line.type == "header"){
             return (
                 <>
-                    <Text key={index} style={{
+                    <Text key={"modalheader" + index} style={{
                         fontSize: 24 - ((line.level - 1) * 6),
                         fontWeight: line.level == 1 ? "bold" : "bold",
                         letterSpacing: -0.5,
@@ -271,7 +271,7 @@ const parseMarkdown = (text) => {
                         {line.text}
                     </Text>
                     {line.level == 1 ? (
-                        <View key={"hr" + index} style={{
+                        <View key={"modalhr" + index} style={{
                             height: 1,
                             width: "100%",
                             backgroundColor: CONFIG.grey,
@@ -283,7 +283,7 @@ const parseMarkdown = (text) => {
             );
         }else if(line.type == "text"){
             return (
-                <Text key={index} style={{
+                <Text key={"modaltext" + index} style={{
                     fontSize: 18,
                     color: CONFIG.text,
                 }}>
@@ -292,7 +292,7 @@ const parseMarkdown = (text) => {
             );
         }else if(line.type == "newline"){
             return (
-                <View key={index} style={{
+                <View key={"modalnewline" + index} style={{
                     height: 16,
                 }} />
             );
