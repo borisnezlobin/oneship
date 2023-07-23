@@ -8,7 +8,8 @@ import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser, verifyToken } from './auth.js';
 import { getSports } from './getSports.js';
 
-if(process.env.ENVIROMENT === "PROD") {
+if(process.env.ENVIROMENT == "PROD") {
+    console.log("running in prod");
     app.use(express.json());
 }
 
