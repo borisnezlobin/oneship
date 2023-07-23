@@ -62,7 +62,9 @@ const SettingsPage = () => {
         // verify all settings
         if(!checkValid()) return;
         forceTypes();
-        console.log(editedSettings);
+
+        var hehe = JSON.parse(JSON.stringify(editedSettings));
+        hehe.userAgents = userData.data.userAgents;
 
         // save
         setSaving(true);
@@ -73,7 +75,7 @@ const SettingsPage = () => {
             },
             body: JSON.stringify({
                 uid: userData.data.uid,
-                settings: editedSettings,
+                settings: hehe,
                 token: userData.token
             })
         }).then(res => {

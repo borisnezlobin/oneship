@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 const DEFAULT_SETTINGS = {
     "email": "",
     "displayName": "",
+    "userAgents": [],
     "uid": "",
     "pfp": "",
     "classNotification": 5,
@@ -142,7 +143,7 @@ const getErrors = async () => {
 };
 
 const updateSettings = async (uid, settings) => {
-    await db.collection("users").doc(uid).update(settings);
+    await db.collection("users").doc(uid).set(settings);
 
     return { status: 200, message: "Settings updated successfully" };
 }

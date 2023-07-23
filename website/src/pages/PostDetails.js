@@ -1,4 +1,4 @@
-import { Sparkle } from "phosphor-react";
+import { Link, Sparkle } from "phosphor-react";
 import FeedItemTypeBadge from "../components/FeedItemTypeBadge";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -124,9 +124,39 @@ const parseMarkdown = (text) => {
                 text: line,
             });
         }else{
+            var j = 0;
+            var lastLink = 0;
+            for(; j < line.length; j++){
+                if(line[j] === "["){
+                    var link = "";
+                    var text = "";
+                    var k = j + 1;
+                    while(line[k] !== "]"){
+                        text += line[k];
+                        k++;
+                    }
+                    k += 2;
+                    while(line[k] !== ")"){
+                        link += line[k];
+                        k++;
+                    }
+                    parsed.push({
+                        type: "text",
+                        text: line.substring(lastLink, j),
+                    });
+                    parsed.push({
+                        type: "link",
+                        text: text,
+                        link: link,
+                    });
+                    j = k;
+                    lastLink = k + 1;
+                    continue;
+                }
+            }
             parsed.push({
                 type: "text",
-                text: line,
+                text: line.substring(lastLink)
             });
         }
     }
@@ -152,6 +182,20 @@ const parseMarkdown = (text) => {
         }else if(line.type === "newline"){
             return (
                 <div key={"newline" + index} className="h-4"/>
+            );
+        }else if(line.type === "link"){
+            return (
+                <div className="w-full md:w-fit p-2 px-4 rounded-lg flex flex-row justify-start gap-4 items-center cursor-pointer bg-lightgrey" onClick={() => window.open(line.link)}>
+                    <Link color="var(--green)" size={24} />
+                    <div>
+                        <a key={"link" + index} href={line.link} target="_blank" rel="noreferrer" className="link">
+                            {line.text}
+                        </a>
+                        <p>
+                            {line.link}
+                        </p>
+                    </div>
+                </div>
             );
         }
         return <></>;

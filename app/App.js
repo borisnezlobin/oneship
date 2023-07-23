@@ -125,10 +125,15 @@ function App() {
         return;
       }
       
-      // enencrypted passwords in the url
-      // whatever
-      const response = await fetch(CONFIG.serverURL + "api/login?email=" + not_sketchy.email + "&password=" + not_sketchy.password, {
+      const response = await fetch(CONFIG.serverURL + "api/login", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: not_sketchy.email,
+          password: not_sketchy.password
+        })
       });
       const text = await response.text();
       log("got newest user data");

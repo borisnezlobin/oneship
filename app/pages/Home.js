@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Platform, SafeAreaView, ScrollView, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { useContext, useEffect, useState } from "react";
 import { ScheduleContext, UserDataContext } from "../util/contexts";
@@ -56,7 +56,7 @@ const HomePage = ({ navigation }) => {
                     height: 1,
                     width: "100%",
                     backgroundColor: CONFIG.grey,
-                    marginVertical: 24
+                    marginTop: 16
                 }} />
                 {userData.messages.map((message, index) => {
                     return <MessageItem key={index} message={message} navigation={navigation} />

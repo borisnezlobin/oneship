@@ -3,7 +3,9 @@ import { CONFIG } from "../util/config";
 import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import LogoSvg from "../util/LogoSvg";
-import { ShareIcon } from "react-native-heroicons/outline";
+import { LinkIcon, ShareIcon } from "react-native-heroicons/outline";
+import tailwind from "tailwind-rn";
+import { openBrowserAsync } from "expo-web-browser";
 
 var modalTypes = {
     "announcement": {
@@ -82,6 +84,7 @@ modalTypes.oneship = modalTypes.announcement;
 
 const CustomModal = ({ route, navigation }) => {
     var { title, body = "", isMarkdown, image = "announcement", id } = route.params;
+    console.log(body);
     const insets = useSafeAreaInsets();
 
     return (
@@ -223,6 +226,7 @@ const parseMarkdown = (text) => {
     // #header
     // ##subheader
     // \n newline
+    // [link](url)
 
     var lines = [];
     if(typeof text != "string"){
@@ -230,7 +234,9 @@ const parseMarkdown = (text) => {
     }
     lines = text.replaceAll("\\n", "\n").replaceAll("\\,", ",").split("\n");
     var parsed = [];
+    console.log(lines);
     for(var i = 0; i < lines.length; i++){
+        console.log(lines[i]);
         var line = lines[i];
         if(line == "|"){
             parsed.push({
@@ -250,12 +256,44 @@ const parseMarkdown = (text) => {
                 text: line,
             });
         }else{
+            var j = 0;
+            var lastLink = 0;
+            for(; j < line.length; j++){
+                if(line[j] == "["){
+                    var link = "";
+                    var text = "";
+                    var k = j + 1;
+                    while(line[k] != "]"){
+                        text += line[k];
+                        k++;
+                    }
+                    k += 2;
+                    while(line[k] != ")"){
+                        link += line[k];
+                        k++;
+                    }
+                    parsed.push({
+                        type: "text",
+                        text: line.substring(lastLink, j),
+                    });
+                    parsed.push({
+                        type: "link",
+                        text: text,
+                        link: link,
+                    });
+                    j = k;
+                    lastLink = k + 1;
+                    continue;
+                }
+            }
             parsed.push({
                 type: "text",
-                text: line,
+                text: line.substring(lastLink)
             });
         }
     }
+
+    console.log(parsed);
 
     return parsed.map((line, index) => {
         if(line.type == "header"){
@@ -295,6 +333,44 @@ const parseMarkdown = (text) => {
                 <View key={"modalnewline" + index} style={{
                     height: 16,
                 }} />
+            );
+        }else if(line.type == "link"){
+            return (
+                <PressableScale
+                    style={[
+                        tailwind("w-full flex flex-row justify-between items-center p-3 rounded-xl m-1"),
+                        {
+                            gap: 8,
+                            backgroundColor: CONFIG.bg2,
+                        }
+                    ]}
+                    onPress={() => {
+                        if(line.link.startsWith("http")){
+                            openBrowserAsync(line.link);
+                        }else{
+                            Linking.openURL(line.link);
+                        }
+                    }}
+                    onLongPress={() => {
+                        Share.share({
+                            title: line.text,
+                            message: line.link,
+                        });
+                    }}
+                >
+                    <LinkIcon color={CONFIG.green} size={24} />
+                    <View style={tailwind("w-11/12")}>
+                        <Text key={"modallink" + index} style={{
+                            fontSize: 18,
+                            color: CONFIG.green,
+                        }}>
+                            {line.text}
+                        </Text>
+                        <Text style={tailwind("text-xs")}>
+                            {line.link}
+                        </Text>
+                    </View>
+                </PressableScale>
             );
         }
     });

@@ -29,18 +29,18 @@ const FeedItem = ({ item }) => {
                 <p className="text-gray-500 w-full text-lg">
                     from {item.sender}
                 </p>
-                <div className="w-full cursor-pointer md:w-auto gap-2 md:px-4 hover:bg-lightgrey hover:scale-x-105 transition-all rounded flex flex-row justify-center items-center md:justify-start py-2">
-                    <button className="text-theme text-lg font-bold" onClick={() => {
-                        nav("/post/" + item.id, {
-                            state: {
-                                item: item,
-                            },
-                        });
-                    }}>
+                <button className="w-full cursor-pointer md:w-auto gap-2 md:px-4 hover:bg-lightgrey hover:scale-x-105 transition-all rounded flex flex-row justify-center items-center md:justify-start py-2" onClick={() => {
+                    nav("/post/" + item.id, {
+                        state: {
+                            item: item,
+                        },
+                    });
+                }}>
+                    <div className="text-theme text-lg font-bold">
                         READ MORE
-                    </button>
+                    </div>
                     <ArrowRight size={24} color="var(--green)" />
-                </div>
+                </button>
             </div>
         </div>
     );
