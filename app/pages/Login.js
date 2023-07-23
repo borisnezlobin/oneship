@@ -1,4 +1,4 @@
-import { Keyboard, SafeAreaView, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, Platform, SafeAreaView, Text, TouchableWithoutFeedback, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
 import { useContext, useEffect, useState } from "react";
@@ -39,12 +39,12 @@ const LoginPage = () => {
             setEmailError("Fill out this field");
             isFormValid = false;
         }
-        if(password.length == 0){
-            setPasswordError("Fill out this field");
-            isFormValid = false;
-        }
         if(password.length < 6){
             setPasswordError("Password must be at least 6 characters");
+            isFormValid = false;
+        }
+        if(password.length == 0){
+            setPasswordError("Fill out this field");
             isFormValid = false;
         }
 
@@ -52,8 +52,16 @@ const LoginPage = () => {
 
         setLoading(true);
         const response = await fetch(
-            CONFIG.serverURL + "api/login?email=" + email + "&password=" + password, {
-            method: "POST"
+            CONFIG.serverURL + "api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email.trim(),
+                password: password,
+                ua: Platform.OS + " " + Platform.Version + " app"
+            })
         }).catch(err => {
             logError("Error logging in user: " + err);
             setLoading(false);

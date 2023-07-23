@@ -46,11 +46,16 @@ const LoginPage = () => {
             return;
         }
 
-        const res = await fetch(CONFIG.SERVER_URL + "/api/login?email=" + email + "&password=" + password + "&yes=iknowthisisbad", {
+        const res = await fetch(CONFIG.SERVER_URL + "/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
+            body: JSON.stringify({
+                email: email.trim(),
+                password: password,
+                ua: navigator.userAgent ? navigator.userAgent : "web"
+            })
         });
         try{
             const json = await res.json();

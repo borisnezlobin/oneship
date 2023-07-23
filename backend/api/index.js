@@ -8,7 +8,9 @@ import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser, verifyToken } from './auth.js';
 import { getSports } from './getSports.js';
 
-app.use(express.json());
+if(process.env.ENVIROMENT === "PROD") {
+    app.use(express.json());
+}
 
 app.get("/version", (_, response) => {
     // look at me using semver
@@ -106,7 +108,7 @@ app.post("/api/register", async (request, response) => {
     const pfp = body.pfp;
     if(email == null || displayName == null || uid == null) return response.status(400).send({ error: "Missing required fields" });
     if(email.split("@")[1] != "pausd.us") return response.status(403).send({ error: "Email must be a PAUSD email" });
-    console.log("received request to register user " + uid + " with email " + email + " and display name " + displayName + "");
+    console.log("received request to register user " + uid + " with email " + email + " and display name " + displayName + ".");
     var obj = {
         ...DEFAULT_SETTINGS,
         email,
@@ -123,15 +125,20 @@ app.post("/api/register", async (request, response) => {
 });
 
 app.post("/api/login", async (request, response) => {
-    const email = request.query.email;
-    const password = request.query.password;
+    const email = request.body.email;
+    const password = request.body.password;
+    const ua = request.body.ua;
+    // const email = request.query.email;
+    // const password = request.query.password;
     if(email == null || password == null) return response.status(400).send({ error: "Missing required fields" });
-    console.log("logging in user " + email + " with password " + password);
+    console.log("logging in user " + email + " with password " + password + ". User agent: " + ua);
     const result = await loginUser(email, password);
 
-    // the next two lines are like that for testing, google won't let me use my pausd account?
+    // the following lines are like that for testing, google won't let me use my pausd account
+    // for some reason, will have to email someone at PAUSD sometime
     // TODO: remove
     if(result.status == 200 || true){
+        var uid = result.message.localId;
         var userData = await readData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1");
         if(userData.exists){
             userData = userData.data();
@@ -146,7 +153,10 @@ app.post("/api/login", async (request, response) => {
                 }
             }
             if(changed) await writeData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1", userData);
-
+            if(ua && !userData.userAgents.includes(ua)){
+                userData.userAgents.push(ua);
+                await writeData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1", userData);
+            }
             const messages = await getMessagesForUser(userData);
             response.status(200).send({
                 data: userData,

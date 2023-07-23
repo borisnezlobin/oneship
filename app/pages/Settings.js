@@ -19,13 +19,13 @@ const SettingsPage = () => {
     const insets = useSafeAreaInsets();
     const [page, setPage] = useState(0);
     const [edited, setEdited] = useState(false);
-    const [editedSettings, setEditedSettings] = useState(userData ? {...userData.data} : null);
+    const [editedSettings, setEditedSettings] = useState(userData ? JSON.parse(JSON.stringify(userData.data)) : null);
     const { setError } = useContext(DebugContext);
 
     useEffect(() => {
         if(userData == null) return;
         if(editedSettings == null){
-            setEditedSettings({...userData.data});
+            setEditedSettings(JSON.parse(JSON.stringify(userData.data)));
             return;
         }
         
@@ -40,15 +40,19 @@ const SettingsPage = () => {
     }, [userData, editedSettings]);
 
     const saveUserData = () => {
-        var newUserData = {...userData};
+        var newUserData = JSON.parse(JSON.stringify(userData));
         newUserData.data = editedSettings;
+
+        // idfk
+        newUserData.data.userAgents = userData.data.userAgents;
+
         setUserDataAndNotify(newUserData);
-        // update async storage
         AsyncStorage.setItem("user_data", JSON.stringify(newUserData));
+
         fetch(CONFIG.serverURL + "/api/user/settings", {
             method: "POST",
             body: JSON.stringify({
-                settings: editedSettings,
+                settings: newUserData.data,
                 token: userData.token,
                 uid: userData.data.uid
             }),
@@ -81,7 +85,9 @@ const SettingsPage = () => {
     }
 
     const updateUserData = (key, newVal) => {
-        setEditedSettings({...editedSettings, [key]: newVal});
+        var obj = JSON.parse(JSON.stringify(editedSettings));
+        obj[key] = newVal;
+        setEditedSettings(obj);
     }
 
     if(userData == null || editedSettings == null){
