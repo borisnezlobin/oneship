@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { DataContext, UserDataContext } from "../util/contexts";
 import LoadingSpinner from "../components/LoadingSpinner";
+import party from "../illustrations/party.svg";
 
 const SchedulePage = () => {
     const { userData } = useContext(UserDataContext);
@@ -17,6 +18,11 @@ const SchedulePage = () => {
     var scheduleComponent = <></>;
     if(schedule.value == null){
         scheduleComponent = <div className="flex justify-center items-center w-full flex-col">
+            <img
+                src={party}
+                alt=""
+                className="w-1/2"
+            />
             <h1 className="bigText text-center mb-8">
                 No School Today!
             </h1>

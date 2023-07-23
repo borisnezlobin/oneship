@@ -84,7 +84,6 @@ modalTypes.oneship = modalTypes.announcement;
 
 const CustomModal = ({ route, navigation }) => {
     var { title, body = "", isMarkdown, image = "announcement", id } = route.params;
-    console.log(body);
     const insets = useSafeAreaInsets();
 
     return (
@@ -234,9 +233,7 @@ const parseMarkdown = (text) => {
     }
     lines = text.replaceAll("\\n", "\n").replaceAll("\\,", ",").split("\n");
     var parsed = [];
-    console.log(lines);
     for(var i = 0; i < lines.length; i++){
-        console.log(lines[i]);
         var line = lines[i];
         if(line == "|"){
             parsed.push({
@@ -292,8 +289,6 @@ const parseMarkdown = (text) => {
             });
         }
     }
-
-    console.log(parsed);
 
     return parsed.map((line, index) => {
         if(line.type == "header"){

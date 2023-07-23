@@ -80,7 +80,6 @@ const CreateAccountPage = () => {
         var cred = EmailAuthProvider.credential(email, password);
         linkWithCredential(auth.currentUser, cred).then(async (usercred) => {
             const user = usercred.user;
-            console.log("Account linking success", user);
             const res = await fetch(CONFIG.SERVER_URL + "/api/register", {
                 method: "POST",
                 headers: {
