@@ -1,6 +1,6 @@
 import express from 'express';
 const app = express();
-import cors from 'cors';
+
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
 import { DEFAULT_SETTINGS, createMessage, getErrors, getMessage, getMessagesForUser, readData, updateSettings, writeData } from './db.js';
@@ -8,7 +8,7 @@ import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser, verifyToken } from './auth.js';
 import { getSports } from './getSports.js';
 
-if(process.env.ENVIROMENT == "PROD") {
+if(process.env.ENVIRONMENT == "PROD") {
     console.log("running in prod");
     app.use(express.json());
 }
