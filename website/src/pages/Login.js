@@ -59,7 +59,6 @@ const LoginPage = () => {
         });
         try{
             const json = await res.json();
-            console.log(json);
             if(json.error){
                 //eek
                 if(json.error.error.message === "INVALID_PASSWORD"){

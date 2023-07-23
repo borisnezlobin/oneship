@@ -107,10 +107,7 @@ const getScheduleForDay = async (day) => {
             return schedule;
         }
     }
-    return {
-        date: day,
-        schedule: null
-    };
+    return null;
 }
 
 const calculateMinutesFromTime = (timeString) => {

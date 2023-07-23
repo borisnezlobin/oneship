@@ -25,7 +25,6 @@ export const getDevicePixelRatio = () => {
     return 1;
   }
 
-  console.log("pixel ratio: " + window.devicePixelRatio)
   return window.devicePixelRatio;
 };
 

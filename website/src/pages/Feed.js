@@ -1,11 +1,22 @@
-import { useContext } from "react";
-import { UserDataContext } from "../util/contexts";
+import { useContext, useEffect, useState } from "react";
+import { DataContext, UserDataContext } from "../util/contexts";
 import { useNavigate } from "react-router-dom";
 import FeedItem from "../components/FeedItem";
+import { getCurrentScheduleInfo } from "../util/functions";
 
 const FeedPage = () => {
     const { userData } = useContext(UserDataContext);
+    const { data } = useContext(DataContext);
     const nav = useNavigate();
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     if(userData == null || userData.data === undefined){
         return (
@@ -38,7 +49,10 @@ const FeedPage = () => {
                         {getTimelyGreeting()}, {userData.data.displayName}
                     </h1>
                     <p className="text-xl text-center">
-                        3rd Period is ending in 00:42:38
+                        {data === null || data.schedule === undefined ?
+                            "Loading..." :
+                            getCurrentScheduleInfo(data.schedule, currentTime)
+                        }
                     </p>
                 </div>
                 <p className="font-bold text-theme text-2xl md:text-3xl m-4 ml-2">

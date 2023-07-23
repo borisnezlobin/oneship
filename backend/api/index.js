@@ -82,7 +82,7 @@ app.get('/api/startup', async (_, response) => {
         }
         data = data.data();
         console.log("sending startup data");
-        console.log("calendar: " + data.calendar.length + " events" + " | schedule: " + data.schedule.value.length + " periods" + " | news: " + data.news.length + " publications");
+        console.log("calendar: " + data.calendar.length + " events" + " | schedule: " + (data.schedule.value == null ? "none today" : data.schedule.value.length + " periods") + " | news: " + data.news.length + " publications");
         console.log("data lastUpdate: " + data.lastUpdate + " | today: " + getTodayInFunnyFormat());
         response.status(200).send(data);
     }catch(e){
@@ -239,7 +239,7 @@ const startServerToday = async () => {
     // get all data needed for app startup
     var calendar = await getCalendar();
     var today = getTodayInFunnyFormat();
-    var schedule = await getScheduleForDay("20230411");
+    var schedule = await getScheduleForDay(today);
     var news = await getNews();
     var sports = await getSports();
     var data = {

@@ -98,7 +98,6 @@ const SettingsPage = () => {
         // TODO: fix this
         var newSettings = {...editedSettings};
         if((typeof newSettings.grade) != "number") newSettings.grade = parseInt(newSettings.grade);
-        console.log(newSettings.grade);
         if(typeof(newSettings.classNotification) != "number") newSettings.classNotification = parseInt(newSettings.classNotification);
 
         setEditedSettings(newSettings);

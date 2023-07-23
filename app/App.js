@@ -55,9 +55,9 @@ function App() {
       try{
         data = JSON.parse(data);
         if(data.error){
-          logError("data.error: " + data.error);
+          logError("data.error: " + JSON.stringify(data.error));
           setError({
-            error: data.error,
+            error: "Startup data dump failed.",
             status: response.status
           });
           return;
@@ -160,7 +160,6 @@ function App() {
     }
 
     const sub = AppState.addEventListener("change", (state) => {
-      console.log("state changed: " + state);
       if(state == "active"){
         start();
       }
