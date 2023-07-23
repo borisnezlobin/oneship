@@ -136,10 +136,10 @@ app.post("/api/login", async (request, response) => {
 
     // the following lines are like that for testing, google won't let me use my pausd account
     // for some reason, will have to email someone at PAUSD sometime
-    // TODO: remove
-    if(result.status == 200 || true){
-        var uid = result.message.localId;
-        var userData = await readData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1");
+    var fakeAuth = process.env.USE_DUMMY_AUTH == "true";
+    if(result.status == 200 || fakeAuth){
+        var uid = fakeAuth ? "S8zqWKYuX1TAP1dUBgbGE3ynLIv1" : result.message.localId;
+        var userData = await readData("users", uid);
         if(userData.exists){
             userData = userData.data();
             
@@ -152,10 +152,10 @@ app.post("/api/login", async (request, response) => {
                     userData[keys[i]] = DEFAULT_SETTINGS[keys[i]];
                 }
             }
-            if(changed) await writeData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1", userData);
+            if(changed) await writeData("users", uid, userData);
             if(ua && !userData.userAgents.includes(ua)){
                 userData.userAgents.push(ua);
-                await writeData("users", "S8zqWKYuX1TAP1dUBgbGE3ynLIv1", userData);
+                await writeData("users", uid, userData);
             }
             const messages = await getMessagesForUser(userData);
             response.status(200).send({
