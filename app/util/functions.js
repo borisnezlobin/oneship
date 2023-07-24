@@ -2,11 +2,11 @@ import { setLocalNotification } from "./notifications";
 
 // also sets notifications for every period if not set already
 const getCurrentScheduleInfo = (schedule, time) => {
-    // return "No school today" if there is no school today
+    // return "!" if there is no school today
     // return "Period x ending in hh:mm:ss" if there is school today and class is in session
     // return "Period x starting in hh:mm:ss" if there is school today and class is not in session
 
-    if(schedule == null || schedule.value == null) return "No school today";
+    if(schedule == null || schedule.value == null) return "No school today!";
     for(var i = 0; i < schedule.value.length; i++){
         // format:
         // {

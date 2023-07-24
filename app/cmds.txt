@@ -1,0 +1,3 @@
+just so I can copy and paste to build the android app
+
+npx eas build -p android --profile preview
