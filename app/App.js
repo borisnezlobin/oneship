@@ -50,42 +50,59 @@ function App() {
   useEffect(() => {
     const getStartupData = async () => {
       log(CONFIG.serverURL + "api/startup");
-      const response = await fetch(CONFIG.serverURL + "api/startup");
-      var data = await response.text();
+      var response;
       try{
-        data = JSON.parse(data);
-        if(data.error){
-          logError("data.error: " + JSON.stringify(data.error));
+        response = await fetch(CONFIG.serverURL + "api/startup").catch(e => {
+          logError("Error fetching startup data: " + e);
           setError({
-            error: "Startup data dump failed.",
-            status: response.status
+            error: "Startup data fetch failed.",
+            status: 500
           });
-          return;
-        }
-
-        setCalendar(data.calendar);
-
-        var today = new Date();
-        today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + (today.getDate() < 9 ? "0" : "") + today.getDate();
-        if(schedule == null || schedule.date != today){
-          if(data.schedule != null){
-            setSchedule(data.schedule);
-            setNotificationForClasses(data.schedule, (userData && userData.data) ? userData.data.classNotification : 5);
-            await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
+        });
+        if(error) return;
+        var data = await response.text();
+        try{
+          data = JSON.parse(data);
+          if(data.error){
+            logError("data.error: " + JSON.stringify(data.error));
+            setError({
+              error: "Startup data dump failed.",
+              status: response.status
+            });
+            return;
           }
-        }
 
-        if(data.calendar != null && calendar == null){
           setCalendar(data.calendar);
+
+          var today = new Date();
+          today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + (today.getDate() < 9 ? "0" : "") + today.getDate();
+          if(schedule == null || schedule.date != today){
+            if(data.schedule != null){
+              setSchedule(data.schedule);
+              setNotificationForClasses(data.schedule, (userData && userData.data) ? userData.data.classNotification : 5);
+              await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
+            }
+          }
+
+          if(data.calendar != null && calendar == null){
+            setCalendar(data.calendar);
+          }
+          
+          setSports(data.sports);
+          setNews(data.news);
+        }catch(e){
+          logError("error: " + e);
+          logError("couldn't parse startup data json from " + data);
+          setError({
+            error: "JSON parsing of startup data dump failed.",
+            status: 500
+          });
         }
-        
-        setSports(data.sports);
-        setNews(data.news);
       }catch(e){
-        logError("error: " + e);
-        logError("couldn't parse startup data json from " + data);
+        logError("error sending startup request to server: " + e);
+        logError("couldn't fetch startup data from " + CONFIG.serverURL + "api/startup");
         setError({
-          error: "JSON parsing of startup data dump failed.",
+          error: "Startup request to server failed.",
           status: 500
         });
       }

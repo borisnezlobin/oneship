@@ -64,6 +64,10 @@ const LoginPage = () => {
             })
         }).catch(err => {
             logError("Error logging in user: " + err);
+            setError({
+                error: "Error logging in user.",
+                status: 500
+            })
             setLoading(false);
         });
         const text = await response.text();
