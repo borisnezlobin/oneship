@@ -33,9 +33,9 @@ const SettingsPage = () => {
     }, [userData, editedSettings, changed]);
 
     if(!userData || editedSettings == null) return (
-        <div className="m-0 md:ml-64 flex flex-col px-4 justify-start pt-4 items-center h-full">
+        <div className="m-0 md:ml-64 flex flex-col px-4 justify-center pt-4 items-center h-full">
             <p className="bigText text-center">Log in to view your settings</p>
-            <hr className="w-full my-4 mb-8" />
+            <hr className="w-full m-4" />
             <p className="text-center">
                 We need to know who you are to show you your settings.
             </p>

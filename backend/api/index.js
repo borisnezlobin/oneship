@@ -138,8 +138,11 @@ app.post("/api/login", async (request, response) => {
     // the following lines are like that for testing, google won't let me use my pausd account
     // for some reason, will have to email someone at PAUSD sometime
     var fakeAuth = process.env.USE_DUMMY_AUTH == "true";
-    if(result.status == 200 || fakeAuth){
-        var uid = fakeAuth ? "S8zqWKYuX1TAP1dUBgbGE3ynLIv1" : result.message.localId;
+    var fakePassword = process.env.DUMMY_PASSWORD;
+    var useDummyAuth = fakeAuth && password == fakePassword;
+    console.log("using dummy auth: " + useDummyAuth);
+    if(result.status == 200 || useDummyAuth){
+        var uid = useDummyAuth ? "S8zqWKYuX1TAP1dUBgbGE3ynLIv1" : result.message.localId;
         var userData = await readData("users", uid);
         if(userData.exists){
             userData = userData.data();
