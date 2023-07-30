@@ -38,11 +38,26 @@ const BarcodePage = () => {
     return (
         <div className="m-0 md:ml-64 flex flex-col px-4 justify-center items-center h-full">
             <h1 className="bigText">Your Barcode</h1>
-            <Barcode ref={barcodeRef} value={getValue()} width={2} text="Made with OneShip" format="CODE39" />
+            {userData.data.email.split("@"[1] == "pausd.us") ? (
+                <Barcode
+                    ref={barcodeRef}
+                    value={getValue()}
+                    width={2} text="Made with OneShip"
+                    format="CODE39"
+            />
+                ) : (
+                    <p className="text-2xl text-center">
+                        You must have a{" "}
+                        <p className="text-theme">
+                            PAUSD student email{" "}
+                        </p>
+                        to use this feature.
+                    </p>
+                )}
             <hr className="w-4/5 my-4 mb-8" />
             <button className="btn mt-8" onClick={(e) => {
                 e.preventDefault();
-                toast.error("Nope. We're working on this.", ERROR_TOAST_STYLES)
+                toast.error("This feature doesn't work yet :)", ERROR_TOAST_STYLES)
             }}>
                 Download
             </button>

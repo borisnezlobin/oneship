@@ -5,11 +5,13 @@ import { useContext, useEffect, useState } from "react";
 import { DebugContext, UserDataContext } from "../util/contexts";
 import { ArrowRightOnRectangleIcon, UserIcon } from "react-native-heroicons/outline";
 import NiceButton from "../components/NiceButton";
-import { HashtagIcon } from "react-native-heroicons/solid";
 import NiceInput from "../components/NiceInput";
 import { openBrowserAsync } from "expo-web-browser";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import log, { logError } from "../util/debug";
+import Toast from "react-native-root-toast";
+import { ERROR_TOAST } from "../util/config";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const LoginPage = () => {
     const { setError } = useContext(DebugContext);
@@ -19,11 +21,15 @@ const LoginPage = () => {
     const [emailError, setEmailError] = useState("");
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const insets = useSafeAreaInsets();
 
     useEffect(() => {
         setEmailError("");
+    }, [email]);
+
+    useEffect(() => {
         setPasswordError("");
-    }, [email, password])
+    }, [password]);
 
     const signIn = async () => {
         var isFormValid = true;
@@ -86,6 +92,27 @@ const LoginPage = () => {
                 return;
             }else{
                 // show error toast
+                var message = "";
+                if(!json || !json.error || !json.error.error || !json.error.error.message){
+                    message = "Error logging in.";
+                    logError("Error logging in: " + text);
+                }else{
+                    if(json.error.error.message == "EMAIL_NOT_FOUND"){
+                        message = "Email not found.";
+                    }else if(json.error.error.message == "INVALID_PASSWORD"){
+                        message = "Invalid password.";
+                    }else{
+                        message = "Error logging in.";
+                        logError("Error logging in: " + json.error.error.message);
+                    }
+                }
+
+                Toast.show(message, {
+                    ...ERROR_TOAST,
+                    containerStyle: {
+                        top: insets.top,
+                    }
+                });
             }
         } catch (e) {
             logError("Error: " + e);

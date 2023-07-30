@@ -7,14 +7,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-root-toast";
 import log from "../util/debug";
 
-
-// just...
-// don't worry about this
-// you can't fight it
-const one = {key: 'one', color: "#949394"};
-const two = {key: 'two', color: '#464646'};
-const three = {key: 'three', color: '#343334'};
-
 const CalendarPage = ({ calendar, navigation }) => {
     const insets = useSafeAreaInsets();
 
@@ -28,20 +20,21 @@ const CalendarPage = ({ calendar, navigation }) => {
         );
     }
 
-    // all of this doesn't work and I have no glue
+    var today = new Date();
+    var key = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
     var markedDates = {};
-    // for(var i = 0; i < calendar.length; i++){
-    //     var date = calendar[i].start;
-    //     date = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
-    //     if(markedDates[date] == null) markedDates[date] = { dots: [one], marked: true };
-    //     else{
-    //         if(markedDates[date].dots.length == 1){
-    //             markedDates[date].dots.push(two);
-    //         }else if(markedDates[date].dots.length == 2){
-    //             markedDates[date].dots.push(three);
-    //         }
-    //     }
-    // }
+    markedDates[key] = {
+        customStyles: {
+            container: {
+                backgroundColor: CONFIG.green,
+            },
+            text: {
+                color: CONFIG.bg,
+                fontWeight: 'bold'
+            }
+        },
+        selected: true
+    };
 
     return (
         <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
@@ -51,13 +44,8 @@ const CalendarPage = ({ calendar, navigation }) => {
                     calendarBackground: CONFIG.bg,
                     textSectionTitleColor: CONFIG.grey,
                     textSectionTitleDisabledColor: CONFIG.grey,
-                    selectedDayBackgroundColor: CONFIG.green,
-                    selectedDayTextColor: CONFIG.bg,
-                    todayTextColor: CONFIG.green,
                     dayTextColor: CONFIG.text,
                     textDisabledColor: CONFIG.grey,
-                    dotColor: CONFIG.green,
-                    selectedDotColor: CONFIG.bg,
                     arrowColor: CONFIG.green,
                     disabledArrowColor: CONFIG.grey,
                     monthTextColor: CONFIG.green,
@@ -65,10 +53,12 @@ const CalendarPage = ({ calendar, navigation }) => {
                     textMonthFontWeight: "bold",
                     textDayFontSize: 16,
                     textMonthFontSize: 24,
-                    textDayHeaderFontSize: 16
+                    textDayHeaderFontSize: 16,
+                    todayBackgroundColor: CONFIG.green,
+                    todayTextColor: CONFIG.bg,
                 }}
                 onDayPress={day => {
-                    log('selected day', day);
+                    log('selected day ' + JSON.stringify(day));
                     var events = getEventsOnDay(day.timestamp, calendar);
                     if(events.length == 0){
                         Toast.show("No events on " + day.day + "/" + day.month + "/" + day.year, {

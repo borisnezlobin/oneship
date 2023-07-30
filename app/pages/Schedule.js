@@ -16,7 +16,6 @@ const SchedulePage = ({ navigation }) => {
     const { calendar } = useContext(CalendarContext);
 
     var height = Dimensions.get("window").height - 56 - useSafeAreaInsets().bottom;
-    if(Platform.OS == "android") height -= 24; // ¯\_(ツ)_/¯ you will just have to cope
 
     if(schedule == null || calendar == null){
         return (
@@ -28,25 +27,17 @@ const SchedulePage = ({ navigation }) => {
         );
     }
 
-    if(schedule.value == null){
-        // no school
-        return (
-            <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
-                <AcademicCapIcon color={CONFIG.green} size={100} style={tailwind("mb-4")} />
-                <Text style={[tailwind("font-bold text-2xl"), { color: CONFIG.green}]}>
-                    No School Today
-                </Text>
-                <Text style={[tailwind("text-lg"), { color: CONFIG.text}]}>
-                    Enjoy your day off!
-                </Text>
-            </SafeAreaView>
-        );
-    }
-
-    var show0Period = schedule.value[0].name == "0 Period" && userData && userData.data.show0;
-    var start = show0Period ? schedule.value[0].start : schedule.value[1].start;
-    var prevStart = start;
-    var end = schedule.value[schedule.value.length - 1].end;
+    var scheduleComponent = (
+        <View style={tailwind("w-full h-full flex flex-col justify-center items-center")}>
+            <AcademicCapIcon color={CONFIG.green} size={100} style={tailwind("mb-4")} />
+            <Text style={[tailwind("font-bold text-2xl"), { color: CONFIG.green}]}>
+                No School Today
+            </Text>
+            <Text style={[tailwind("text-lg"), { color: CONFIG.text}]}>
+                Enjoy your day off!
+            </Text>
+        </View>
+    );
 
     var eventsToday = [];
     var niceCalendar = [];
@@ -69,6 +60,24 @@ const SchedulePage = ({ navigation }) => {
         niceCalendar.push(obj);
     }
 
+    if(schedule.value != null){
+        var show0Period = schedule.value[0].name == "0 Period" && userData && userData.data.show0;
+        var start = show0Period ? schedule.value[0].start : schedule.value[1].start;
+        var prevStart = start;
+        var end = schedule.value[schedule.value.length - 1].end;
+
+        scheduleComponent = (
+            <View>
+                {schedule.value.map((period, index) => {
+                    if(userData && !userData.data.show0 && period.name == "0 Period") return null;
+                    var temp = prevStart;
+                    prevStart = period.end;
+                    return (<ScheduleItem key={index} period={period} prevStart={temp} start={start} end={end} />)
+                })}
+            </View>
+        );
+    }
+
     const tabs = <Tabs
         tabs={["Schedule", "Events", "Calendar"]}
         cb={setPage}
@@ -81,20 +90,6 @@ const SchedulePage = ({ navigation }) => {
     />;
 
     if(page == 0){
-        if(schedule.value == null){
-            return (
-                <SafeAreaView style={[
-                    tailwind("bg-white w-full flex justify-center items-center"),
-                    {
-                        height: height
-                    }
-                ]}>
-                    <Text style={[tailwind("font-bold"), { color: CONFIG.green}]}>
-                        No school today!
-                    </Text>
-                </SafeAreaView>
-            );
-        }
         return (
             <SafeAreaView style={[
                 tailwind("bg-white w-full"),
@@ -102,14 +97,7 @@ const SchedulePage = ({ navigation }) => {
                     height: height
                 }
             ]}>
-                <View>
-                    {schedule.value.map((period, index) => {
-                        if(userData && !userData.data.show0 && period.name == "0 Period") return null;
-                        var temp = prevStart;
-                        prevStart = period.end;
-                        return (<ScheduleItem key={index} period={period} prevStart={temp} start={start} end={end} />)
-                    })}
-                </View>
+                {scheduleComponent}
                 {tabs}
             </SafeAreaView>
         );
