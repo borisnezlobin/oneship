@@ -15,17 +15,32 @@ import Toast from "react-native-root-toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SettingsPage = () => {
-    const { userData, setUserData, setUserDataAndNotify } = useContext(UserDataContext);
     const insets = useSafeAreaInsets();
     const [page, setPage] = useState(0);
     const [edited, setEdited] = useState(false);
-    const [editedSettings, setEditedSettings] = useState(userData ? JSON.parse(JSON.stringify(userData.data)) : null);
+    const { userData, setUserData, setUserDataAndNotify } = useContext(UserDataContext);
+    
+    const logout = () => {
+        log("signing out")
+        AsyncStorage.removeItem("user_data");
+        AsyncStorage.removeItem("not_sketchy");
+        setUserData(null);
+    }
+
+    var perchance = null;
+    try{
+        perchance = JSON.parse(JSON.stringify(userData.data));
+    }catch(e){ logout(); }
+
+    const [editedSettings, setEditedSettings] = useState(perchance);
     const { setError } = useContext(DebugContext);
 
     useEffect(() => {
         if(userData == null) return;
         if(editedSettings == null){
-            setEditedSettings(JSON.parse(JSON.stringify(userData.data)));
+            try{
+                setEditedSettings(JSON.parse(JSON.stringify(userData.data)));
+            }catch(e){ logout(); }
             return;
         }
         
@@ -89,6 +104,7 @@ const SettingsPage = () => {
         obj[key] = newVal;
         setEditedSettings(obj);
     }
+
 
     if(userData == null || editedSettings == null){
         return <LoginPage />
@@ -156,12 +172,7 @@ const SettingsPage = () => {
                 <View style={tailwind("flex px-3 h-20 flex-row justify-around items-center w-full absolute bottom-7")}>
                     <NiceButton
                         type="danger"
-                        cb={() => {
-                            log("signing out")
-                            AsyncStorage.removeItem("user_data");
-                            AsyncStorage.removeItem("not_sketchy");
-                            setUserData(null);
-                        }}
+                        cb={logout}
                     >
                         <Text style={[tailwind("text-lg font-bold"), { color: CONFIG.bg }]}>
                             Sign out
@@ -188,6 +199,7 @@ const SettingsPage = () => {
     const barcodeComponent = (
         <SafeAreaView style={tailwind("bg-white w-full h-full")} key={userData}>
             <View style={tailwind("w-full h-full flex justify-center items-center")}>
+                {userData.data.email.split("@")[1] == "pausd.us" ? (
                 <Barcode
                     format="CODE39"
                     value={"950" + userData.data.email.split("@")[0].substring(2)}
@@ -207,6 +219,15 @@ const SettingsPage = () => {
                     }}
                     maxWidth={Dimensions.get('window').height / 2}
                 />
+                ) : (
+                    <Text style={[tailwind("text-2xl text-center"), { color: CONFIG.text }]}>
+                        You must have a{" "}
+                        <Text style={{ color: CONFIG.green }}>
+                            PAUSD student email{" "}
+                        </Text>
+                        to use this feature.
+                    </Text>
+                )}
             </View>
             {tabs}
         </SafeAreaView>
