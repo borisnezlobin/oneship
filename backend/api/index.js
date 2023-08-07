@@ -140,8 +140,8 @@ app.post("/api/login", async (request, response) => {
     var fakeAuth = process.env.USE_DUMMY_AUTH == "true";
     var fakePassword = process.env.DUMMY_PASSWORD;
     var useDummyAuth = fakeAuth && password == fakePassword;
-    console.log("using dummy auth: " + useDummyAuth);
-    if(result.status == 200 || useDummyAuth){
+    if(useDummyAuth) console.log("using dummy auth");
+    if(useDummyAuth || result.status == 200){
         var uid = useDummyAuth ? "S8zqWKYuX1TAP1dUBgbGE3ynLIv1" : result.message.localId;
         var userData = await readData("users", uid);
         if(userData.exists){
