@@ -20,6 +20,8 @@ const SettingsPage = () => {
     const [edited, setEdited] = useState(false);
     const { userData, setUserData, setUserDataAndNotify } = useContext(UserDataContext);
     
+    // console.log("\"" + JSON.stringify(userData) + "\"");
+
     const logout = () => {
         log("signing out")
         AsyncStorage.removeItem("user_data");
@@ -106,7 +108,7 @@ const SettingsPage = () => {
     }
 
 
-    if(userData == null || editedSettings == null){
+    if(userData == null || !userData.data || editedSettings == null){
         return <LoginPage />
     }
 

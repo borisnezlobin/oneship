@@ -85,8 +85,8 @@ const LoginPage = () => {
                 setUserData(json);
                 log("saving user data + login to async storage");
                 AsyncStorage.setItem("not_sketchy", JSON.stringify({
-                    email: "email@pausd.us",
-                    password: "password"
+                    email: email.trim(),
+                    password: password
                 }));
                 AsyncStorage.setItem("user_data", JSON.stringify(json));
                 return;

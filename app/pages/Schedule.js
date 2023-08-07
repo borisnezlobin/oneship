@@ -8,6 +8,7 @@ import ScheduleItem from "../components/ScheduleItem";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Tabs from "../components/Tabs";
 import CalendarPage from "./Calendar";
+import log from "../util/debug";
 
 const SchedulePage = ({ navigation }) => {
     const [page, setPage] = useState(0);
@@ -94,7 +95,7 @@ const SchedulePage = ({ navigation }) => {
             <SafeAreaView style={[
                 tailwind("bg-white w-full"),
                 {
-                    height: height
+                    height: "100%"
                 }
             ]}>
                 {scheduleComponent}
@@ -106,7 +107,7 @@ const SchedulePage = ({ navigation }) => {
             <SafeAreaView style={[
                 tailwind("bg-white w-full"),
                 {
-                    height: height
+                    height: "100%"
                 }
             ]}>
             {eventsToday.length != 0 ? (
@@ -164,12 +165,12 @@ const dateFromString = (dateString) => {
     var year = dateString.substring(0, 4);
     var month = dateString.substring(4, 6);
     var day = dateString.substring(6, 8);
-    if(dateString.length == 8) return new Date(year, month - 1, day - 1, 0, 0, 0);
+    if(dateString.length == 8) return new Date(year, month - 1, day, 0, 0, 0);
 
     var hour = dateString.substring(9, 11);
     var minute = dateString.substring(11, 13);
     var second = dateString.substring(13, 15);
-    return new Date(year, month - 1, day - 1, hour, minute, second);
+    return new Date(year, month - 1, day, hour, minute, second);
 }
 
 export default SchedulePage;
