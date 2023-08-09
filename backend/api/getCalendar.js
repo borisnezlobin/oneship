@@ -15,7 +15,7 @@ const alternates = [
             { name: "4th Period", start: "12:50", end: "1:30" },
             { name: "5th Period", start: "1:40", end: "2:20" },
             { name: "6th Period", start: "2:30", end: "3:10" },
-            { name: "Brunch", start: "3:20", end: "4:00" },
+            { name: "7th Period", start: "3:20", end: "4:00" },
         ],
     },
     {
