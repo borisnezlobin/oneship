@@ -61,13 +61,17 @@ const SchedulePage = ({ navigation }) => {
         niceCalendar.push(obj);
     }
 
+    // TODO: make this a setting?
+    var useFixedHeight = false;
     if(schedule.value != null){
+        // if we can't fit all the periods on the screen, use a fixed height and make it scroll
+        if(schedule.value.length > 9) useFixedHeight = true;
         var show0Period = schedule.value[0].name == "0 Period" && userData && userData.data.show0;
         var start = show0Period ? schedule.value[0].start : schedule.value[1].start;
         var prevStart = start;
         var end = schedule.value[schedule.value.length - 1].end;
 
-        scheduleComponent = (
+        scheduleComponent = !useFixedHeight ? (
             <View>
                 {schedule.value.map((period, index) => {
                     if(userData && !userData.data.show0 && period.name == "0 Period") return null;
@@ -76,6 +80,16 @@ const SchedulePage = ({ navigation }) => {
                     return (<ScheduleItem key={index} period={period} prevStart={temp} start={start} end={end} />)
                 })}
             </View>
+        ) : (
+            <ScrollView>
+                {schedule.value.map((period, index) => {
+                    if(userData && !userData.data.show0 && period.name == "0 Period") return null;
+                    var temp = prevStart;
+                    prevStart = period.end;
+                    return (<ScheduleItem fixedHeight={true} key={index} period={period} prevStart={temp} start={start} end={end} />)
+                })}
+                <View style={{ height: CONFIG.DEFAULT_FIXED_HEIGHT / 2 }} />
+            </ScrollView>
         );
     }
 
