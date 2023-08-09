@@ -57,6 +57,7 @@ const SchedulePage = ({ navigation }) => {
         };
         if(eventStart.getFullYear() <= now.getFullYear() && eventStart.getMonth() <= now.getMonth() && eventStart.getDate() <= now.getDate() && eventEnd.getFullYear() >= now.getFullYear() && eventEnd.getMonth() >= now.getMonth() && eventEnd.getDate() >= now.getDate()){
             eventsToday.push(obj);
+            console.log("event today: " + JSON.stringify(event))
         }
         niceCalendar.push(obj);
     }
