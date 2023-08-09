@@ -23,6 +23,7 @@ const CalendarPage = ({ calendar, navigation }) => {
     var today = new Date();
     var key = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
     var markedDates = {};
+    console.log(key);
     markedDates[key] = {
         customStyles: {
             container: {
@@ -91,14 +92,15 @@ const CalendarPage = ({ calendar, navigation }) => {
                 markingType="multi-dot"
                 markedDates={markedDates}
                 showScrollIndicator={true}
+                key={key}
             />
         </SafeAreaView>
     );
 }
 
 const getEventsOnDay = (timestamp, calendar) => {
-    timestamp = timestamp + 1;
     timestamp = new Date(timestamp);
+    timestamp.setDate(timestamp.getDate() + 1);
     var events = [];
     for(var i = 0; i < calendar.length; i++){
         var event = calendar[i];
