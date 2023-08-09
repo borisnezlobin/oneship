@@ -1,7 +1,8 @@
 const getTodayInFunnyFormat = () => {
     var today = new Date();
     // in format "yyyymmdd"
-    today = today.getFullYear() + (today.getMonth() < 10 ? "0" : "") + today.getMonth() + (today.getDate() < 9 ? "0" : "") + today.getDate();
+    // getDate() is 1-indexed, but getMonth isn't??
+    today = today.getFullYear() + (today.getMonth() < 9 ? "0" : "") + (today.getMonth() + 1) + (today.getDate() < 10 ? "0" : "") + today.getDate();
     return today;
 };
 

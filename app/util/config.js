@@ -9,7 +9,8 @@ const CONFIG = {
     blue: "#1076ab",
     bg: "#ffffff",
     serverURL: "https://oneship.vercel.app/",
-    // serverURL: "http://10.0.0.169:5000/",
+    // serverURL: "http://10.0.0.66:5000/",
+    DEFAULT_FIXED_HEIGHT: 100,
 }
 
 const DEFUALT_TOAST = {

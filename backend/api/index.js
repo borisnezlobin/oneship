@@ -242,6 +242,7 @@ const startServerToday = async () => {
     // get all data needed for app startup
     var calendar = await getCalendar();
     var today = getTodayInFunnyFormat();
+    console.log("today is " + today);
     var schedule = await getScheduleForDay(today);
     var news = await getNews();
     var sports = await getSports();

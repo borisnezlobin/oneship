@@ -28,6 +28,8 @@ const SchedulePage = () => {
             </h1>
         </div>;
     }else{
+        var useFixedHeight = false;
+        if(schedule.value.length > 10) useFixedHeight = true;
         var winHeight = window.innerHeight;
 
         // in minutes
@@ -46,8 +48,8 @@ const SchedulePage = () => {
                     key={"scheduleItem" + i}
                     className="rounded-lg px-4 py-2 bg-gray-50 w-full border border-grey-300"
                     style={{
-                        height: (e.end - e.start) / (dayEnd - dayStart) * winHeight + "px",
-                        marginTop: top + "px",
+                        height: useFixedHeight ? 100 : (e.end - e.start) / (dayEnd - dayStart) * winHeight + "px",
+                        marginTop: useFixedHeight ? 10 : top + "px",
                         borderTopLeftRadius: topRadius + "px",
                         borderTopRightRadius: topRadius + "px",
                         borderBottomLeftRadius: bottomRadius + "px",
