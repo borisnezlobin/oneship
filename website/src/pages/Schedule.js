@@ -29,7 +29,7 @@ const SchedulePage = () => {
         </div>;
     }else{
         var useFixedHeight = false;
-        if(schedule.value.length > 10) useFixedHeight = true;
+        if(schedule.value.length >= 8) useFixedHeight = true;
         var winHeight = window.innerHeight;
 
         // in minutes
