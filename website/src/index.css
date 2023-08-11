@@ -60,6 +60,16 @@ body{
   width: 256px;
 }
 
+.slab-light{
+  font-family: "Roboto Slab", serif;
+  font-weight: 200;
+}
+
+.slab{
+  font-family: "Roboto Slab", serif;
+  font-weight: 300;
+}
+
 .btn:hover,
 .btn:focus {
   border-color: rgba(0, 0, 0, 0.15);

@@ -23,7 +23,8 @@ const NewsItem = ({ item }) => {
                     </>
                 )
             })}
-            {item.authors.length > 0 ? " with " : ""}{item.publication} on {item.published.trim()}
+            {item.authors.length > 0 ? " with " : ""}{item.publication} on{" "}
+                {item.published.trim()}
             </p>
             <hr className="m-2" />
             <p className="text-0 md:text-lg">{description}</p>

@@ -54,9 +54,10 @@ const SchedulePage = () => {
                         borderTopRightRadius: topRadius + "px",
                         borderBottomLeftRadius: bottomRadius + "px",
                         borderBottomRightRadius: bottomRadius + "px",
+                        minHeight: 50,
                     }}
                 >
-                    <h1 className="mediumText">
+                    <h1 className="mediumText slab">
                         {e.name}
                         {" "}
                         <span className="text-lg text-gray-500">
@@ -91,7 +92,7 @@ const SchedulePage = () => {
         }
         eventComponent = <div className="w-full mt-4 md:mt-0 md:absolute md:h-full flex flex-col justify-center items-center">
             <div className={containerClassName}>
-                <h1 className="mediumText">
+                <h1 className="mediumText slab">
                     Today's Events
                 </h1>
                 <div className="w-full h-px bg-gray-300 my-2" /> {/* idk why I can't just <hr /> */}
@@ -128,7 +129,7 @@ const SchedulePage = () => {
     return (
         <div className="m-0 bg-white md:ml-64 p-4">
             <div className="flex justify-center items-center w-full flex-col">
-                <h1 className="bigText text-center mb-8">
+                <h1 className="bigText text-center mb-8 slab">
                     Today's Schedule
                 </h1>
             </div>
