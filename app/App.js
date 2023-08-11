@@ -79,6 +79,7 @@ function App() {
           if(schedule == null || schedule.date != today){
             if(data.schedule != null){
               setSchedule(data.schedule);
+              console.log(userData);
               setNotificationForClasses(data.schedule, (userData && userData.data) ? userData.data.classNotification : 5);
               await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
             }
@@ -170,8 +171,8 @@ function App() {
 
     if(error) return;
 
-    const start = () => {
-      getUserData();
+    const start = async () => {
+      await getUserData();
       getScheduleFromStorage();
       getStartupData();
     }
@@ -183,6 +184,10 @@ function App() {
     });
 
     start();
+
+    if(userData && userData.data && schedule && schedule.value != null){
+      setNotificationForClasses(schedule, userData.data.classNotification);
+    }
 
     return () => {
       sub.remove()

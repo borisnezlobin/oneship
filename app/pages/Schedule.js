@@ -57,13 +57,12 @@ const SchedulePage = ({ navigation }) => {
         };
         if(eventStart.getFullYear() <= now.getFullYear() && eventStart.getMonth() <= now.getMonth() && eventStart.getDate() <= now.getDate() && eventEnd.getFullYear() >= now.getFullYear() && eventEnd.getMonth() >= now.getMonth() && eventEnd.getDate() >= now.getDate()){
             eventsToday.push(obj);
-            console.log("event today: " + JSON.stringify(event))
         }
         niceCalendar.push(obj);
     }
 
     // TODO: make this a setting?
-    var useFixedHeight = false;
+    var useFixedHeight = true; // used to be false but idgaf
     if(schedule.value != null){
         // if we can't fit all the periods on the screen, use a fixed height and make it scroll
         if(schedule.value.length >= 8) useFixedHeight = true;
@@ -87,7 +86,43 @@ const SchedulePage = ({ navigation }) => {
                     if(userData && !userData.data.show0 && period.name == "0 Period") return null;
                     var temp = prevStart;
                     prevStart = period.end;
-                    return (<ScheduleItem fixedHeight={true} key={index} period={period} prevStart={temp} start={start} end={end} />)
+                    var hasPassing = false;
+                    var prevPeriod = null;
+                    if(index != 0){
+                        prevPeriod = schedule.value[index - 1];
+                        hasPassing = prevPeriod.end != period.start;
+                    }
+                    return (
+                        <>
+                            {hasPassing && (
+                                <View style={{
+                                    height: CONFIG.DEFAULT_FIXED_HEIGHT / 2,
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
+                                }}>
+                                    <Text style={{
+                                        color: CONFIG.grey,
+                                        textAlign: "center",
+                                        fontStyle: "italic",
+                                    }}>
+                                        {period.start - prevPeriod.end}m{" "}
+                                        Passing
+                                    </Text>
+                                    <View style={{
+                                        height: 1,
+                                        borderStyle: "dashed",
+                                        borderWidth: 1,
+                                        borderColor: CONFIG.grey,
+                                        borderRadius: 1,
+                                        width: "100%",
+                                    }}/>
+                                </View>
+                            )}
+                            <ScheduleItem fixedHeight={true} key={index} period={period} prevStart={temp} start={start} end={end} />
+                        </>
+                    )
                 })}
                 <View style={{ height: CONFIG.DEFAULT_FIXED_HEIGHT / 2 }} />
             </ScrollView>

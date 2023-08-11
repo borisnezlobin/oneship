@@ -40,7 +40,7 @@ const getCurrentScheduleInfo = (schedule, time) => {
 
 const setNotificationForClasses = (schedule, timeTrigger) => {
     const time = new Date();
-
+    // console.log("setting notifications with trigger " + timeTrigger);
     if(schedule == null || schedule.value == null) return;
     if(!timeTrigger) return;
     timeTrigger = parseInt(timeTrigger);
@@ -65,7 +65,8 @@ const setNotificationForClasses = (schedule, timeTrigger) => {
             setLocalNotification(
                 period.name,
                 "Starting in " + timeTrigger + " minute" + (timeTrigger == 1 ? "" : "s") + "!",
-                ((periodStart - new Date()) / 1000) - (timeTrigger * 60)
+                ((periodStart - new Date()) / 1000) - (timeTrigger * 60),
+                "schedule"
             );
         }else{
             return;

@@ -34,20 +34,20 @@ async function registerForPushNotificationsAsync() {
     return token;
 }
 
-const setLocalNotification = async (title, body, seconds) => {
+const setLocalNotification = async (title, body, seconds, channel) => {
   // check if a notification with this title already exists
-  log("setting notification with title " + title + " and body " + body + " in " + seconds + " seconds");
+  // log("setting notification with title " + title + " and body " + body + " in " + seconds + " seconds");
   const notifications = await Notifications.getAllScheduledNotificationsAsync();
   for(var i = 0; i < notifications.length; i++){
     if(notifications[i].content.title == title){
       Notifications.cancelScheduledNotificationAsync(notifications[i].identifier);
-      log("Notification with title " + title + " already exists, removing it.");
+      // log("Notification with title " + title + " already exists, removing it.");
       // return;
       break;
     }
   }
 
-  log("Notification with title " + title + " does not exist, creating it.");
+  // log("Notification with title " + title + " does not exist, creating it.");
   
   await Notifications.scheduleNotificationAsync({
     content: {
@@ -56,6 +56,7 @@ const setLocalNotification = async (title, body, seconds) => {
     },
     trigger: {
       seconds: seconds,
+      channelId: channel,
     }
   });
 };

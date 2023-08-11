@@ -14,7 +14,8 @@ function ScheduleItem({ period, start, end, fixedHeight = false }) {
                 position: fixedHeight ? "relative" : "absolute",
                 backgroundColor: "#F3F4F6",
                 top: fixedHeight ? 0 : ((period.start - start) / (end - start)) * (screenHeight),
-                height: fixedHeight ? CONFIG.DEFAULT_FIXED_HEIGHT : height
+                height: fixedHeight ? CONFIG.DEFAULT_FIXED_HEIGHT : height,
+                marginTop: fixedHeight ? 4 : 0,
             }
         ]}>
             <Text style={[tailwind("font-bold text-lg w-full text-left"), { color: CONFIG.green}]}>
