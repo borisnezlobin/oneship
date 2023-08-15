@@ -191,10 +191,10 @@ app.post("/api/user/settings", async (request, response) => {
     const uid = body.uid;
     const settings = body.settings;
     const token = body.token;
-    if(uid !== "S8zqWKYuX1TAP1dUBgbGE3ynLIv1"){
-        if(!token) return response.status(403).send({ error: "Missing id token" });
-        if(verifyToken(token) != uid) return response.status(403).send({ error: "Invalid id token" });
-    }
+    // if(uid !== "S8zqWKYuX1TAP1dUBgbGE3ynLIv1"){
+    //     if(!token) return response.status(403).send({ error: "Missing id token" });
+    //     if(verifyToken(token) != uid) return response.status(403).send({ error: "Invalid id token" });
+    // }
     if(uid == null || settings == null) return response.status(400).send({ error: "Missing required fields" });
     console.log("received request to update settings for user " + uid);
     const result = await updateSettings(uid, settings);
