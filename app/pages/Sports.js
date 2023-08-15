@@ -1,12 +1,13 @@
 import { SafeAreaView, ScrollView, Text, View, Image } from "react-native";
 import tailwind from "tailwind-rn";
-import { CONFIG, ERROR_TOAST, INFO_TOAST, SUCCESS_TOAST } from "../util/config";
+import { CONFIG, ERROR_TOAST } from "../util/config";
 import { SportsContext } from "../util/contexts";
 import { useContext } from "react";
 import { PressableScale } from "react-native-pressable-scale";
 import { createOpenLink } from "react-native-open-maps";
 import Toast from "react-native-root-toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { HomeIcon } from "react-native-heroicons/solid"
 
 const SportsPage = ({ navigation }) => {
     const { sports } = useContext(SportsContext);
@@ -54,6 +55,13 @@ const SportsPage = ({ navigation }) => {
             <ScrollView style={{
                 width: "100%",
             }}>
+                <Image
+                    style={{
+                        width: "100%",
+                        height: 196,
+                    }}
+                    source={require("../assets/illustrations/tickets.png")}
+                />
                 <Text style={[
                     tailwind("text-2xl font-bold text-center"),
                     {
@@ -74,7 +82,7 @@ const SportsPage = ({ navigation }) => {
                     return (
                         <View key={index} style={{
                             width: "100%",
-                            paddingHorizontal: 24,
+                            paddingHorizontal: 12,
                             paddingVertical: 12,
                         }}>
                             <Text style={[
@@ -122,25 +130,33 @@ const SportsPage = ({ navigation }) => {
                                     >
                                         <View key={index} style={{
                                             width: "100%",
-                                            paddingLeft: 24,
+                                            display: "flex",
+                                            flexDirection: "row",
                                             paddingVertical: 12,
+                                            gap: 12,
+                                            paddingLeft: game.isHomeGame ? 0 : 36,
                                         }}>
-                                            <Text style={[
-                                                tailwind("text-xl font-bold text-left"),
-                                                {
-                                                    color: CONFIG.green,
-                                                }
-                                            ]}>
-                                                {game.time}
-                                            </Text>
-                                            <Text style={[
-                                                tailwind("text-xl text-left"),
-                                                {
-                                                    color: CONFIG.text,
-                                                }
-                                            ]}>
-                                                {game.eventName}
-                                            </Text>
+                                            {game.isHomeGame ? (
+                                                <HomeIcon size={24} color={CONFIG.green} />
+                                            ) : <></>}
+                                            <View>
+                                                <Text style={[
+                                                    tailwind("text-xl font-bold text-left"),
+                                                    {
+                                                        color: CONFIG.green,
+                                                    }
+                                                ]}>
+                                                    {game.time}
+                                                </Text>
+                                                <Text style={[
+                                                    tailwind("text-xl text-left"),
+                                                    {
+                                                        color: CONFIG.text,
+                                                    }
+                                                ]}>
+                                                    {game.team}
+                                                </Text>
+                                            </View>
                                         </View>
                                     </PressableScale>
                                 );
@@ -155,15 +171,15 @@ const SportsPage = ({ navigation }) => {
 }
 
 const gameToMarkdown = (game) => {
-    var str = "#" + game.eventName + "\n";
+    var str = "#" + game.team + "\n";
     str += "##" + game.time + ", " + game.date + "\n\n";
     var location = game.location.replace("Palo Alto High School", "").trim();
     if(location != ""){
         str += "At " + location + "\n\n";
     }else{
-        str += "Home game\n\n";
+        str += "Home game" + (location.length != 0 ? ": " + location : "") + "\n\n";
     }
-    str += "Against " + game.against;
+    str += "Against " + game.opponent;
 
     return str;
 };
