@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { DataContext } from "../util/contexts";
 import game from "../illustrations/game.svg";
-import { MapTrifold } from "phosphor-react";
+import { House, MapTrifold } from "phosphor-react";
 import tickets from "../illustrations/tickets.svg";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -17,7 +17,7 @@ const SportsPage = () => {
     );
 
     return (
-        <div className="m-0 md:ml-64 min-h-screen">
+        <div className="m-0 md:ml-64 min-h-screen pb-8">
             {(!data.sports || data.sports.length === 0) ?
             <div className="flex flex-col justify-center items-center w-full h-screen">
                 <img
@@ -44,39 +44,42 @@ const SportsPage = () => {
                 </h1>
             </div>
             {data.sports.map((day, index) => {
-                return <div className="border border-grey rounded p-4 mb-4" key={"sports" + day.date}>
+                return <div className="border border-grey rounded p-4 mx-2 mb-4" key={"sports" + day.date}>
                     <h1 className="bigText">
                         {day.date}
                     </h1>
                     <hr />
                     {day.events.map((event, index) => {
-                        return <div key={"sports" + event.date + "" + index} className="mt-8">
-                            <h1 className="mediumText">
-                                {event.eventName} {" "}
-                                <span className="font-bold text-black text-lg">
-                                    {" "} {event.time}
-                                </span>
-                            </h1>
-                            <p>
-                                {
-                                    event.location.includes("TBA") ?
-                                    "Location not announced"
-                                    : event.location.replaceAll("PAlo Alto High School", "").trim()
-                                }
-                            </p>
-                            {!event.location.includes("TBA") && 
-                            (
-                                <button onClick={() => {
-                                    window.open(
-                                        "https://www.google.com/maps/search/?api=1&query="
-                                            + event.location.replaceAll(" ", "+"),
-                                        "_blank"
-                                    );
-                                }} className="absolute right-0 top-0 btn w-16">
-                                    <MapTrifold />
-                                    <p>Get Directions</p>
-                                </button>
-                            )}
+                        return <div key={"sports" + event.date + "" + index} className="mt-8 flex flex-row">
+                            {event.isHomeGame ? <House size={32} className="mr-4" color="var(--green)" /> : <></>}
+                            <div>
+                                <h1 className="mediumText">
+                                    {event.team} {" "}
+                                    <span className="font-bold text-black text-lg slab">
+                                        {" "} {event.time}
+                                    </span>
+                                </h1>
+                                <p>
+                                    {
+                                        event.location.includes("TBA") ?
+                                        "Location not announced"
+                                        : "against " + event.opponent.trim()
+                                    }
+                                </p>
+                                {!event.location.includes("TBA") && 
+                                (
+                                    <button onClick={() => {
+                                        window.open(
+                                            "https://www.google.com/maps/search/?api=1&query="
+                                                + event.location.replaceAll(" ", "+"),
+                                            "_blank"
+                                        );
+                                    }} className="absolute right-0 top-0 btn w-16">
+                                        <MapTrifold />
+                                        <p>Get Directions</p>
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     })}
                 </div>

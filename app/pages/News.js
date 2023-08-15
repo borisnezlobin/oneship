@@ -37,14 +37,6 @@ const NewsPage = () => {
     return (
         <SafeAreaView style={tailwind("bg-white w-full h-full flex justify-center items-center")}>
             <ScrollView style={tailwind("w-full h-full")}>
-                <Text style={[
-                    tailwind("text-4xl mt-8 font-bold text-center"),
-                    {
-                        color: CONFIG.green,
-                    }
-                ]}>
-                    What's happening?
-                </Text>
                 <Image
                     style={{
                         width: "100%",
@@ -53,6 +45,14 @@ const NewsPage = () => {
                     resizeMode="contain"
                     source={newsImg}
                 />
+                <Text style={[
+                    tailwind("text-2xl font-bold text-center"),
+                    {
+                        color: CONFIG.green,
+                    }
+                ]}>
+                    What's happening?
+                </Text>
                 <View style={{
                     height: 1,
                     width: "95%",
