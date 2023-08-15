@@ -143,6 +143,10 @@ const getErrors = async () => {
 };
 
 const updateSettings = async (uid, settings) => {
+    // check that all keys are present against DEFAULT_SETTINGS
+    for(const key in DEFAULT_SETTINGS) {
+        if(settings[key] == null) settings[key] = DEFAULT_SETTINGS[key];
+    }
     await db.collection("users").doc(uid).set(settings);
 
     return { status: 200, message: "Settings updated successfully" };
