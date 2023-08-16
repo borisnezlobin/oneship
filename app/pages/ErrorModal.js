@@ -26,9 +26,10 @@ const ErrorModal = ({ error }) => {
         var ua = "unknown";
         try{
             ua = UserAgent.getUserAgent();
+            ua += ", oneship: " + CONFIG.VERSION;
             console.log("User agent: " + ua);
         }catch(e){
-            ua = Platform.OS + " " + Platform.Version;
+            ua = Platform.OS + " " + Platform.Version + ", oneship: " + CONFIG.VERSION;
         }
         var report = {
             logs,

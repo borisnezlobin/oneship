@@ -11,6 +11,7 @@ const CONFIG = {
     serverURL: "https://oneship.vercel.app/",
     // serverURL: "http://10.0.0.66:5000/",
     DEFAULT_FIXED_HEIGHT: 100,
+    VERSION: "0.0.0"
 }
 
 const DEFUALT_TOAST = {
