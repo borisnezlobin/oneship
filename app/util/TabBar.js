@@ -3,6 +3,7 @@ import tailwind from 'tailwind-rn';
 import { CONFIG } from './config';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PressableScale } from 'react-native-pressable-scale';
+import VersionCheck from '../components/VersionCheck';
 
 function TabBar({ state, descriptors, navigation }) {
   return (
@@ -66,6 +67,7 @@ function TabBar({ state, descriptors, navigation }) {
           </PressableScale>
         );
       })}
+      <VersionCheck navigation={navigation} />
     </View>
   );
 }

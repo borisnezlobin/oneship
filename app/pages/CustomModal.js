@@ -83,7 +83,7 @@ var modalTypes = {
 modalTypes.oneship = modalTypes.announcement;
 
 const CustomModal = ({ route, navigation }) => {
-    var { title, body = "", isMarkdown, image = "announcement", id } = route.params;
+    var { title, body = "", isMarkdown, image = "announcement", id, shareable = true, closeable = true } = route.params;
     const insets = useSafeAreaInsets();
 
     return (
@@ -118,7 +118,7 @@ const CustomModal = ({ route, navigation }) => {
                 }}>
                     {title}
                 </Text>
-                {(image != "game" && image != "event") &&
+                {(image != "game" && image != "event" && shareable) &&
                     <PressableScale
                         style={{
                             padding: 8,
@@ -168,32 +168,34 @@ const CustomModal = ({ route, navigation }) => {
                         {body}
                     </Text>
                 )}
-                <PressableScale style={{
-                    width: "100%",
-                    height: 50,
-                    backgroundColor: CONFIG.green,
-                    borderRadius: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginTop: 36,
-                }}
-                onPress={() => {
-                    navigation.goBack();
-                }}>
-                    <Text style={{
-                        fontSize: 18,
-                        fontWeight: "bold",
-                        color: CONFIG.bg,
+                {closeable ? (
+                    <PressableScale style={{
+                        width: "100%",
+                        height: 50,
+                        backgroundColor: CONFIG.green,
+                        borderRadius: 10,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 36,
+                    }}
+                    onPress={() => {
+                        navigation.goBack();
                     }}>
-                        Close
-                    </Text>
-                </PressableScale>
+                        <Text style={{
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            color: CONFIG.bg,
+                        }}>
+                            Close
+                        </Text>
+                    </PressableScale>
+                ): <></>}
                 <View style={{
                     height: 16,
                     backgroundColor: CONFIG.bg,
                 }} />
 
-                {image != "game" && image != "event" ? (
+                {image != "game" && shareable && image != "event" ? (
                     <View style={{
                         backgroundColor: CONFIG.bg,
                     }}>

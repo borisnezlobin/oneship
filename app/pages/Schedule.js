@@ -66,7 +66,7 @@ const SchedulePage = ({ navigation }) => {
     if(schedule.value != null){
         // if we can't fit all the periods on the screen, use a fixed height and make it scroll
         if(schedule.value.length >= 8) useFixedHeight = true;
-        var show0Period = schedule.value[0].name == "0 Period" && userData && userData.data.show0;
+        var show0Period = schedule.value[0].name == "0 Period" && userData && userData.data && userData.data.show0;
         var start = show0Period ? schedule.value[0].start : schedule.value[1].start;
         var prevStart = start;
         var end = schedule.value[schedule.value.length - 1].end;
