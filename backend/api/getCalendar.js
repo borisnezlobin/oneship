@@ -61,8 +61,8 @@ const getCalendar = async () => {
     return events;
 }
 
-const getScheduleForDay = async (day) => {
-    var events = await getCalendar();
+const getScheduleForDay = (day, events) => {
+    // var events = await getCalendar();
     console.log(day);
     for(var i = 0; i < alternates.length; i++){
         var alternate = alternates[i];

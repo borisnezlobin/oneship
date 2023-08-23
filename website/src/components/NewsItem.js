@@ -2,14 +2,18 @@ const NewsItem = ({ item }) => {
     var description = item.description.replaceAll("\r", "").replaceAll("\n", "");
     if(description.length > 256) description = description.substring(0, 256) + "...";
     return (
-        <a href={item.link} target="blank" rel="noreferrer" className="rounded-lg p-4 md:p-2 md:p-8" style={{
+        <div target="blank" rel="noreferrer" className="rounded-lg md:gap-4 p-4 md:p-8 md:flex md:flex-row-reverse md:items-start md:justify-start" style={{
             width: "100%",
-            display: "block",
-            cursor: "pointer",
-        }} onClick={() => {
-            window.open(item.link);
         }}>
-            <h1 className="mediumText">{item.title}</h1>
+        <div style={{
+            width: "100%",
+        }}>
+            <a
+                href={item.link}
+                className="mediumText link"
+            >
+                {item.title}
+            </a>
             <p>
             {item.authors.map((e, i) => {
                 return (
@@ -29,13 +33,14 @@ const NewsItem = ({ item }) => {
             <hr className="m-2" />
             <p className="text-0 md:text-lg">{description}</p>
             <p className="text-sm">{item.date}</p>
+            </div>
             { /* media */}
-            <div className="w-full">
+            <div className="w-full md:w-96 md:h-48">
             {item.isVideo ? (
                 <iframe
                     title={item.title}
                     src={item.embedURL}
-                    className="w-full h-128"
+                    className="w-full h-128 md:w-48 md:h-128"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen={true}
                     style={{
@@ -45,7 +50,7 @@ const NewsItem = ({ item }) => {
             ) : (
                 <img
                     src={item.image}
-                    className="w-full h-128 rounded-lg"
+                    className="w-full h-48 rounded-lg"
                     alt={item.title}
                     style={{
                         objectFit: "cover",
@@ -54,7 +59,7 @@ const NewsItem = ({ item }) => {
                 />
             )}
             </div>
-        </a>
+        </div>
     )
 };
 

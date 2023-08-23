@@ -102,10 +102,6 @@ function App() {
       }catch(e){
         logError("error sending startup request to server: " + e);
         logError("couldn't fetch startup data from " + CONFIG.serverURL + "api/startup");
-        setError({
-          error: "Startup request to server failed.",
-          status: 500
-        });
       }
     }
     const getScheduleFromStorage = async () => {

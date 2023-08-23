@@ -28,7 +28,7 @@ const SchedulePage = () => {
             </h1>
         </div>;
     }else{
-        var useFixedHeight = false;
+        var useFixedHeight = true; // whatever tbh
         if(schedule.value.length >= 8) useFixedHeight = true;
         var winHeight = window.innerHeight;
 
@@ -44,7 +44,27 @@ const SchedulePage = () => {
                 );
                 var topRadius = e.start === (i === 0 ? e.end : schedule.value[i - 1].end) ? 0 : 8;
                 var bottomRadius = e.end === (i === schedule.value.length - 1 ? e.start : schedule.value[i + 1].start) ? 0 : 8;
-                return <div
+                return (<>
+                {i != 0 && e.start !== schedule.value[i - 1].end ? (
+                    <div
+                        key={"scheduleGap" + i}
+                        style={{
+                            marginTop: 8,
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <p style={{
+                            color: "#ccc",
+                        }}>
+                            {e.start - schedule.value[i - 1].end}m passing period
+                        </p>
+                    </div>
+                ) : <></>}
+                <div
                     key={"scheduleItem" + i}
                     className="rounded-lg px-4 py-2 bg-gray-50 w-full border border-grey-300"
                     style={{
@@ -64,14 +84,15 @@ const SchedulePage = () => {
                             {e.startString}-{e.endString}
                         </span>
                     </h1>
-                </div>;
+                </div>
+                </>);
             })}
         </div>;
     }
 
     var eventsToday = [];
     var eventComponent = <></>;
-    const containerClassName = "rounded-lg p-4 bg-white shadow-xl w-full md:w-64 md:absolute md:top-24 md:right-4 border border-grey-300 flex flex-col justify-center items-center";
+    const containerClassName = "rounded-lg p-4 bg-white shadow-xl w-full md:w-64 border border-grey-300 flex flex-col justify-center items-center";
     if(data.calendar != null){
         var now = new Date();
         for(var i = 0; i < data.calendar.length; i++){
@@ -86,29 +107,32 @@ const SchedulePage = () => {
                 start: eventStart,
                 end: eventEnd
             };
-            if(eventStart.getFullYear() <= now.getFullYear() && eventStart.getMonth() <= now.getMonth() && eventStart.getDate() <= now.getDate() && eventEnd.getFullYear() >= now.getFullYear() && eventEnd.getMonth() >= now.getMonth() && eventEnd.getDate() >= now.getDate()){
+            if(eventStart.getFullYear() <= now.getFullYear() && eventStart.getMonth() <= now.getMonth() && eventStart.getDate() <= now.getDate() - 1 && eventEnd.getFullYear() >= now.getFullYear() && eventEnd.getMonth() >= now.getMonth() && eventEnd.getDate() >= now.getDate() - 1){
                 eventsToday.push(obj);
             }
         }
-        eventComponent = <div className="w-full mt-4 md:mt-0 md:absolute md:h-full flex flex-col justify-center items-center">
+        eventComponent = <div className="w-full mt-4 md:mt-0 md:h-full flex flex-col justify-center items-center">
             <div className={containerClassName}>
                 <h1 className="mediumText slab">
                     Today's Events
                 </h1>
-                <div className="w-full h-px bg-gray-300 my-2" /> {/* idk why I can't just <hr /> */}
+                <div style={{ height: 1, width: "100%" }} className="my-2 bg-gray-300" />
+                <div className="w-full h-px" />
                 {eventsToday.map((e, i) => {
                     return (
                         <div
                             key={"eventItem" + i}
-                            className="rounded-lg p-2 bg-gray-100 w-full border border-grey-300 flex justify-start items-center mt-2"
+                            className="rounded-lg p-2 w-full border border-grey-300 flex flex-col justify-start items-start mt-2"
                         >
-                            <h1 className="mediumText">
+                            <h1 className="text-lg text-theme">
                                 {e.event.summary}
-                                {" "}
-                                <span className="text-lg text-gray-500">
-                                    {e.start.getHours() + ":" + e.start.getMinutes() + "-" + e.end.getHours() + ":" + e.end.getMinutes()}
-                                </span>
                             </h1>
+                            <p className="text-sm text-gray-500">
+                                {e.start.getHours() == 0 ? "All Day" : e.start.getHours() + ":" + e.start.getMinutes() + "-" + e.end.getHours() + ":" + e.end.getMinutes()}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                                {e.event.description}
+                            </p>
                         </div>
                     );
                 })}
@@ -133,10 +157,8 @@ const SchedulePage = () => {
                     Today's Schedule
                 </h1>
             </div>
-            <div className="w-full md:w-2/3">
+            <div className="w-full md:flex md:flex-row">
                 {scheduleComponent}
-            </div>
-            <div className="block md:absolute w-full md:w-1/3 md:top-0 right-0 md:right-4">
                 {eventComponent}
             </div>
             <p className="w-full text-center text-sm mt-4">

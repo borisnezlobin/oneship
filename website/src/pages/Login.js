@@ -81,6 +81,11 @@ const LoginPage = () => {
             setIsNavigating(true);
             nav(next && next !== "null" ? next : "/feed");
             setUserData(json);
+            localStorage.setItem("creds", JSON.stringify({
+                email: email.trim(),
+                password: password,
+                yes: "iknowthisisbad"
+            }));
         }catch(err){
             setLoading(false);
             console.log(err);
