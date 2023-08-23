@@ -3,6 +3,7 @@ import { DataContext, UserDataContext } from "../util/contexts";
 import { useNavigate } from "react-router-dom";
 import FeedItem from "../components/FeedItem";
 import { getCurrentScheduleInfo } from "../util/functions";
+import sync from "../illustrations/sync.svg";
 
 const FeedPage = () => {
     const { userData } = useContext(UserDataContext);
@@ -55,14 +56,25 @@ const FeedPage = () => {
                         }
                     </p>
                 </div>
-                <p className="font-bold text-theme text-2xl md:text-3xl m-4 ml-2">
-                    Here's what's happening:
-                </p>
-                {userData.messages.map((message, index) => {
-                    return (
-                        <FeedItem key={"feed" + index} item={message} />
-                    )
-                })}
+                {userData.messages.length === 0 ? (
+                    <div className="w-full mt-16 h-full flex flex-col justify-center items-center">
+                        <img src={sync} className="h-36 w-36" alt="logo" />
+                        <p className="font-bold text-theme text-2xl md:text-3xl m-4 ml-2">
+                            No messages for now!
+                        </p>
+                    </div>
+                ) : (
+                    <>
+                        <p className="font-bold text-theme text-2xl md:text-3xl m-4 ml-2">
+                            Here's what's happening:
+                        </p>
+                        {userData.messages.map((message, index) => {
+                            return (
+                                <FeedItem key={"feed" + index} item={message} />
+                            )
+                        })}
+                    </>
+                )}
             </div>
         );
     }

@@ -69,6 +69,11 @@ const writeData = async (collection, document, data) => {
     await db.collection(collection).doc(document).set(data);
 }
 
+const updateData = async (collection, document, data) => {
+    console.log("updating " + collection + "/" + document);
+    await db.collection(collection).doc(document).set(data, { merge: true });
+}
+
 const readData = async (collection, document) => {
     // ctf code irl
     return await db.collection(collection).doc(document).get();
@@ -154,6 +159,7 @@ const updateSettings = async (uid, settings) => {
 
 export {
     writeData,
+    updateData,
     readData,
     getMessagesForUser,
     getMessage,

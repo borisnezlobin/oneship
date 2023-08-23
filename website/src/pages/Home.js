@@ -29,17 +29,12 @@ const HomePage = () => {
                 Join our Discord!
             </a>
             <p style={{ marginTop: 24, marginBottom: 0 }}>
-                Or
+                
             </p>
             <button className='link' onClick={() => {
-                try{
-                    navigator.clipboard.writeText("https://discord.gg/nDDBXnyYw2");
-                    toast.success("Copied invite link!", SUCCESS_TOAST_STYLES);
-                }catch(e){
-                    toast.error("Your browser doesn't support this.", ERROR_TOAST_STYLES);
-                }
+                window.open("https://github.com/Rand0mLetters/oneship");
             }}>
-                Copy the invite link
+                View the code on GitHub
             </button>
       </div>
     </>

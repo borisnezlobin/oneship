@@ -32,13 +32,36 @@ function App() {
       }
     };
 
+    const attemptLogin = async () => {
+      const creds = JSON.parse(localStorage.getItem("creds"));
+      if(creds === null) return;
+      const res = await fetch(CONFIG.SERVER_URL + "/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: creds.email,
+          password: creds.password,
+          ua: navigator.userAgent ? navigator.userAgent : "web"
+        })
+      });
+      try{
+        const data = await res.json();
+        setLocalUserData(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     if(startupData == null) getStartupData();
+    if(userData == null) attemptLogin();
   }, [startupData]);
 
   // TODO: get user data from localstorage and update from server
   const setUserData = (data) => {
     setLocalUserData(data);
-    localStorage.setItem("userData", JSON.stringify(data));
+    // localStorage.setItem("userData", JSON.stringify(data));
   };
 
   const canDownloadAndroidApp = window.navigator.userAgent.toLowerCase().includes("android");

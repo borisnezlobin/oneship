@@ -19,8 +19,6 @@ const SettingsPage = () => {
     const [page, setPage] = useState(0);
     const [edited, setEdited] = useState(false);
     const { userData, setUserData, setUserDataAndNotify } = useContext(UserDataContext);
-    
-    // console.log("\"" + JSON.stringify(userData) + "\"");
 
     const logout = () => {
         log("signing out")
@@ -46,14 +44,16 @@ const SettingsPage = () => {
             return;
         }
         
-        var change = false;
-        for(var key in editedSettings){
-            if(editedSettings[key] != userData.data[key]){
-                change = true;
-                break;
+        if(userData && editedSettings){
+            var change = false;
+            for(var key in editedSettings){
+                if(editedSettings[key] !== userData.data[key]){
+                    change = true;
+                    break;
+                }
             }
+            if(edited !== change) setEdited(change);
         }
-        if(edited != change) setEdited(change);
     }, [userData, editedSettings]);
 
     const saveUserData = () => {
@@ -171,7 +171,7 @@ const SettingsPage = () => {
                         height: 56 + 40 + 16,
                     }} />
                 </ScrollView>
-                <View style={tailwind("flex px-3 h-20 flex-row justify-around items-center w-full absolute bottom-7")}>
+                <View style={tailwind("flex px-3 h-20 flex-row justify-around items-center w-full absolute bottom-7 bg-white")}>
                     <NiceButton
                         type="danger"
                         cb={logout}
@@ -198,13 +198,15 @@ const SettingsPage = () => {
         // </TouchableWithoutFeedback>
     );
 
+    var useFake = userData.data.email == "mc34608@pausd.us";
+
     const barcodeComponent = (
         <SafeAreaView style={tailwind("bg-white w-full h-full")} key={userData}>
             <View style={tailwind("w-full h-full flex justify-center items-center")}>
                 {userData.data.email.split("@")[1] == "pausd.us" ? (
                 <Barcode
                     format="CODE39"
-                    value={"950" + userData.data.email.split("@")[0].substring(2)}
+                    value={useFake ? "95051245" : "950" + userData.data.email.split("@")[0].substring(2)}
                     text={userData.data.displayName + " - OneShip"}
                     textStyle={{
                         fontSize: 20,

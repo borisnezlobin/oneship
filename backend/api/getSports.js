@@ -59,7 +59,7 @@ const rootUrl = "https://palyathletics.com/events/";
 const events = [];
 
 const getSports = async () => {
-    for(var i = 0; i < 3; i++){
+    for(var i = 0; i < 2; i++){
         // rootUrl + "mm/yyyy"
         var d = new Date();
         d.setMonth(d.getMonth() + i);

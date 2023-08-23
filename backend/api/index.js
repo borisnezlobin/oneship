@@ -3,12 +3,12 @@ const app = express();
 
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
-import { DEFAULT_SETTINGS, createMessage, getErrors, getMessage, getMessagesForUser, readData, updateSettings, writeData } from './db.js';
+import { DEFAULT_SETTINGS, createMessage, getErrors, getMessage, getMessagesForUser, readData, updateData, updateSettings, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
-import { loginUser, verifyToken } from './auth.js';
+import { loginUser } from './auth.js';
 import { getSports } from './getSports.js';
 
-if(process.env.ENVIRONMENT == "PROD") {
+if(process.env.ENVIRONMENT == "PROD"){
     console.log("running in prod");
     app.use(express.json());
 }
@@ -17,8 +17,10 @@ app.get("/version", (_, response) => {
     // look at me using semver
     // correctly
     response.status(200).send({
-        current: "0.0.0",
+        current: "0.0.1",
         min: "0.0.0",
+
+        // currently unused
         alpha: "0.0.1-alpha",
         beta: "0.0.1-beta",
         server: "0.0.1-alpha"
@@ -90,13 +92,6 @@ app.get('/api/startup', async (_, response) => {
         console.log("error sending startup data");
         response.status(500).send({ error: e });
     }
-});
-
-// called by https://uptimerobot.com every hour or something
-// TODO: rate limit this
-app.use('/api/poll', async (_, response) => {
-    await startServerToday();
-    response.status(200).send({ status: "ok" });
 });
 
 app.post("/api/register", async (request, response) => {
@@ -238,24 +233,56 @@ app.get('/', async (_, response) => {
     ));
 });
 
-const startServerToday = async () => {
-    // get all data needed for app startup
-    var calendar = await getCalendar();
-    var today = getTodayInFunnyFormat();
-    console.log("today is " + today);
-    var schedule = await getScheduleForDay(today);
-    var news = await getNews();
+// takes 25 seconds to fetch 2 months in advance (locally)
+// vercel has 10s limit, so just run this every now and then locally I guess
+app.use("/api/poll/sports", async (_, response) => {
+    console.log("fetched sports");
     var sports = await getSports();
-    var data = {
-        lastUpdate: getTodayInFunnyFormat(),
-        calendar: calendar,
-        schedule: { date: today, value: schedule },
-        news: news,
+    await updateData("app", "daily", {
         sports: sports
-    };
+    });
+    response.status(200).send("updated sports");
+});
 
-    // write data to firestore
-    await writeData("app", "daily", data);
+app.use("/api/poll/calendar", async (_, response) => {
+    var today = getTodayInFunnyFormat();
+    var calendar = await getCalendar();
+    var schedule = getScheduleForDay(today, calendar);
+    var obj = {
+        calendar: calendar,
+        lastUpdate: today,
+        "schedule.date": today,
+        "schedule.value": schedule
+    };
+    await updateData("app", "daily", obj);
+    return response.status(200).send("updated calendar and schedule");
+});
+
+app.use("/api/poll/news", async (_, response) => {
+    var news = await getNews();
+    await updateData("app", "daily", {
+        news: news,
+    });
+    response.status(200).send("updated news");
+});
+
+app.use('/api/poll', async (_, response) => {
+    var today = getTodayInFunnyFormat();
+    await updateData("app", "daily", {
+        lastUpdate: today,
+    });
+    response.status(200).send({ status: "ok" });
+});
+
+const getURL = () => {
+    var url = "https://google.com";
+    if(process.env.ENVIRONMENT == "PROD"){
+        url = "https://oneship.vercel.app/api/poll";
+    }else{
+        url = "http://localhost:5000/api/poll";
+    }
+
+    return url;
 }
 
 export default app;

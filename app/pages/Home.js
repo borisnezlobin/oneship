@@ -1,4 +1,4 @@
-import { Platform, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Image, Platform, SafeAreaView, ScrollView, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { useContext, useEffect, useState } from "react";
 import { ScheduleContext, UserDataContext } from "../util/contexts";
@@ -58,9 +58,22 @@ const HomePage = ({ navigation }) => {
                     backgroundColor: CONFIG.grey,
                     marginTop: 16
                 }} />
-                {userData.messages.map((message, index) => {
-                    return <MessageItem key={index} message={message} navigation={navigation} />
-                })}
+                {userData.messages.length === 0 ? (
+                    <>
+                        <Image
+                            source={require("../assets/illustrations/sync.png")}
+                            style={[tailwind("h-64 mt-12 w-full"), {
+                            }]}
+                        />
+                        <Text style={[tailwind("font-bold text-2xl text-center w-full"), { color: CONFIG.green}]}>
+                            No messages for now!
+                        </Text>
+                    </>
+                ) : (
+                    userData.messages.map((message, index) => {
+                        return <MessageItem key={index} message={message} navigation={navigation} />
+                    })
+                )}
             </ScrollView>
         </SafeAreaView>
     );
