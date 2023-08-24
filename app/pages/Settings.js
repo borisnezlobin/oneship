@@ -45,9 +45,10 @@ const SettingsPage = () => {
         }
         
         if(userData && editedSettings){
+            var skippable = ["userAgents"];
             var change = false;
             for(var key in editedSettings){
-                if(editedSettings[key] !== userData.data[key]){
+                if(!skippable.includes(key) && editedSettings[key] != userData.data[key]){
                     change = true;
                     break;
                 }

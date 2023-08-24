@@ -251,8 +251,10 @@ app.use("/api/poll/calendar", async (_, response) => {
     var obj = {
         calendar: calendar,
         lastUpdate: today,
-        "schedule.date": today,
-        "schedule.value": schedule
+        schedule: {
+            date: today,
+            value: schedule
+        }
     };
     await updateData("app", "daily", obj);
     return response.status(200).send("updated calendar and schedule");
