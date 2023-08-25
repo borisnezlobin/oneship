@@ -52,11 +52,13 @@ function App() {
       log(CONFIG.serverURL + "api/startup");
       var response;
       try{
-        response = await fetch(CONFIG.serverURL + "api/startup").catch(e => {
+        response = await fetch(CONFIG.serverURL + "api/startup")
+        .catch(e => {
           logError("Error fetching startup data: " + e);
-          setError({
+          if(!error) setError({
             error: "Startup data fetch failed.",
-            status: 500
+            status: 500,
+            closeable: true
           });
         });
         if(error) return;
@@ -65,9 +67,9 @@ function App() {
           data = JSON.parse(data);
           if(data.error){
             logError("data.error: " + JSON.stringify(data.error));
-            setError({
+            if(!error) setError({
               error: "Startup data dump failed.",
-              status: response.status
+              status: response.status,
             });
             return;
           }
@@ -93,8 +95,9 @@ function App() {
           setNews(data.news);
         }catch(e){
           logError("error: " + e);
-          logError("couldn't parse startup data json from " + data);
-          setError({
+          logError("couldn't parse startup data json from ");
+          log(data);
+          if(!error) setError({
             error: "JSON parsing of startup data dump failed.",
             status: 500
           });
@@ -117,7 +120,7 @@ function App() {
       }catch(e){
         logError("error: " + e);
         logError("couldn't parse user_data json from " + user_data);
-        setError({
+        if(!error) setError({
           error: "JSON parsing of user data failed.",
           status: 500
         });
@@ -132,33 +135,34 @@ function App() {
       }catch(e){
         logError("error: " + e);
         logError("couldn't parse not_sketchy json from " + not_sketchy);
-        setError({
+        if(!error) setError({
           error: "JSON parsing of user credentials failed.",
           status: 500
         });
         return;
       }
       
-      const response = await fetch(CONFIG.serverURL + "api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: not_sketchy.email,
-          password: not_sketchy.password
-        })
-      });
-      const text = await response.text();
-      log("got newest user data");
+      var text;
       try{
+        const response = await fetch(CONFIG.serverURL + "api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: not_sketchy.email,
+            password: not_sketchy.password
+          })
+        });
+        text = await response.text();
+        log("got newest user data");
         AsyncStorage.setItem("user_data", text);
         const data = JSON.parse(text);
         setUserData(data);
       }catch(e){
-        logError("error: " + e);
+        logError("error logging in: " + e);
         logError("couldn't parse server response json from " + text);
-        setError({
+        if(!error) setError({
           error: "Error logging in user.",
           status: 500
         });
