@@ -10,6 +10,7 @@ const NewsItem = ({ item }) => {
         }}>
             <a
                 href={item.link}
+                target="blank"
                 className="mediumText link"
             >
                 {item.title}
@@ -18,7 +19,7 @@ const NewsItem = ({ item }) => {
             {item.authors.map((e, i) => {
                 return (
                     <>
-                        <a className="link" key={"author" + item.title + i} href={e.authorLink}>
+                        <a className="link" target="blank" key={"author" + item.title + i} href={e.authorLink}>
                             {e.authorName}
                         </a>
                         <span>
@@ -40,12 +41,9 @@ const NewsItem = ({ item }) => {
                 <iframe
                     title={item.title}
                     src={item.embedURL}
-                    className="w-full h-128 md:w-48 md:h-128"
+                    className="h-48 md:w-full md:h-48 rounded-lg"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen={true}
-                    style={{
-                        height: 512
-                    }}
                 />
             ) : (
                 <img
