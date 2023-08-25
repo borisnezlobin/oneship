@@ -5,15 +5,18 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import log, { getLogs, logError } from "../util/debug";
 import UserAgent from 'react-native-user-agent';
 import { useContext, useState } from "react";
-import { UserDataContext } from "../util/contexts";
+import { DebugContext, UserDataContext } from "../util/contexts";
 
 const ErrorModal = ({ error }) => {
     const { userData } = useContext(UserDataContext);
+    const { setError } = useContext(DebugContext);
     const [errorReportStatus, setErrorReportStatus] = useState("unreported"); // unreported, loading, reported
     const insets = useSafeAreaInsets();
     const body = "#Oops!\nSomething went wrong. While the app was running, the following error occured:\n"
-     + "##Status " + error.status + "\n##Message \"" + error.error + "\""
-     + "\n\nPlease try again later. Close the app and reopen it.\n\n"
+     + "##Status " + error.status + ": \"" + error.error + "\""
+     + "\n\n" + (!error.closeable ?
+        "Please try again later. Close the app and reopen it.\n\n" :
+        "You can continue using the app, but it may not function properly. This error likely occured due to poor internet connection.\n\n")
      + "If the error persists, report it to us and we will fix it as soon as possible.\n\n"
      + "Thank you for your patience,\nThe OneShip Team";
 
@@ -116,6 +119,31 @@ const ErrorModal = ({ error }) => {
                     height: 16,
                 }} />
                 {parseMarkdown(body)}
+                {error.closeable && (
+                    <PressableScale
+                        style={{
+                            width: "100%",
+                            height: 50,
+                            backgroundColor: CONFIG.green,
+                            borderRadius: 10,
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginTop: 16,
+                        }}
+                        onPress={() => {
+                            setError(null);
+                        }}
+                    >
+                        <Text style={{
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            color: CONFIG.bg,
+                        }}>
+                            Close
+                        </Text>
+                    </PressableScale>
+                )}
+
                 <PressableScale
                     style={{
                         width: "100%",
@@ -124,7 +152,7 @@ const ErrorModal = ({ error }) => {
                         borderRadius: 10,
                         alignItems: "center",
                         justifyContent: "center",
-                        marginTop: 36,
+                        marginTop: error.closeable ? 8 : 36,
                     }}
                     disabled={errorReportStatus != "unreported"}
                     onPress={() => {
