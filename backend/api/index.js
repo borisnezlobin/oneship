@@ -17,7 +17,7 @@ app.get("/version", (_, response) => {
     // look at me using semver
     // correctly
     response.status(200).send({
-        current: "0.0.1",
+        current: "0.0.2",
         min: "0.0.0",
 
         // currently unused

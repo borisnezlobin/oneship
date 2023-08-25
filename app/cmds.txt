@@ -1,3 +1,10 @@
 just so I can copy and paste to build the android app
 
+Checklist before building app:
+    config.js:
+        - serverURL is NOT localhost
+        - version is 0.0.1 more than previous (unless new features)
+    backend/index.js:
+        - /version is updated, equals app version
+
 npx eas build -p android --profile preview
