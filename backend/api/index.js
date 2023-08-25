@@ -78,7 +78,7 @@ app.get('/api/startup', async (_, response) => {
     try{
         var data = await readData("app", "daily");
         var invalid = checkForBadData(data);
-        if(invalid){ return response.send(500).send({ error: "Data not in expected state", message: invalid }); }
+        if(invalid){ return response.status(500).send({ error: "Data not in expected state", message: invalid }); }
         data = data.data();
         console.log("sending startup data");
         console.log("calendar: " + data.calendar.length + " events" + " | schedule: " + (data.schedule.value == null ? "none today" : data.schedule.value.length + " periods") + " | news: " + data.news.length + " publications");
