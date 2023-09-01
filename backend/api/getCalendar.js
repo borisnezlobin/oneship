@@ -2,28 +2,12 @@ import fetch from "node-fetch";
 
 const alternates = [
     {
-        date: "20230810",
+        date: "20230901",
         schedule: [
-            { name: "0 Period", start: "7:50", end: "8:50", },
-            { name: "1st Period", start: "9:00", end: "10:00" },
-            { name: "Brunch", start: "10:00", end: "10:15" },
-            { name: "2nd Period", start: "10:15", end: "11:15" },
-            { name: "Lunch", start: "11:15", end: "11:55" },
-            { name: "Advisory 9+11/CM 10+12", start: "11:55", end: "12:40" },
-            { name: "Class Meetings 9+11/Adv 10+12", start: "12:50", end: "1:35" },
-            { name: "3rd Period", start: "1:45", end: "2:45" },
-            { name: "4th Period", start: "2:55", end: "3:55" },
-        ],
-    },
-    {
-        date: "20230811",
-        schedule: [
-            { name: "5th Period", start: "9:00", end: "10:30" },
-            { name: "Brunch", start: "10:30", end: "10:45" },
-            { name: "6th Period", start: "10:45", end: "11:45" },
-            { name: "Lunch", start: "11:45", end: "12:35" },
-            { name: "7th Period", start: "12:35", end: "1:35" },
-            { name: "Assembly", start: "1:45", end: "3:00" },
+            { name: "5th Period", start: "9:00", end: "10:15" },
+            { name: "Brunch", start: "10:15", end: "10:30" },
+            { name: "6th Period", start: "10:30", end: "11:45" },
+            { name: "7th Period", start: "11:55", end: "1:10" },
         ],
     }
 ]
