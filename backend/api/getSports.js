@@ -59,6 +59,8 @@ const rootUrl = "https://palyathletics.com/events/";
 const events = [];
 
 const getSports = async () => {
+    var dev = process.env.ENVIRONMENT !== "PROD";
+    if(!dev) console.log("LOG: running in prod, silencing development logs");
     for(var i = 0; i < 2; i++){
         // rootUrl + "mm/yyyy"
         var d = new Date();
@@ -74,6 +76,7 @@ const getSports = async () => {
         });
 
         const tableValues = root.querySelectorAll("tr.event");
+        if(dev) console.log("LOG: found " + tableValues.length + " events");
 
         var currentDay = {
             date: "",
@@ -81,10 +84,21 @@ const getSports = async () => {
         };
         tableValues.forEach((value) => {
             try{
-                if(value.attributes.class.trim() !== "event") return;
-                var date = value.querySelector("td.date.print-hide").getAttribute("data-event-date");
-                var time = value.querySelector("td.start-time").text.trim();
-                var team = value.querySelector("td.team").querySelector("a").text.trim();
+                if(!value.attributes.class.includes("event")) return;
+                if(value.attributes.class.includes("print-hide")) return;
+                var dateElement = value.querySelector("td.date.print-hide");
+                var date = "";
+                var time = "sometime";
+                if(dateElement){
+                    var date = dateElement.getAttribute("data-event-date");
+                    var time = dateElement.getAttribute("data-event-start-time").trim();
+                }
+                var team = "Unknown Team";
+                try{
+                    team = value.querySelector("td.team").querySelector("a").text.trim();
+                }catch(e){
+                    console.log(value.querySelector("td.team"));
+                }
                 var teamLink = value.querySelector("td.team").querySelector("a").getAttribute("href");
                 var eventDetails = value.querySelector("td.event-details");
                 var opponent = "";
@@ -102,10 +116,7 @@ const getSports = async () => {
                     console.log(eventDetails);
                 }
 
-                var locationElement = value.querySelector("td.location");
-                var isHomeGame = locationElement.textContent.trim().toLowerCase().includes("home");
-                var location = locationElement.textContent.trim().split("\n")[1].trim();
-                var result = value.querySelector("td.result").textContent.trim();
+                var result = value.querySelector("span.event-score").textContent.trim();
                 
                 const newEvent = {
                     date: date,
@@ -114,8 +125,8 @@ const getSports = async () => {
                     teamLink: teamLink,
                     opponent: opponent,
                     eventName: eventName,
-                    isHomeGame: isHomeGame,
-                    location: location,
+                    isHomeGame: false, // palyathletics.com doesn't have this info anymore
+                    location: opponent, // we can't get this info anymore
                     result: result
                 };
 
@@ -130,14 +141,15 @@ const getSports = async () => {
                 }
                 currentDay.events.push(newEvent);
             }catch(e){
-                // console.log(value.childNodes);
                 console.log("error: " + e);
-                // log line that threw e
                 console.log(e.stack.split("\n")[1]);
             };
         });
     }
-
+    if(dev){
+        console.log("LOG: events length = " + events.length);
+        console.log("LOG: finished getting sport events");
+    }
     return events;
 };
 

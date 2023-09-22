@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, Platform } from "react-native";
+import { View, Text, ScrollView, Image, Platform, Alert } from "react-native";
 import { CONFIG } from "../util/config";
 import { PressableScale } from "react-native-pressable-scale";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,18 +9,18 @@ import { DebugContext, UserDataContext } from "../util/contexts";
 
 const ErrorModal = ({ error }) => {
     const { userData } = useContext(UserDataContext);
-    const { setError } = useContext(DebugContext);
+    const { setError, reloadApp } = useContext(DebugContext);
     const [errorReportStatus, setErrorReportStatus] = useState("unreported"); // unreported, loading, reported
     const insets = useSafeAreaInsets();
     const body = "#Oops!\nSomething went wrong. While the app was running, the following error occured:\n"
      + "##Status " + error.status + ": \"" + error.error + "\""
      + "\n\n" + (!error.closeable ?
-        "Please try again later. Close the app and reopen it.\n\n" :
+        "Please try again later. Close the app and reopen it. If you've encountered this error frequently, you can try clearing the cache.\n\n" :
         "You can continue using the app, but it may not function properly. This error likely occured due to poor internet connection.\n\n")
      + "If the error persists, report it to us and we will fix it as soon as possible.\n\n"
      + "Thank you for your patience,\nThe OneShip Team";
 
-     const registerError = async () => {
+    const registerError = async () => {
         setErrorReportStatus("loading");
         // compile error report
         // logs
@@ -59,6 +59,24 @@ const ErrorModal = ({ error }) => {
         // yes technically this will happen even if there's an error reporting the error
         // but I am not making an error reporting system for the error reporting system
         setErrorReportStatus("reported");
+    }
+
+    const attemptReload = () => {
+        Alert.alert(
+            "Clear Cache",
+            "Are you sure you want to clear the cache? This will clear all data and log you out.",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel",
+                },
+                {
+                    text: "Clear",
+                    style: "destructive",
+                    onPress: reloadApp,
+                },
+            ]
+        );
     }
 
     return (
@@ -143,16 +161,15 @@ const ErrorModal = ({ error }) => {
                         </Text>
                     </PressableScale>
                 )}
-
                 <PressableScale
                     style={{
                         width: "100%",
                         height: 50,
-                        backgroundColor: errorReportStatus == "reported" ? CONFIG.green : CONFIG.red,
+                        backgroundColor: errorReportStatus == "reported" ? CONFIG.green : CONFIG.darkGrey,
                         borderRadius: 10,
                         alignItems: "center",
                         justifyContent: "center",
-                        marginTop: error.closeable ? 8 : 36,
+                        marginTop: 36,
                     }}
                     disabled={errorReportStatus != "unreported"}
                     onPress={() => {
@@ -175,6 +192,27 @@ const ErrorModal = ({ error }) => {
                         color: CONFIG.bg,
                     }}>
                         {errorReportStatus == "unreported" ? "Report Error" : errorReportStatus == "reported" ? "Reported!" : "Just a sec..."}
+                    </Text>
+                </PressableScale>
+
+                <PressableScale
+                    style={{
+                        width: "100%",
+                        height: 50,
+                        backgroundColor: CONFIG.red,
+                        borderRadius: 10,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        marginTop: 8,
+                    }}
+                    onPress={attemptReload}
+                >
+                    <Text style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        color: CONFIG.bg,
+                    }}>
+                        Clear Cache
                     </Text>
                 </PressableScale>
                 <View style={{
