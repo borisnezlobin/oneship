@@ -50,8 +50,15 @@ const SportsPage = () => {
                     </h1>
                     <hr />
                     {day.events.map((event, index) => {
-                        return <div key={"sports" + event.date + "" + index} className="mt-8 flex flex-row">
-                            {event.isHomeGame ? <House size={32} className="mr-4" color="var(--green)" /> : <></>}
+                        return <div key={"sports" + event.date + "" + index} className="mt-8 flex flex-row gap-8">
+                            <p className="flex flex-col items-center justify-center">
+                                <p className={"font-bold text-2xl " + (event.result.includes("Win") ? "text-theme" : "text-red-800")}>
+                                    {event.result.slice(4).trim()}
+                                </p>
+                                <p>
+                                    {event.result.includes("Win") ? "Win" : "Loss"}
+                                </p>
+                            </p>
                             <div>
                                 <h1 className="mediumText">
                                     {event.team} {" "}
@@ -61,7 +68,7 @@ const SportsPage = () => {
                                 </h1>
                                 <p>
                                     {
-                                        event.location.includes("TBA") ?
+                                        event.location.toUpperCase().includes("TBA") ?
                                         "Location not announced"
                                         : "against " + event.opponent.trim()
                                     }

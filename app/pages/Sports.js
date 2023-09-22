@@ -8,6 +8,7 @@ import { createOpenLink } from "react-native-open-maps";
 import Toast from "react-native-root-toast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HomeIcon } from "react-native-heroicons/solid"
+import Alert from "../components/Alert";
 
 const SportsPage = ({ navigation }) => {
     const { sports } = useContext(SportsContext);
@@ -68,16 +69,17 @@ const SportsPage = ({ navigation }) => {
                         color: CONFIG.green,
                     }
                 ]}>
-                    Upcoming games
+                    Paly Athletics
                 </Text>
                 <Text style={[
-                    tailwind("text-lg text-center mb-8"),
+                    tailwind("text-xl text-center"),
                     {
-                        color: "#777777",
+                        color: CONFIG.green,
                     }
                 ]}>
-                    Long press on a game to open it in Maps
+                    in one place
                 </Text>
+                <Alert message="Long press on a game to open it in Maps" type="info" />
                 {sports.map((day, index) => {
                     return (
                         <View key={index} style={{
@@ -93,7 +95,14 @@ const SportsPage = ({ navigation }) => {
                             ]}>
                                 {day.date}
                             </Text>
+                            <View style={{
+                                width: "100%",
+                                height: 1,
+                                backgroundColor: CONFIG.grey,
+                                marginVertical: 12,
+                            }} />
                             {day.events.map((game, index) => {
+                                const isWin = game.result.slice(0, 4).trim() == "Win";
                                 return (
                                     <PressableScale
                                         key={index}
@@ -128,34 +137,53 @@ const SportsPage = ({ navigation }) => {
                                             link();
                                         }}
                                     >
-                                        <View key={index} style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            paddingVertical: 12,
-                                            gap: 12,
-                                            paddingLeft: game.isHomeGame ? 0 : 36,
-                                        }}>
-                                            {game.isHomeGame ? (
-                                                <HomeIcon size={24} color={CONFIG.green} />
-                                            ) : <></>}
-                                            <View>
+                                        <View style={[tailwind("flex flex-row justify-start items-center"), { gap: 12 }]}>
+                                            <View style={{
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                flexDirection: "column",
+                                                width: 72,
+                                            }}>
                                                 <Text style={[
-                                                    tailwind("text-xl font-bold text-left"),
+                                                    tailwind("text-xl font-bold text-center"),
                                                     {
-                                                        color: CONFIG.green,
+                                                        color: isWin ? CONFIG.green : CONFIG.red,
                                                     }
                                                 ]}>
-                                                    {game.time}
+                                                    {game.result.slice(4)}
                                                 </Text>
-                                                <Text style={[
-                                                    tailwind("text-xl text-left"),
-                                                    {
-                                                        color: CONFIG.text,
-                                                    }
-                                                ]}>
-                                                    {game.team}
+                                                <Text>
+                                                    {game.result.slice(0, 4).trim()}
                                                 </Text>
+                                            </View>
+                                            <View key={index} style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                paddingVertical: 12,
+                                                gap: 12,
+                                            }}>
+                                                {game.isHomeGame ? (
+                                                    <HomeIcon size={24} color={CONFIG.green} />
+                                                ) : <></>}
+                                                <View>
+                                                    <Text style={[
+                                                        tailwind("text-xl font-bold text-left"),
+                                                        {
+                                                            color: CONFIG.green,
+                                                        }
+                                                    ]}>
+                                                        {game.time}
+                                                    </Text>
+                                                    <Text style={[
+                                                        tailwind("text-xl text-left"),
+                                                        {
+                                                            color: CONFIG.text,
+                                                        }
+                                                    ]}>
+                                                        {game.team}
+                                                    </Text>
+                                                </View>
                                             </View>
                                         </View>
                                     </PressableScale>
@@ -180,6 +208,10 @@ const gameToMarkdown = (game) => {
         str += "Home game" + (location.length != 0 ? ": " + location : "") + "\n\n";
     }
     str += "Against " + game.opponent;
+
+    if(game.result != null && game.result != "" && game.result.trim() != "---"){
+        str += "\n\n# Result:\n" + game.result;
+    }
 
     return str;
 };

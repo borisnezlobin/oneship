@@ -12,7 +12,6 @@ import NewsPage from "./pages/News";
 import SettingsPage from "./pages/Settings";
 import TabBar from "./util/TabBar";
 import {
-  ScaleIcon,
   ClockIcon,
   Cog6ToothIcon,
   HomeIcon,
@@ -20,7 +19,6 @@ import {
   TrophyIcon
 } from "react-native-heroicons/solid";
 import {
-  ScaleIcon as ScaleOutline,
   TrophyIcon as TrophyOutline,
   ClockIcon as ClockOutline,
   Cog6ToothIcon as CogOutline,
@@ -108,8 +106,8 @@ function App() {
       }
     }
     const getScheduleFromStorage = async () => {
-      const schedule = await AsyncStorage.getItem("schedule");
-      if(schedule != null) setSchedule(JSON.parse(schedule));
+      const storage = await AsyncStorage.getItem("schedule");
+      if(storage != null && !schedule) setSchedule(JSON.parse(storage));
     }
 
     const getUserData = async () => {
@@ -158,7 +156,7 @@ function App() {
         log("got newest user data");
         AsyncStorage.setItem("user_data", text);
         const data = JSON.parse(text);
-        setUserData(data);
+        if(JSON.stringify(data) != JSON.stringify(userData)) setUserData(data);
       }catch(e){
         logError("error logging in: " + e);
         logError("couldn't parse server response json from " + text);
@@ -192,16 +190,28 @@ function App() {
     return () => {
       sub.remove()
     }
-  }, []);
+  }, [userData, error]);
 
   const setUserDataAndNotify = async (data) => {
     setUserData(data);
     setNotificationForClasses(schedule, data.data.classNotification);
   }
 
+  const reloadApp = () => {
+    log("RELOADING APP");
+    setSchedule(null);
+    setCalendar(null);
+    setNews(null);
+    setSports(null);
+    setUserData(null);
+    setError(null);
+
+    AsyncStorage.clear();
+  }
+
   return (
     <RootSiblingParent>
-      <DebugContext.Provider value={{ setError }}>
+      <DebugContext.Provider value={{ setError, reloadApp }}>
         <View style={tailwind("w-full h-full bg-white")}>
           <ScheduleContext.Provider value={{ schedule, setSchedule }}>
             <UserDataContext.Provider value={{ userData, setUserData, setUserDataAndNotify }}>

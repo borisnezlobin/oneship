@@ -142,7 +142,7 @@ const SettingsPage = () => {
                     cb={(e) => updateEdits(e, "wantsMobile", e.target.checked)}
                     value={editedSettings.wantsMobile}
                     title="OneShip mobile app"
-                    description="Do you want to see a OneShip mobile app? Help convince the ASB to fund it."
+                    description="Do you want to see a OneShip mobile app? We'd like to know!"
                 />
                 <TextInput
                     key={"settingsGrade" + errors.grade}
