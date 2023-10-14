@@ -61,7 +61,7 @@ const events = [];
 const getSports = async () => {
     var dev = process.env.ENVIRONMENT !== "PROD";
     if(!dev) console.log("LOG: running in prod, silencing development logs");
-    for(var i = 0; i < 2; i++){
+    for(var i = 0; i < 3; i++){
         // rootUrl + "mm/yyyy"
         var d = new Date();
         d.setMonth(d.getMonth() + i);

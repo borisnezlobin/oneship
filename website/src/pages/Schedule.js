@@ -1,11 +1,24 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DataContext, UserDataContext } from "../util/contexts";
 import LoadingSpinner from "../components/LoadingSpinner";
 import party from "../illustrations/party.svg";
 
+const calculateMinutes = (date) => {
+    return date.getHours() * 60 + date.getMinutes();
+};
+
 const SchedulePage = () => {
     const { userData } = useContext(UserDataContext);
     const { data } = useContext(DataContext);
+
+    const [nowMinutes, setNow] = useState(calculateMinutes(new Date()));
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNow(calculateMinutes(new Date()));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     if(data === null || data.schedule === undefined) return (
         <div className="m-0 md:ml-64 flex justify-center items-center h-full">
@@ -33,12 +46,15 @@ const SchedulePage = () => {
         var winHeight = window.innerHeight;
 
         // in minutes
-        var dayStart = schedule.value[0].start;
-        var dayEnd = schedule.value[schedule.value.length - 1].end;
+        const dayStart = schedule.value[0].start;
+        const dayEnd = schedule.value[schedule.value.length - 1].end;
 
         scheduleComponent = <div className="w-full h-full">
             {schedule.value.map((e, i) => {
+                
                 if(userData != null && !userData.data.show0 && e.name.includes("0 Period")) return <></>;
+                if(e.end < nowMinutes) return <></>;
+
                 var top = i === 0 ? 0 : (
                     (e.start - schedule.value[i - 1].end) / (dayEnd - dayStart) * winHeight
                 );
@@ -92,7 +108,7 @@ const SchedulePage = () => {
 
     var eventsToday = [];
     var eventComponent = <></>;
-    const containerClassName = "rounded-lg p-4 bg-white shadow-xl w-full md:w-64 border border-grey-300 flex flex-col justify-center items-center";
+    const containerClassName = "rounded-lg p-4 bg-white shadow-xl w-full md:w-128 border border-grey-300 flex flex-col justify-center items-center";
     if(data.calendar != null){
         var now = new Date();
         for(var i = 0; i < data.calendar.length; i++){
@@ -111,7 +127,7 @@ const SchedulePage = () => {
                 eventsToday.push(obj);
             }
         }
-        eventComponent = <div className="w-full mt-4 md:mt-0 md:h-full flex flex-col justify-center items-center">
+        eventComponent = <div className="w-full mt-4 md:mt-0 md:h-full md:ml-4 flex flex-col justify-center items-center">
             <div className={containerClassName}>
                 <h1 className="mediumText slab">
                     Today's Events
@@ -131,7 +147,7 @@ const SchedulePage = () => {
                                 {e.start.getHours() == 0 ? "All Day" : e.start.getHours() + ":" + e.start.getMinutes() + "-" + e.end.getHours() + ":" + e.end.getMinutes()}
                             </p>
                             <p className="text-sm text-gray-500">
-                                {e.event.description}
+                                {e.event.description.replaceAll("\\", "")}
                             </p>
                         </div>
                     );

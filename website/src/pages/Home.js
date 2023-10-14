@@ -1,5 +1,5 @@
 import React from 'react'
-import GenerativeArt from '../components/codethaticopied/GenerativeArt'
+import GenerativeArt from '../components/generativeart/GenerativeArt'
 import logo from '../logo.svg'
 import { toast } from 'react-hot-toast'
 import { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from '../util/config'
@@ -36,6 +36,11 @@ const HomePage = () => {
             }}>
                 View the code on GitHub
             </button>
+      </div>
+      <div className='absolute bottom-0 right-0 p-4'>
+        <p>
+          Copyright Boris Nezlobin 2022+
+        </p>
       </div>
     </>
   )
