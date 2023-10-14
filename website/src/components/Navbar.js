@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Barcode, BellSimple, Football, GearSix, HouseSimple, List, Newspaper, SignIn, UserPlus } from "phosphor-react";
 import logo from "../logo.svg";
 import { useContext, useState } from "react";
@@ -15,13 +15,14 @@ const containerStyle = "h-12 fixed bottom-0 md:top-0 left-0 w-full bg-white flex
 const Navbar = () => {
     const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
     const { userData } = useContext(UserDataContext);
+    const nav = useNavigate();
     const path = useLocation().pathname;
     const isSmallScreen = window.innerWidth < 768;
 
     return (
         <nav className={containerStyle}>
             {window.innerWidth >= 768 ?
-                <img src={logo} className="h-0 w-0 md:h-36 md:w-36" alt="logo" />
+                <img src={logo} onClick={() => nav("/")} className="h-0 w-0 md:h-36 md:w-36 cursor-pointer" alt="logo" />
                 :<></>
             }
             <Link to="/schedule" className={calculateStyles("/schedule", path)}>
