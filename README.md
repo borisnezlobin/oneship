@@ -5,4 +5,4 @@ Backend code (ExpressJS) is in the `/backend` folder, web frontend code (ReactJS
 Contributions are welcome - feel free to open a PR. If you want to contribute, check out [CONTRIBUTING.md](https://github.com/borisnezlobin/oneship/blob/master/CONTRIBUTING.md).<br />
 If you have any questions or would like to connect with me, join the [OneShip Discord](https://discord.gg/nDDBXnyYw2), or message me directly ([_randomletters](https://discord.com/users/801815917969276978) - link only works on discord web)
 
-Check out [OneShip](https://paly.app)
+## Check out [OneShip](https://paly.app)!
