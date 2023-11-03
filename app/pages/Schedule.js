@@ -1,4 +1,4 @@
-import { Dimensions, Platform, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { Dimensions, Image, SafeAreaView, ScrollView, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
 import { useContext, useState } from "react";
@@ -8,7 +8,7 @@ import ScheduleItem from "../components/ScheduleItem";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Tabs from "../components/Tabs";
 import CalendarPage from "./Calendar";
-import log from "../util/debug";
+import EventsImage from "../assets/illustrations/events.png";
 
 const SchedulePage = ({ navigation }) => {
     const [page, setPage] = useState(0);
@@ -160,8 +160,12 @@ const SchedulePage = ({ navigation }) => {
                     height: "100%"
                 }
             ]}>
-            {eventsToday.length != 0 ? (
+            {eventsToday.length != 0 || (eventsToday.length == 1 && eventsToday[0].event.summary.includes("Schedule")) ? (
                 <ScrollView style={tailwind("w-full h-full")}>
+                    <Image source={EventsImage} style={{
+                        width: "100%",
+                        height: 256,
+                    }} />
                     {eventsToday.map((event, index) => {
                         if(event.event.summary == undefined) return;
                         if(event.event.summary.includes("Schedule")) return null;
@@ -177,15 +181,19 @@ const SchedulePage = ({ navigation }) => {
                                     {isAllDay ? "All Day" : event.start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + " - " + event.end.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                                 </Text>
                                 <Text style={[tailwind("text-lg"), { color: CONFIG.text }]}>
-                                    {event.event.description}
+                                    {event.event.description.replaceAll("\\", "")}
                                 </Text>
                             </View>
                         );
                     })}
+                    <View style={{ height: 64 }} />
                 </ScrollView>
             ) : (
                 <View style={tailwind("w-full h-full flex justify-center items-center")}>
-                    <BellSnoozeIcon color={CONFIG.green} size={100} style={tailwind("mb-4")} />
+                    <Image source={EventsImage} style={{
+                        width: "100%",
+                        height: 256,
+                    }} />
                     <Text style={[tailwind("text-2xl font-bold"), { color: CONFIG.green}]}>
                         No Events Today
                     </Text>
