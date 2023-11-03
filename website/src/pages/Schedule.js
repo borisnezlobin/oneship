@@ -2,6 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { DataContext, UserDataContext } from "../util/contexts";
 import LoadingSpinner from "../components/LoadingSpinner";
 import party from "../illustrations/party.svg";
+import awesome from "../illustrations/awesome.svg";
+
+const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const calculateMinutes = (date) => {
     return date.getHours() * 60 + date.getMinutes();
@@ -49,6 +52,8 @@ const SchedulePage = () => {
         const dayStart = schedule.value[0].start;
         const dayEnd = schedule.value[schedule.value.length - 1].end;
 
+        var hasRenderedAtLeastOneBlock = false;
+
         scheduleComponent = <div className="w-full h-full">
             {schedule.value.map((e, i) => {
                 
@@ -60,6 +65,7 @@ const SchedulePage = () => {
                 );
                 var topRadius = e.start === (i === 0 ? e.end : schedule.value[i - 1].end) ? 0 : 8;
                 var bottomRadius = e.end === (i === schedule.value.length - 1 ? e.start : schedule.value[i + 1].start) ? 0 : 8;
+                hasRenderedAtLeastOneBlock = true;
                 return (<>
                 {i != 0 && e.start !== schedule.value[i - 1].end ? (
                     <div
@@ -103,6 +109,23 @@ const SchedulePage = () => {
                 </div>
                 </>);
             })}
+            {
+                !hasRenderedAtLeastOneBlock ? (
+                    <div className="flex justify-center items-center w-full flex-col">
+                        <img
+                            src={awesome}
+                            alt=""
+                            className="w-1/2"
+                        />
+                        <h1 className="bigText text-center">
+                            School's over!
+                        </h1>
+                        <p className="text-center text-theme">
+                            Enjoy the rest of your {days[new Date().getDay()]}
+                        </p>
+                    </div>
+                ) : <></>
+            }
         </div>;
     }
 
@@ -135,6 +158,7 @@ const SchedulePage = () => {
                 <div style={{ height: 1, width: "100%" }} className="my-2 bg-gray-300" />
                 <div className="w-full h-px" />
                 {eventsToday.map((e, i) => {
+                    if(e.event.summary.includes("Schedule")) return <></>;
                     return (
                         <div
                             key={"eventItem" + i}
@@ -144,7 +168,7 @@ const SchedulePage = () => {
                                 {e.event.summary}
                             </h1>
                             <p className="text-sm text-gray-500">
-                                {e.start.getHours() == 0 ? "All Day" : e.start.getHours() + ":" + e.start.getMinutes() + "-" + e.end.getHours() + ":" + e.end.getMinutes()}
+                                {timeStringFromStartAndEnd(e.start, e.end)}
                             </p>
                             <p className="text-sm text-gray-500">
                                 {e.event.description.replaceAll("\\", "")}
@@ -152,9 +176,10 @@ const SchedulePage = () => {
                         </div>
                     );
                 })}
-                {eventsToday.length === 0 ? <h1 className="mediumText text-center mt-2">
+                {eventsToday.length === 0 || (eventsToday.length == 1 && eventsToday[0].event.summary.includes("Schedule")) ?
+                <h1 className="mediumText text-center mt-2">
                     No events today!
-                    </h1> : <></>
+                </h1> : <></>
                 }
             </div>
         </div>;
@@ -206,6 +231,28 @@ const SchedulePage = () => {
         </div>
     );
 };
+
+const timeStringFromStartAndEnd = (start, end) => {
+    // e.start.getHours() == 0 ? "All Day" : e.start.getHours() + ":" + e.start.getMinutes() + "-" + e.end.getHours() + ":" + e.end.getMinutes()
+    var startString = "";
+
+    if(start.getHours() === 0)
+        return "All Day";
+    
+    if(start.getHours() < 10) startString += "0";
+    startString += start.getHours() + ":";
+    if(start.getMinutes() < 10) startString += "0";
+    startString += start.getMinutes();
+
+    startString += " - ";
+
+    if(end.getHours() < 10) startString += "0";
+    startString += end.getHours() + ":";
+    if(end.getMinutes() < 10) startString += "0";
+    startString += end.getMinutes();
+
+    return startString;
+}
 
 const dateFromString = (dateString) => {
     // format: yyyymmddThhmmss

@@ -12,30 +12,6 @@
         "source": "**",
         "destination": "/index.html"
       }]
-    }, {
-      "target": "vikings",
-      "public": "build",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [{
-        "source": "**",
-        "destination": "/index.html"
-      }]
-    }, {
-      "target": "skovikes",
-      "public": "build",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ],
-      "rewrites": [{
-        "source": "**",
-        "destination": "/index.html"
-      }]
     }
   ]
 }
