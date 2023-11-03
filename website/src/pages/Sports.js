@@ -1,12 +1,20 @@
 import { useContext } from "react"
 import { DataContext } from "../util/contexts";
 import game from "../illustrations/game.svg";
-import { House, MapTrifold } from "phosphor-react";
+import { House, MapTrifold, PushPinSimple } from "phosphor-react";
 import tickets from "../illustrations/tickets.svg";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 
-// tfw when the formatting
+const days = [
+    "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+];
+
+const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+    "Oct", "Nov", "Dec"
+]
+
 const SportsPage = () => {
     const { data } = useContext(DataContext);
 
@@ -15,6 +23,9 @@ const SportsPage = () => {
             <LoadingSpinner />
         </div>
     );
+
+    const today = new Date();
+    const todayName = days[today.getDay()] + ", " + months[today.getMonth()] + " " + today.getDate();
 
     return (
         <div className="m-0 md:ml-64 min-h-screen pb-8">
@@ -44,19 +55,21 @@ const SportsPage = () => {
                 </h1>
             </div>
             {data.sports.map((day, index) => {
-                return <div className="border border-grey rounded p-4 mx-2 mb-4" key={"sports" + day.date}>
-                    <h1 className="bigText">
-                        {day.date}
+                return <div className="border border-grey rounded p-4 mx-2 mb-4" key={"sports" + day.date} ref={(r) => {
+                    if(day.date == todayName && r) r.scrollIntoView();
+                }}>
+                    <h1 className="bigText flex flex-row gap-2 items-center justify-start">
+                        {day.date} {day.date == todayName ? <PushPinSimple size={24} color="var(--green)" weight="bold" /> : <></>}
                     </h1>
                     <hr />
                     {day.events.map((event, index) => {
                         return <div key={"sports" + event.date + "" + index} className="mt-8 flex flex-row gap-8">
-                            <p className="flex flex-col items-center justify-center">
+                            <p className="flex flex-col items-center justify-center w-24">
                                 <p className={"font-bold text-2xl " + (event.result.includes("Win") ? "text-theme" : "text-red-800")}>
                                     {event.result.slice(4).trim()}
                                 </p>
                                 <p>
-                                    {event.result.includes("Win") ? "Win" : "Loss"}
+                                    {event.result.includes("Win") ? "Win" : event.result.includes("Loss") ? "Loss" : "---"}
                                 </p>
                             </p>
                             <div>

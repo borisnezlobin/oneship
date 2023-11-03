@@ -1,4 +1,4 @@
-import { AppState, SafeAreaView, StatusBar, Text, View } from "react-native";
+import { AppState, StatusBar, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "./util/config";
 import { CalendarContext, DebugContext, NewsContext, ScheduleContext, SportsContext, UserDataContext } from "./util/contexts";

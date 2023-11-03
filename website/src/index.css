@@ -22,7 +22,6 @@ body{
 .link{
   color: var(--green);
   text-decoration: 1px solid underline rgba(0, 0, 0, 0);
-  font-size: 1.1rem;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
@@ -113,4 +112,9 @@ body{
 .input:focus{
   outline: none;
   border-bottom: 1.5px solid var(--green);
+}
+
+
+.pb {
+  padding-bottom: calc(max(env(safe-area-inset-bottom), 24px));
 }

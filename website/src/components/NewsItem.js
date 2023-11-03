@@ -1,5 +1,5 @@
 const NewsItem = ({ item }) => {
-    var description = item.description.replaceAll("\r", "").replaceAll("\n", "");
+    var description = item.description.replaceAll("\r", "").replaceAll("\n", " ");
     if(description.length > 256) description = description.substring(0, 256) + "...";
     return (
         <div target="blank" rel="noreferrer" className="rounded-lg md:gap-4 p-4 md:p-8 md:flex md:flex-row-reverse md:items-start md:justify-start" style={{
