@@ -10,7 +10,7 @@ const linkStyle = "text-0 rounded-full h-12 w-12 flex flex-row justify-center bo
 const containerStyle = "h-12 fixed bottom-0 md:top-0 left-0 w-full bg-white flex"
 + " flex-row justify-around items-center md:justify-start "
 + "md:h-full md:w-64 md:top-0 md:left-0 md:bottom-auto md:shadow-xl "
-+ "md:px-4 md:py-8 md:flex-col md:justify-center md:align-start md:gap-2";
++ "md:px-4 md:py-8 md:flex-col md:justify-center md:align-start md:gap-2 pb";
 
 const Navbar = () => {
     const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
