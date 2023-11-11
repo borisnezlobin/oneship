@@ -121,20 +121,12 @@ app.post("/api/login", async (request, response) => {
     const email = request.body.email;
     const password = request.body.password;
     const ua = request.body.ua;
-    // const email = request.query.email;
-    // const password = request.query.password;
     if(email == null || password == null) return response.status(400).send({ error: "Missing required fields" });
     console.log("logging in user " + email + " with password " + password + ". User agent: " + ua);
     const result = await loginUser(email, password);
 
-    // the following lines are like that for testing, google won't let me use my pausd account
-    // for some reason, will have to email someone at PAUSD sometime
-    var fakeAuth = process.env.USE_DUMMY_AUTH == "true";
-    var fakePassword = process.env.DUMMY_PASSWORD;
-    var useDummyAuth = fakeAuth && password == fakePassword;
-    if(useDummyAuth) console.log("using dummy auth");
-    if(useDummyAuth || result.status == 200){
-        var uid = useDummyAuth ? "S8zqWKYuX1TAP1dUBgbGE3ynLIv1" : result.message.localId;
+    if(result.status == 200){
+        var uid = result.message.localId;
         var userData = await readData("users", uid);
         if(userData.exists){
             userData = userData.data();
@@ -156,7 +148,7 @@ app.post("/api/login", async (request, response) => {
             const messages = await getMessagesForUser(userData);
             response.status(200).send({
                 data: userData,
-                messages,
+                messages: messages,
                 token: result.idToken,
                 refreshToken: result.refreshToken
             });
@@ -183,10 +175,6 @@ app.post("/api/user/settings", async (request, response) => {
     const uid = body.uid;
     const settings = body.settings;
     const token = body.token;
-    // if(uid !== "S8zqWKYuX1TAP1dUBgbGE3ynLIv1"){
-    //     if(!token) return response.status(403).send({ error: "Missing id token" });
-    //     if(verifyToken(token) != uid) return response.status(403).send({ error: "Invalid id token" });
-    // }
     if(uid == null || settings == null) return response.status(400).send({ error: "Missing required fields" });
     console.log("received request to update settings for user " + uid);
     const result = await updateSettings(uid, settings);
@@ -272,16 +260,5 @@ app.use('/api/poll', async (_, response) => {
     });
     response.status(200).send({ status: "ok" });
 });
-
-const getURL = () => {
-    var url = "https://google.com";
-    if(process.env.ENVIRONMENT == "PROD"){
-        url = "https://oneship.vercel.app/api/poll";
-    }else{
-        url = "http://localhost:5000/api/poll";
-    }
-
-    return url;
-}
 
 export default app;
