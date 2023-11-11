@@ -5,7 +5,7 @@ import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
 import { DEFAULT_SETTINGS, createMessage, getErrors, getMessage, getMessagesForUser, readData, updateData, updateSettings, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
-import { loginUser } from './auth.js';
+import { loginUser, requireAdmin } from './auth.js';
 import { getSports } from './getSports.js';
 
 if(process.env.ENVIRONMENT == "PROD"){
@@ -146,12 +146,14 @@ app.post("/api/login", async (request, response) => {
                 await writeData("users", uid, userData);
             }
             const messages = await getMessagesForUser(userData);
-            response.status(200).send({
+            const resObject = {
                 data: userData,
                 messages: messages,
-                token: result.idToken,
-                refreshToken: result.refreshToken
-            });
+                token: result.message.idToken,
+                refreshToken: result.message.refreshToken
+            };
+            console.log(resObject);
+            response.status(200).send(resObject);
         }else{
             response.status(500).send({
                 error: "User with id " + result.message.localId + " does not exist in the database",
@@ -181,7 +183,7 @@ app.post("/api/user/settings", async (request, response) => {
     response.status(result.status).send(result.message);
 });
 
-app.post("/api/create-message", async (request, response) => {
+app.post("/api/create-message", requireAdmin, async (request, response) => {
     const body = request.body;
     console.log(body);
     const result = await createMessage(body);

@@ -6,6 +6,7 @@ import TFInput from "../components/settings/TFInput";
 import LoadingSpinner from "../components/LoadingSpinner";
 import CONFIG, { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from "../util/config";
 import { toast } from "react-hot-toast";
+import { SignOut } from "phosphor-react";
 
 const SettingsPage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
@@ -136,7 +137,19 @@ const SettingsPage = () => {
     return (
         <>
             <div className="m-0 md:ml-64 flex flex-col px-4 justify-start pt-4 items-center h-full">
-                <p className="bigText">Settings for {userData.data.displayName}</p>
+                <div className="flex flex-col md:flex-row justify-between items-center w-full">
+                    <p className="bigText text-left">Settings for {userData.data.displayName}</p>
+                    <div className="flex flex-row justify-center items-center gap-2 cursor-pointer hover:bg-gray-100 p-3 px-6 rounded"  onClick={() => {
+                            localStorage.removeItem("creds");
+                            setUserData(null);
+                            nav("/");
+                        }} >
+                        <SignOut size={24} color="black"/>
+                        <p className="whitespace-nowrap">
+                            Sign out
+                        </p>
+                    </div>
+                </div>
                 <hr className="w-full my-4 mb-8" />
                 <TFInput
                     cb={(e) => updateEdits(e, "wantsMobile", e.target.checked)}

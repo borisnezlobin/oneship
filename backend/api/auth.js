@@ -45,7 +45,24 @@ const verifyToken = async (token) => {
     return res;
 };
 
+const ADMIN_UIDS = JSON.parse(process.env.ADMIN_UIDS);
+
+const requireAdmin = async (request, response, next) => {
+    const token = request.headers.authorization;
+    if(!token){
+        response.status(401).send("No token provided");
+        return;
+    }
+    const decoded = await verifyToken(token);
+    if(!ADMIN_UIDS.includes(decoded.uid)){
+        response.status(403).send("Unauthorized ID token provided.");
+        return;
+    }
+    next();
+};
+
 export {
     loginUser,
-    verifyToken
+    verifyToken,
+    requireAdmin
 }
