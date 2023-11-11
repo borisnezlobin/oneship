@@ -56,6 +56,11 @@ const LoginPage = () => {
                 password: password,
                 ua: navigator.userAgent ? navigator.userAgent : "web"
             })
+        }).catch(err => {
+            console.log(err);
+            toast.error("Error logging in", ERROR_TOAST_STYLES);
+            setLoading(false);
+            return;
         });
         try{
             const json = await res.json();

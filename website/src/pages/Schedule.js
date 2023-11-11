@@ -202,7 +202,7 @@ const SchedulePage = () => {
                 {scheduleComponent}
                 {eventComponent}
             </div>
-            <p className="w-full text-center text-sm mt-4">
+            <p className="w-full text-center text-sm mt-4 mb-8">
                 All schedule and calendar data is from the{" "}
                 <a
                     className="link text-sm"

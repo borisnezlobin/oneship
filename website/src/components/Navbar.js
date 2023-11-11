@@ -60,6 +60,8 @@ const Navbar = () => {
                     More
                 </p>
                 {isMoreMenuOpen ?
+                <>
+                    t<div className="w-screen h-screen absolute cursor-default" onClick={() => setIsMoreMenuOpen(false)} />
                     <div style={{
                         position: "absolute",
                         top: isSmallScreen ? -48 - 4 - 16*3 : -48 - 4,
@@ -103,6 +105,7 @@ const Navbar = () => {
                             
                         )}
                     </div>
+                </>
                 :<></>}
             </button>
         </nav>
