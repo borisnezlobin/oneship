@@ -29,6 +29,8 @@ const SchedulePage = () => {
         </div>
     );
 
+    console.log(userData);
+
     const schedule = data.schedule;
 
     var scheduleComponent = <></>;
@@ -100,7 +102,7 @@ const SchedulePage = () => {
                     }}
                 >
                     <h1 className="mediumText slab">
-                        {Object.keys(userData).includes(e.name) ? userData.data[e.name].customName : e.name}
+                        {userData != null && Object.keys(userData.data).includes(e.name) ? userData.data[e.name].customName : e.name}
                         {" "}
                         <span className="text-lg text-gray-500">
                             {e.startString}-{e.endString}
