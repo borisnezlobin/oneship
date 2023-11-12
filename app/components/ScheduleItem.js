@@ -2,10 +2,12 @@ import { Dimensions, Text, View } from "react-native";
 import tailwind from "tailwind-rn";
 import { CONFIG } from "../util/config";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserDataContext } from "../util/contexts";
 
 function ScheduleItem({ period, start, end, fixedHeight = false }) {
     const [now, setNow] = useState(new Date());
+    const { userData } = useContext(UserDataContext);
     var screenHeight = Dimensions.get("window").height - useSafeAreaInsets().bottom -40 - 56 - useSafeAreaInsets().top;
     var height = ((period.end - period.start) / (end - start)) * (screenHeight);
 
@@ -39,7 +41,7 @@ function ScheduleItem({ period, start, end, fixedHeight = false }) {
             }
         ]}>
             <Text style={[tailwind("font-bold text-lg w-full text-left"), { color: CONFIG.green}]}>
-                {period.name}
+                {Object.keys(userData.data).includes(period.name) ? userData.data[period.name].customName : period.name}
             </Text>
             <Text>{period.startString}-{period.endString}</Text>
             {isCurrent && fixedHeight && (

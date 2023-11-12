@@ -100,7 +100,7 @@ const SchedulePage = () => {
                     }}
                 >
                     <h1 className="mediumText slab">
-                        {e.name}
+                        {Object.keys(userData).includes(e.name) ? userData.data[e.name].customName : e.name}
                         {" "}
                         <span className="text-lg text-gray-500">
                             {e.startString}-{e.endString}

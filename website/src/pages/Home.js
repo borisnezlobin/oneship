@@ -61,11 +61,6 @@ const HomePage = () => {
             View license
         </button>
       </div>
-      <div className='absolute bottom-0 right-0 p-4'>
-        <p>
-          Copyright Boris Nezlobin 2022+
-        </p>
-      </div>
     </>
   )
 }
