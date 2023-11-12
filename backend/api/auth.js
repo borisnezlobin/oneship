@@ -46,7 +46,6 @@ const loginUser = async (email, password) => {
         }
     );
     const json = await res.json();
-    console.log(json);
     if(res.status != 200){
         return {
             status: res.status,

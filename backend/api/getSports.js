@@ -66,7 +66,7 @@ const getSports = async () => {
         var d = new Date();
         d.setMonth(d.getMonth() + i);
         var url = rootUrl + (d.getMonth() + 1) + "/" + (d.getFullYear());
-        console.log("getting sports from " + url + "...");
+        if(dev) console.log("getting sports from " + url + "...");
         const response = await fetch(url)
         const txt = await response.text();
         const root = parse(txt, {

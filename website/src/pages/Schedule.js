@@ -29,8 +29,6 @@ const SchedulePage = () => {
         </div>
     );
 
-    console.log(userData);
-
     const schedule = data.schedule;
 
     var scheduleComponent = <></>;
@@ -69,7 +67,7 @@ const SchedulePage = () => {
                 var bottomRadius = e.end === (i === schedule.value.length - 1 ? e.start : schedule.value[i + 1].start) ? 0 : 8;
                 hasRenderedAtLeastOneBlock = true;
                 return (<>
-                {i != 0 && e.start !== schedule.value[i - 1].end ? (
+                {i !== 0 && e.start !== schedule.value[i - 1].end ? (
                     <div
                         key={"scheduleGap" + i}
                         style={{
@@ -178,7 +176,7 @@ const SchedulePage = () => {
                         </div>
                     );
                 })}
-                {eventsToday.length === 0 || (eventsToday.length == 1 && eventsToday[0].event.summary.includes("Schedule")) ?
+                {eventsToday.length === 0 || (eventsToday.length === 1 && eventsToday[0].event.summary.includes("Schedule")) ?
                 <h1 className="mediumText text-center mt-2">
                     No events today!
                 </h1> : <></>
