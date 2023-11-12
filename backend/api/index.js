@@ -117,13 +117,21 @@ app.post("/api/register", async (request, response) => {
     });
 });
 
-app.post("/api/login", async (request, response) => {
+
+const ADMINS = JSON.parse(process.env.ADMIN_UIDS);
+const handleLoginRoute = async (request, response, adminOnly) => {
     const email = request.body.email;
     const password = request.body.password;
     const ua = request.body.ua;
     if(email == null || password == null) return response.status(400).send({ error: "Missing required fields" });
     console.log("logging in user " + email + " with password " + password + ". User agent: " + ua);
     const result = await loginUser(email, password);
+
+    if(adminOnly && !ADMINS.includes(result.message.localId)){
+        return response.status(403).send({
+            error: "You are not an admin!",
+        });
+    }
 
     if(result.status == 200){
         var uid = result.message.localId;
@@ -164,6 +172,15 @@ app.post("/api/login", async (request, response) => {
             error: result.message,
         });
     }
+}
+
+app.post("/api/login", async (request, response) => {
+    handleLoginRoute(request, response, false);
+});
+
+// identical to /login, but check the uid of user to check if they are an admin
+app.post("/api/admin-login", async (request, response) => {
+    handleLoginRoute(request, response, true);
 });
 
 app.get("/api/post/:postid", async (request, response) => {
