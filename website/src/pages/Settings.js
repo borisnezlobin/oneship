@@ -7,6 +7,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import CONFIG, { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from "../util/config";
 import { toast } from "react-hot-toast";
 import { SignOut } from "phosphor-react";
+import ScheduleEntryItem from "../components/settings/ScheduleEntryItem";
 
 const SettingsPage = () => {
     const { userData, setUserData } = useContext(UserDataContext);
@@ -16,6 +17,13 @@ const SettingsPage = () => {
     const [errors, setErrors] = useState({});
     const nav = useNavigate();
 
+    const isObjectChanged = (obj1, obj2) => {
+        for(var key in obj1){
+            if(obj1[key] !== obj2[key]) return true;
+        }
+        return false;
+    }
+
     useEffect(() => {
         if(userData && editedSettings == null){
             setEditedSettings(userData.data);
@@ -24,7 +32,10 @@ const SettingsPage = () => {
         if(userData && editedSettings){
             var change = false;
             for(var key in editedSettings){
-                if(editedSettings[key] !== userData.data[key]){
+                if(typeof editedSettings[key] === "object"){
+                    change = isObjectChanged(editedSettings[key], userData.data[key]);
+                    if(change) break;
+                }else if(editedSettings[key] !== userData.data[key]){
                     change = true;
                     break;
                 }
@@ -181,7 +192,17 @@ const SettingsPage = () => {
                     title="Show 0 Period"
                     description="Show 0 Period on the schedule page?"
                 />
-                <div className="h-16 md:h-20 w-24 shrink-0" />
+                <hr className="w-full my-4 mb-8" />
+                <h1 className="bigText text-left w-full mb-4">Your Schedule</h1>
+                <ScheduleEntryItem editedSettings={editedSettings} label={"0 Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"1st Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"2nd Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"3rd Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"4th Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"5th Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"6th Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"7th Period"} onEdit={updateEdits} />
+                <div className="h-36 md:h-24 w-24 shrink-0" />
             </div>
             {changed ?
                 <div className="w-full h-20 fixed left-0 bottom-12 md:bottom-0 md:pl-64">

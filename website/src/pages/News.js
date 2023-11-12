@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { DataContext } from "../util/contexts";
 import NewsItem from "../components/NewsItem";
 import LoadingSpinner from "../components/LoadingSpinner";
+import news from "../illustrations/news.svg";
 
 const NewsPage = () => {
     const { data } = useContext(DataContext);
@@ -33,9 +34,18 @@ const NewsPage = () => {
 
     return (
         <div className="m-0 md:ml-64">
-            <h1>{articles.map((e, i) => {
+            <div className="flex flex-col items-center justify-center pt-4">
+                <img src={news} alt="News" className="w-1/2 md:w-1/4" />
+                <h1 className="bigText">Paly News</h1>
+            </div>
+            <hr />
+            <p className="m-4 text-center">
+                Content on this page is not created or moderated by OneShip.<br />
+                Don't see your favorite publication? <a className="link" href="mailto:bn51245@pausd.us">Contact us</a> and we'll add it!
+            </p>
+            {articles.map((e, i) => {
                 return <NewsItem key={"newsItem" + i} item={e} />
-            })}</h1>
+            })}
         </div>
     );
 };
