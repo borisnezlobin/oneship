@@ -41,7 +41,7 @@ function ScheduleItem({ period, start, end, fixedHeight = false }) {
             }
         ]}>
             <Text style={[tailwind("font-bold text-lg w-full text-left"), { color: CONFIG.green}]}>
-                {Object.keys(userData.data).includes(period.name) ? userData.data[period.name].customName : period.name}
+                {userData && Object.keys(userData.data).includes(period.name) ? userData.data[period.name].customName : period.name}
             </Text>
             <Text>{period.startString}-{period.endString}</Text>
             {isCurrent && fixedHeight && (
