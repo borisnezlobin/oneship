@@ -27,7 +27,6 @@ const VersionCheck = ({ navigation }) => {
         const getServerVersion = async () => {
             const response = await fetch(CONFIG.serverURL + 'version');
             const json = await response.json();
-            console.log("JSON " + JSON.stringify(json));
             setServerVersion(json);
         };
         if(serverVersion == null) getServerVersion();

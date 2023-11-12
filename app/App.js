@@ -79,7 +79,6 @@ function App() {
           if(schedule == null || schedule.date != today){
             if(data.schedule != null){
               setSchedule(data.schedule);
-              console.log(userData);
               setNotificationForClasses(data.schedule, (userData && userData.data) ? userData.data.classNotification : 5);
               await AsyncStorage.setItem("schedule", JSON.stringify(data.schedule));
             }

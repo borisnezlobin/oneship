@@ -23,7 +23,6 @@ const CalendarPage = ({ calendar, navigation }) => {
     var today = new Date();
     var key = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
     var markedDates = {};
-    console.log(key);
     markedDates[key] = {
         customStyles: {
             container: {

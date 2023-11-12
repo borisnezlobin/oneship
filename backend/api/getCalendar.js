@@ -16,7 +16,7 @@ const getCalendar = async () => {
     var response = await fetch("https://www.paly.net/data/calendar/icalcache/feed_480C4DDD5A484139AC879C9C72FE34B6.ics");
     // the response is an ical file, parse (relaibily)
     response = await response.text();
-    // console.log(response);
+    
     var icalEvents = response.split("BEGIN:VEVENT");
     var events = [];
     for(var i = 1; i < icalEvents.length; i++){
@@ -46,8 +46,6 @@ const getCalendar = async () => {
 }
 
 const getScheduleForDay = (day, events) => {
-    // var events = await getCalendar();
-    console.log(day);
     for(var i = 0; i < alternates.length; i++){
         var alternate = alternates[i];
         if(alternate.date == day){

@@ -40,7 +40,6 @@ const getCurrentScheduleInfo = (schedule, time) => {
 
 const setNotificationForClasses = (schedule, timeTrigger) => {
     const time = new Date();
-    // console.log("setting notifications with trigger " + timeTrigger);
     if(schedule == null || schedule.value == null) return;
     if(!timeTrigger) return;
     timeTrigger = parseInt(timeTrigger);
