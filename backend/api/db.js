@@ -66,6 +66,12 @@ const db = admin.firestore();
 
 const writeData = async (collection, document, data) => {
     console.log("writing to " + collection + "/" + document);
+    await db.collection(collection).doc(document).delete();
+    await db.collection(collection).doc(document).create(data);
+}
+
+const overwriteData = async (collection, document, data) => {
+    console.log("overwriting " + collection + "/" + document);
     await db.collection(collection).doc(document).set(data);
 }
 
@@ -159,6 +165,7 @@ const updateSettings = async (uid, settings) => {
 
 export {
     writeData,
+    overwriteData,
     updateData,
     readData,
     getMessagesForUser,
