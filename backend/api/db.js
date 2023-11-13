@@ -12,43 +12,43 @@ const DEFAULT_SETTINGS = {
     "grade": -1,
     "show0": false,
     "wantsMobile": false,
-    '0 Period': {
+    '0 period': {
         "customName": "0 Period",
         "teacher": null,
         "room": null,
     },
-    '1st Period': {
+    '1st period': {
         "customName": "1st Period",
         "teacher": null,
         "room": null,
     },
-    '2nd Period': {
+    '2nd period': {
         "customName": "2nd Period",
         "teacher": null,
         "room": null,
     },
-    '3rd Period': {
+    '3rd period': {
         "customName": "3rd Period",
         "teacher": null,
         "room": null,
 
     },
-    '4th Period': {
+    '4th period': {
         "customName": "4th Period",
         "teacher": null,
         "room": null,
     },
-    '5th Period': {
+    '5th period': {
         "customName": "5th Period",
         "teacher": null,
         "room": null,
     },
-    '6th Period': {
+    '6th period': {
         "customName": "6th Period",
         "teacher": null,
         "room": null,
     },
-    '7th Period': {
+    '7th period': {
         "customName": "7th Period",
         "teacher": null,
         "room": null,
