@@ -56,7 +56,8 @@ const SchedulePage = () => {
 
         scheduleComponent = <div className="w-full h-full">
             {schedule.value.map((e, i) => {
-                
+                console.log(e);
+                console.log(userData);
                 if(userData != null && !userData.data.show0 && e.name.includes("0 Period")) return <></>;
                 if(e.end < nowMinutes) return <></>;
 
@@ -100,7 +101,7 @@ const SchedulePage = () => {
                     }}
                 >
                     <h1 className="mediumText slab">
-                        {userData != null && Object.keys(userData.data).includes(e.name) ? userData.data[e.name].customName : e.name}
+                        {userData != null && Object.keys(userData.data).includes(e.name.trim()) ? userData.data[e.name.trim()].customName : e.name}
                         {" "}
                         <span className="text-lg text-gray-500">
                             {e.startString}-{e.endString}
