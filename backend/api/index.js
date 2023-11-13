@@ -3,7 +3,7 @@ const app = express();
 
 import { getInfocusNews, getPublication } from './getNews.js';
 import { getCalendar, getScheduleForDay } from './getCalendar.js';
-import { DEFAULT_SETTINGS, createMessage, getErrors, getMessage, getMessagesForUser, readData, updateData, updateSettings, writeData } from './db.js';
+import { DEFAULT_SETTINGS, createMessage, getErrors, getMessage, getMessagesForUser, overwriteData, readData, updateData, updateSettings, writeData } from './db.js';
 import { checkForBadData, getTodayInFunnyFormat } from './util.js';
 import { loginUser, requireAdmin } from './auth.js';
 import { getSports } from './getSports.js';
@@ -148,7 +148,15 @@ const handleLoginRoute = async (request, response, adminOnly) => {
                     userData[keys[i]] = DEFAULT_SETTINGS[keys[i]];
                 }
             }
-            if(changed) await writeData("users", uid, userData);
+
+            const curKeys = Object.keys(userData);
+            for(var i = 0; i < curKeys.length; i++){
+                if(!keys.includes(curKeys[i])){
+                    changed = true;
+                    delete userData[curKeys[i]];
+                }
+            }
+            if(changed) await overwriteData("users", uid, userData);
             if(ua && !userData.userAgents.includes(ua)){
                 userData.userAgents.push(ua);
                 await writeData("users", uid, userData);
