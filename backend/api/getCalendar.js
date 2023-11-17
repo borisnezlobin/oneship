@@ -2,12 +2,13 @@ import fetch from "node-fetch";
 
 const alternates = [
     {
-        date: "20231112",
+        date: "20231117",
         schedule: [
-            { name: "5th Period", start: "9:00", end: "10:15" },
-            { name: "Brunch", start: "10:15", end: "10:30" },
-            { name: "6th Period", start: "10:30", end: "11:45" },
-            { name: "7th Period", start: "11:55", end: "1:10" },
+            { name: "5th Period", start: "9:00", end: "10:35" },
+            { name: "6th Period", start: "10:50", end: "12:20" },
+            { name: "Lunch", start: "12:20", end: "1:00" },
+            { name: "Advisory/Study Hall", start: "1:00", end: "1:50" },
+            { name: "7th Period", start: "2:00", end: "3:30" }
         ],
     }
 ]
