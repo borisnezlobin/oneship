@@ -68,8 +68,8 @@ const PostDetails = () => {
             <img src={logo} alt="logo" className="w-48 mx-auto" />
             {parseMarkdown(item.content)}
             <div className="mt-8 w-full flex flex-row justify-center items-center">
-                <button className="btn" onClick={() => nav(-1)}>
-                    <p>Back</p>
+                <button className="btn" onClick={() => nav("/feed")}>
+                    <p>Back to feed</p>
                 </button>
             </div>
             <p className="w-full text-center text mt-4 mb-2">
