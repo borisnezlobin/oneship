@@ -30,6 +30,7 @@ const SchedulePage = () => {
     );
 
     const schedule = data.schedule;
+    var hasFinal = false;
 
     var scheduleComponent = <></>;
     if(schedule.value == null){
@@ -67,6 +68,7 @@ const SchedulePage = () => {
                 var topRadius = e.start === (i === 0 ? e.end : schedule.value[i - 1].end) ? 0 : 8;
                 var bottomRadius = e.end === (i === schedule.value.length - 1 ? e.start : schedule.value[i + 1].start) ? 0 : 8;
                 hasRenderedAtLeastOneBlock = true;
+                if(e.isFinal) hasFinal = true;
                 return (<>
                 {i !== 0 && e.start !== schedule.value[i - 1].end ? (
                     <div
@@ -196,7 +198,7 @@ const SchedulePage = () => {
         <div className="m-0 bg-white md:ml-64 p-4">
             <div className="flex justify-center items-center w-full flex-col">
                 <h1 className="bigText text-center mb-8 slab">
-                    Today's Schedule
+                    {hasFinal ? "Good luck on your finals!" : "Today's Schedule"}
                 </h1>
             </div>
             <div className="w-full md:flex md:flex-row">

@@ -91,7 +91,8 @@ const getScheduleForDay = (day, events) => {
                     start: calculateMinutesFromTime(startTime),
                     endString: endTime.trim(),
                     end: calculateMinutesFromTime(endTime),
-                    name: goofy.replaceAll(endTime, "").trim()
+                    name: goofy.replaceAll(endTime, "").trim(),
+                    isFinal: event.summary.includes("Finals")
                 };
                 if(obj.endString == "" || obj.startString == "" || obj.start == null || obj.end == null || obj.name == "") continue;
                 schedule.push(obj);
