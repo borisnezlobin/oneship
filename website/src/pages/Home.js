@@ -43,7 +43,7 @@ const HomePage = () => {
         <button className='link' onClick={() => {
             toast(<>
                 <p style={{ textAlign: "center", marginBottom: 0 }}>
-                Copyright © 2023 Boris Nezlobin.<br />All Rights Reserved. <br /> For inquiries or permissions, please contact <a href="mailto:boris.nezlobin@gmail.com" className='link'>Boris Nezlobin</a>.
+                Copyright © 2024 Boris Nezlobin.<br />All Rights Reserved. <br /> For inquiries or permissions, please contact <a href="mailto:boris.nezlobin@gmail.com" className='link'>Boris Nezlobin</a>.
                 </p>
               </>, {
                 style: {
