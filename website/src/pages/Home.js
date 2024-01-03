@@ -2,13 +2,18 @@ import React from 'react'
 import GenerativeArt from '../components/generativeart/GenerativeArt'
 import logo from '../logo.svg'
 import { toast } from 'react-hot-toast'
-import { ERROR_TOAST_STYLES, SUCCESS_TOAST_STYLES } from '../util/config'
 
 const HomePage = () => {
   return (
     <>
       {window.innerWidth >= 750 ? <GenerativeArt /> : <></>}
       <div className='m-0 h-full flex flex-col justify-center items-center md:ml-64'>
+        <div className='hidden md:flex left-64 top-0 fixed w-[calc(100vw-16rem)] bg-neutral-100 p-4'>
+          <p className='w-full flex-1'>
+            OneShip is in active development!
+            We value your feedback -- if you have any suggestions, please <a className='link' href="mailto:bn51245@pausd.us">contact us</a>!
+          </p>
+        </div>
         <img src={logo} className="h-48 w-48 md:w-64 md:h-64" alt="logo" />
         <p className='bigText'>
             OneShip
