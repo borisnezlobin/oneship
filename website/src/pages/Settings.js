@@ -194,14 +194,14 @@ const SettingsPage = () => {
                 />
                 <hr className="w-full my-4 mb-8" />
                 <h1 className="bigText text-left w-full mb-4">Your Schedule</h1>
-                <ScheduleEntryItem editedSettings={editedSettings} label={"0 period"} onEdit={updateEdits} />
-                <ScheduleEntryItem editedSettings={editedSettings} label={"1st period"} onEdit={updateEdits} />
-                <ScheduleEntryItem editedSettings={editedSettings} label={"2nd period"} onEdit={updateEdits} />
-                <ScheduleEntryItem editedSettings={editedSettings} label={"3rd period"} onEdit={updateEdits} />
-                <ScheduleEntryItem editedSettings={editedSettings} label={"4th period"} onEdit={updateEdits} />
-                <ScheduleEntryItem editedSettings={editedSettings} label={"5th period"} onEdit={updateEdits} />
-                <ScheduleEntryItem editedSettings={editedSettings} label={"6th period"} onEdit={updateEdits} />
-                <ScheduleEntryItem editedSettings={editedSettings} label={"7th period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"0 Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"1st Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"2nd Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"3rd Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"4th Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"5th Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"6th Period"} onEdit={updateEdits} />
+                <ScheduleEntryItem editedSettings={editedSettings} label={"7th Period"} onEdit={updateEdits} />
                 <div className="h-36 md:h-24 w-24 shrink-0" />
             </div>
             {changed ?
