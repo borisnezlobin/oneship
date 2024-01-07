@@ -2,11 +2,6 @@ import React, { ComponentProps, useContext, useEffect, useState } from "react";
 import { UserDataContext } from "../../util/contexts";
 import { ScheduleItem } from "../../types";
 
-const calculateMinutes = (date) => {
-    return date.getHours() * 60 + date.getMinutes();
-};
-
-
 interface ScheduleListItemProps {
     e: ScheduleItem,
     schedule: ScheduleItem[],
@@ -14,7 +9,7 @@ interface ScheduleListItemProps {
     nowMinutes: number
 }
 
-const useFixedHeight = false; // maybe re-enabled in the future? we will see
+const useFixedHeight = true; // maybe re-enabled in the future? we will see
 
 const ScheduleListItem: React.FC<ScheduleListItemProps> = ({ e, schedule, i, nowMinutes }) => {
     var winHeight = window.innerHeight;

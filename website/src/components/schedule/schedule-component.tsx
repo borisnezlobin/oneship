@@ -8,12 +8,12 @@ import party from "../../illustrations/party.svg";
 
 const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-const calculateMinutes = (date) => {
+const calculateMinutes = (date: Date) => {
     return date.getHours() * 60 + date.getMinutes();
 };
 
 interface ScheduleListProps {
-    schedule: { value: ScheduleItem[], date: string };
+    schedule: ScheduleItem[]
 }
 
 const ScheduleList: React.FC<ScheduleListProps> = ({ schedule }) => {
@@ -41,15 +41,15 @@ const ScheduleList: React.FC<ScheduleListProps> = ({ schedule }) => {
 
     return (
         <div className="w-full h-full">
-            {schedule.value.map((e, i) => (
+            {schedule.map((e, i) => (
                 <ScheduleListItem
-                    schedule={schedule.value}
+                    schedule={schedule}
                     i={i}
                     e={e}
                     nowMinutes={nowMinutes}
                 />
             ))}
-            {calculateMinutes(schedule.value[schedule.value.length - 1]) < nowMinutes &&
+            {schedule[schedule.length - 1].end < nowMinutes &&
                 <>
                     <img
                         src={awesome}
