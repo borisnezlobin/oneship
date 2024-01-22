@@ -27,7 +27,7 @@ const ScheduleListItem: React.FC<ScheduleListItemProps> = ({ e, schedule, i, now
     );
     var topRadius = e.start === (i === 0 ? e.end : schedule[i - 1].end) ? 0 : 8;
     var bottomRadius = e.end === (i === schedule.length - 1 ? e.start : schedule[i + 1].start) ? 0 : 8;
-    // hasRenderedAtLeastOneBlock = true;
+
     return (<>
         {i !== 0 && e.start !== schedule[i - 1].end ? (
             <div
