@@ -72,9 +72,10 @@ const getScheduleForDay = (day, events) => {
             !event.summary.includes("Schedule") &&
             !event.summary.includes("Minimum Day") &&
             !event.summary.includes("Finals") &&
-            !event.summary.includes("Schdule")
+            !event.summary.includes("Schdule") &&
             /* ^ because pausd can't spell */
             /* it happened more than once */
+            !event.summary.includes("Late Start Monday")
         ) continue;
         if(event.start.trim() == day.trim()){
             var periods = event.description.split("\n");
@@ -91,7 +92,7 @@ const getScheduleForDay = (day, events) => {
                     start: calculateMinutesFromTime(startTime),
                     endString: endTime.trim(),
                     end: calculateMinutesFromTime(endTime),
-                    name: goofy.replaceAll(endTime, "").trim(),
+                    name: goofy.replaceAll(endTime, "").replaceAll("period", "Period").trim(),
                     isFinal: event.summary.includes("Finals")
                 };
                 if(obj.endString == "" || obj.startString == "" || obj.start == null || obj.end == null || obj.name == "") continue;
