@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const useBoundingBox = () => {
   // Our `ref` is needed to be passed to the component's `ref` attribute.

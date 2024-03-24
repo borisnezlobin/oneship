@@ -1,14 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-import { DataContext, UserDataContext } from "../util/contexts.ts";
+import { DataContext, UserDataContext } from "../util/contexts";
 import { useNavigate } from "react-router-dom";
 import FeedItem from "../components/FeedItem";
 import { getCurrentScheduleInfo } from "../util/functions";
+// @ts-ignore
 import sync from "../illustrations/sync.svg";
-import ScheduleList from "../components/schedule/schedule-component.tsx";
-import SchedulePage from "./Schedule.tsx";
+import ScheduleList from "../components/schedule/schedule-component";
+import SchedulePage from "./Schedule";
 
 const FeedPage = () => {
+  // @ts-ignore
   const { userData } = useContext(UserDataContext);
+  // @ts-ignore
   const { data } = useContext(DataContext);
   const nav = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -62,7 +65,7 @@ const FeedPage = () => {
           <div className="mt-16 flex h-full w-full flex-col items-center justify-center lg:w-1/2">
             <img src={sync} className="h-36 w-36" alt="logo" />
             <p className="text-theme m-4 ml-2 text-center text-2xl font-bold md:text-3xl">
-              No messages for now! Lorem ispuda;sdjf dolor sit amet
+              No messages for now!
             </p>
           </div>
         ) : (
@@ -77,6 +80,7 @@ const FeedPage = () => {
         )}
 
         <div className="mt:4 border-gray-10 right-4 top-4 w-full rounded-lg border lg:fixed lg:w-1/3">
+          {/* @ts-ignore */}
           <SchedulePage containerStyles="md:flex-col" pageStyles="md:m-0" />
         </div>
       </div>

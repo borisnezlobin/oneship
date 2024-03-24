@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react";
+import { ComponentProps } from "react";
 import { CalendarEvent } from "../../types";
 import { Exclude } from "@phosphor-icons/react";
 import { Placeholder } from "@phosphor-icons/react/dist/ssr";

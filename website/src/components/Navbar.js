@@ -12,7 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import logo from "../logo.svg";
 import { useContext, useState } from "react";
-import { UserDataContext } from "../util/contexts.ts";
+import { UserDataContext } from "../util/contexts";
 
 const linkStyle =
   "text-0 rounded-full h-12 w-12 flex flex-row justify-center border border-transparent" +

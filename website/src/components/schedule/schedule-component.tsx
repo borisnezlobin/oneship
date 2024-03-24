@@ -1,7 +1,7 @@
-import React, { ComponentProps, useEffect, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 // @ts-ignore
 import awesome from "../../illustrations/awesome.svg";
-import ScheduleListItem from "./list-item.tsx";
+import ScheduleListItem from "./list-item";
 import { ScheduleItem } from "../../types";
 // @ts-ignore
 import party from "../../illustrations/party.svg";

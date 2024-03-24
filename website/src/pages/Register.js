@@ -14,7 +14,7 @@ import CONFIG, {
   ERROR_TOAST_STYLES,
   SUCCESS_TOAST_STYLES,
 } from "../util/config";
-import { UserDataContext } from "../util/contexts.ts";
+import { UserDataContext } from "../util/contexts";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
 

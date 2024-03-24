@@ -1,18 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Spring } from 'react-spring';
+import React from "react";
+import styled from "styled-components";
+import { Spring } from "react-spring";
 
 // copied from joshwcomeau.com
-import {
-  getScaledCanvasProps,
-} from './canvas.helpers';
-import useMousePosition from './use-mouse-position.hook';
-import useBoundingBox from './useBoundingBox.hook';
-import usePrefersReducedMotion from './use-prefers-reduced-motion.hook';
+import { getScaledCanvasProps } from "./canvas.helpers";
+import useMousePosition from "./use-mouse-position.hook";
+import useBoundingBox from "./useBoundingBox.hook";
+import usePrefersReducedMotion from "./use-prefers-reduced-motion.hook";
 
-const clamp = (val, min = 0, max = 1) =>
-  Math.max(min, Math.min(max, val));
-
+const clamp = (val, min = 0, max = 1) => Math.max(min, Math.min(max, val));
 
 const GAP = 12;
 
@@ -26,7 +22,7 @@ function draw(
   lineWidth,
   timeSince,
   prefersReducedMotion,
-  ctx
+  ctx,
 ) {
   const relativeMousePos = {
     x: parseFloat(JSON.stringify(x)),
@@ -59,7 +55,11 @@ function draw(
       const yRatio = deltaY * hypRatio;
 
       // const dampenBy = clamp(normalize((distance * distance), 0, 300, 1, 0), 0, 1);
-      const dampenBy = clamp((1 / clamp(distance * distance, 0.001, 10000000000000)) * 5000, 0, 1);
+      const dampenBy = clamp(
+        (1 / clamp(distance * distance, 0.001, 10000000000000)) * 5000,
+        0,
+        1,
+      );
       const p1 = {
         x: centerX - xRatio * dampenBy,
         y: centerY - yRatio * dampenBy,
@@ -73,7 +73,7 @@ function draw(
       ctx.moveTo(p1.x, p1.y);
       ctx.lineTo(p2.x, p2.y);
       ctx.lineWidth = lineWidth;
-      ctx.lineCap = 'round';
+      ctx.lineCap = "round";
       ctx.strokeStyle = "rgba(125, 125, 125, 0.25)";
       ctx.stroke();
       ctx.closePath();
@@ -84,8 +84,8 @@ function draw(
 const GenerativeArt = ({
   lineLength = 36,
   lineWidth = 4,
-  numRows = (window.innerHeight) / (lineLength + GAP) - 1,
-  numCols = (window.innerWidth) / (lineLength + GAP) - 1,
+  numRows = window.innerHeight / (lineLength + GAP) - 1,
+  numCols = window.innerWidth / (lineLength + GAP) - 1,
 }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -103,15 +103,15 @@ const GenerativeArt = ({
     if (!canvasRef.current) {
       return;
     }
-    contextRef.current = canvasRef.current.getContext('2d');
+    contextRef.current = canvasRef.current.getContext("2d");
   }, [canvasRef]);
 
   const strokeColor = React.useRef(null);
 
   React.useEffect(() => {
     strokeColor.current = getComputedStyle(
-      document.documentElement
-    ).getPropertyValue('--green');
+      document.documentElement,
+    ).getPropertyValue("--green");
 
     if (!mousePos || !canvasBox) {
       return;
@@ -127,7 +127,7 @@ const GenerativeArt = ({
       lineWidth,
       timeSince,
       prefersReducedMotion,
-      contextRef.current
+      contextRef.current,
     );
     // Whatever
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,7 +164,7 @@ const GenerativeArt = ({
             lineWidth,
             timeSince,
             prefersReducedMotion,
-            contextRef.current
+            contextRef.current,
           );
           return null;
         }}
