@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { UserDataContext } from "../util/contexts";
+import { UserDataContext } from "../util/contexts.ts";
 import { useNavigate } from "react-router-dom";
 import TextInput from "../components/settings/TextInput";
 import TFInput from "../components/settings/TFInput";

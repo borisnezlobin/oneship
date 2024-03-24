@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DataContext } from "../util/contexts";
+import { DataContext } from "../util/contexts.ts";
 import game from "../illustrations/game.svg";
 import { House, MapTrifold, PushPinSimple } from "@phosphor-icons/react";
 import tickets from "../illustrations/tickets.svg";
