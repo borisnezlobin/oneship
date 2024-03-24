@@ -1,6 +1,6 @@
 const CONFIG = {
-  // SERVER_URL: "https://oneship.vercel.app",
-  SERVER_URL: "http://localhost:5001",
+  SERVER_URL: "https://oneship.vercel.app",
+  // SERVER_URL: "http://localhost:5001",
 };
 
 const ERROR_TOAST_STYLES = {
