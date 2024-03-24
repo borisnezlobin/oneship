@@ -3,7 +3,7 @@ import GenerativeArt from "../components/generativeart/GenerativeArt";
 import logo from "../logo.svg";
 import { toast } from "react-hot-toast";
 import { useContext } from "react";
-import { UserDataContext } from "../util/contexts.ts";
+import { UserDataContext } from "../util/contexts";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 

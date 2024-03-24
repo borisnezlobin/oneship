@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { DataContext, UserDataContext } from "../util/contexts.ts";
+import { DataContext, UserDataContext } from "../util/contexts";
 import LoadingSpinner from "../components/LoadingSpinner";
-import ScheduleList from "../components/schedule/schedule-component.tsx";
-import EventsComponent from "../components/schedule/events-component.tsx";
+import ScheduleList from "../components/schedule/schedule-component";
+import EventsComponent from "../components/schedule/events-component";
 
 const SchedulePage: React.FC = ({
   containerStyles = "",
@@ -11,6 +11,7 @@ const SchedulePage: React.FC = ({
   containerStyles?: string;
   pageStyles?: string;
 }) => {
+  // @ts-ignore
   const { data } = useContext(DataContext);
 
   if (data === null || data.schedule === undefined)

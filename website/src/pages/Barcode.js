@@ -1,5 +1,5 @@
 import { useContext, useRef } from "react";
-import { UserDataContext } from "../util/contexts.ts";
+import { UserDataContext } from "../util/contexts";
 import Barcode from "react-barcode";
 import { ERROR_TOAST_STYLES } from "../util/config";
 import { toast } from "react-hot-toast";

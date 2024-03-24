@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DataContext } from "../util/contexts.ts";
+import { DataContext } from "../util/contexts";
 import NewsItem from "../components/NewsItem";
 import LoadingSpinner from "../components/LoadingSpinner";
 import news from "../illustrations/news.svg";

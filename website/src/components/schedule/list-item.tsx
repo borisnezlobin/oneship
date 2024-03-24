@@ -1,5 +1,5 @@
-import React, { ComponentProps, useContext, useEffect, useState } from "react";
-import { UserDataContext } from "../../util/contexts.ts";
+import { ComponentProps, useContext, useEffect, useState } from "react";
+import { UserDataContext } from "../../util/contexts";
 import { ScheduleItem } from "../../types";
 
 interface ScheduleListItemProps {
@@ -22,6 +22,7 @@ const ScheduleListItem: React.FC<ScheduleListItemProps> = ({
   // in minutes
   const dayStart = schedule[0].start;
   const dayEnd = schedule[schedule.length - 1].end;
+  // @ts-ignore
   const { userData } = useContext(UserDataContext);
 
   if (userData != null && !userData.data.show0 && e.name.includes("0 Period"))
