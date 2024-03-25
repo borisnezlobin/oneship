@@ -45,7 +45,7 @@ const EventsComponent: React.FC<EventsProps> = ({ calendar }) => {
   }
 
   return (
-    <div className="mt-4 flex w-full flex-col items-center justify-center md:ml-4 md:mt-0 md:h-full">
+    <div className="mt-4 flex w-full flex-col items-center justify-center md:mx-4 md:mt-0 md:h-full">
       <div className={containerClassName}>
         {eventsToday.length === 0 ||
         (eventsToday.length === 1 &&

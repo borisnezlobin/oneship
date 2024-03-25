@@ -81,7 +81,10 @@ const FeedPage = () => {
 
         <div className="mt:4 border-gray-10 right-4 top-4 w-full rounded-lg border lg:fixed lg:w-1/3">
           {/* @ts-ignore */}
-          <SchedulePage containerStyles="md:flex-col" pageStyles="md:m-0" />
+          <SchedulePage
+            containerStyles="md:flex-col md:items-center md:gap-4"
+            pageStyles="md:m-0 overflow-auto md:h-[calc(100vh-2rem)]"
+          />
         </div>
       </div>
     );

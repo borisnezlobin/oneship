@@ -4,13 +4,15 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import ScheduleList from "../components/schedule/schedule-component";
 import EventsComponent from "../components/schedule/events-component";
 
-const SchedulePage: React.FC = ({
-  containerStyles = "",
-  pageStyles = "",
-}: {
+interface ScheduleProps {
   containerStyles?: string;
   pageStyles?: string;
-}) => {
+}
+
+const SchedulePage: React.FC<ScheduleProps> = ({
+  containerStyles = "",
+  pageStyles = "",
+}: ScheduleProps) => {
   // @ts-ignore
   const { data } = useContext(DataContext);
 
