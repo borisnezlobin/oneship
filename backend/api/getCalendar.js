@@ -30,7 +30,7 @@ const alternates = [
             { name: "Advisory (9/11)/Class Meetings (10/12)", start: "11:55", end: "12:40" },
             { name: "Class Meetings (9/11)/Advisory (10/12)", start: "12:50", end: "1:35" },
             { name: "3rd Period", start: "1:45", end: "2:45" },
-            { name: "6th Period", start: "2:55", end: "3:55" },
+            { name: "4th Period", start: "2:55", end: "3:55" },
         ],
     },
     {
