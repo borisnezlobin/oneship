@@ -1,47 +1,25 @@
 import fetch from "node-fetch";
 
 const alternates = [
-    // first three days of school, why did they do the formatting so dumb
     {
-        date: "20240814",
+        date: "20241008",
         schedule: [
-            { name: "Zero Period", start: "7:50", end: "8:50" },
-            { name: "Advisory 9/11", start: "9:00", end: "9:15" },
-            { name: "Advisory 10/12", start: "9:20", end: "9:35" },
-            { name: "1st Period", start: "9:45", end: "10:25" },
-            { name: "Brunch", start: "10:25", end: "10:40" },
-            { name: "2nd Period", start: "10:40", end: "11:20" },
-            { name: "3rd Period", start: "11:30", end: "12:10" },
-            { name: "Lunch", start: "12:10", end: "12:50" },
-            { name: "4th Period", start: "12:50", end: "1:30" },
-            { name: "5th Period", start: "1:40", end: "2:20" },
-            { name: "6th Period", start: "2:30", end: "3:10" },
-            { name: "7th Period", start: "3:20", end: "4:00" },
+            { name: "1st Period", start: "9:00", end: "9:50" },
+            { name: "Brunch", start: "9:50", end: "10:05" },
+            { name: "2nd Period", start: "10:05", end: "10:55" },
+            { name: "3rd Period", start: "11:05", end: "11:55" },
+            { name: "Lunch", start: "11:55", end: "12:25" },
+            { name: "4th Period", start: "12:35", end: "1:25" },
+            { name: "PRIME", start: "1:35", end: "2:25" },
         ],
-    },
-    {
-        date: "20240815",
+    }, {
+        date: "20241009",
         schedule: [
-            { name: "Zero Period", start: "7:50", end: "8:50" },
-            { name: "1st Period", start: "9:00", end: "10:00" },
-            { name: "Brunch", start: "10:00", end: "10:15" },
-            { name: "2nd Period", start: "10:15", end: "11:15" },
-            { name: "Lunch", start: "11:15", end: "11:55" },
-            { name: "Advisory (9/11)/Class Meetings (10/12)", start: "11:55", end: "12:40" },
-            { name: "Class Meetings (9/11)/Advisory (10/12)", start: "12:50", end: "1:35" },
-            { name: "3rd Period", start: "1:45", end: "2:45" },
-            { name: "4th Period", start: "2:55", end: "3:55" },
-        ],
-    },
-    {
-        date: "20240816",
-        schedule: [
-            { name: "5th Period", start: "9:00", end: "10:30" },
-            { name: "Brunch", start: "10:30", end: "10:45" },
-            { name: "6th Period", start: "10:45", end: "11:45" },
-            { name: "Lunch", start: "11:45", end: "12:35" },
-            { name: "7th Period", start: "12:35", end: "1:45" },
-            { name: "Assembly", start: "1:45", end: "3:00" },
+            { name: "PSAT (11)/SAT (12)", start: "8:30", end: "12:00" },
+            { name: "Lunch", start: "12:00", end: "12:30" },
+            { name: "5th Period", start: "12:40", end: "1:30" },
+            { name: "6th Period", start: "1:40", end: "2:30" },
+            { name: "7th Period", start: "2:40", end: "3:30" },
         ],
     },
 ]
